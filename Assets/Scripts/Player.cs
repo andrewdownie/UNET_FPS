@@ -91,8 +91,19 @@ public class Player : Player_Base {
         ///
         if(Input.GetKey(KeyCode.Mouse0)){
             gunSlot.Shoot(Input.GetKeyDown(KeyCode.Mouse0));
+
         } 
-                
+
+
+        ///
+        /// Multiplayer testing stuff
+        ///
+        if(Input.GetKeyDown(KeyCode.Mouse0)){
+            // do something fruity
+            GameObject go = new GameObject();
+            go.transform.parent = transform;
+            go.name = "do sumthi fruity";                
+        }
         
     }
 }

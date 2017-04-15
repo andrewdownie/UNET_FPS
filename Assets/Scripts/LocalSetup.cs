@@ -4,15 +4,13 @@ using UnityStandardAssets.Characters.FirstPerson;
 
 public class LocalSetup : NetworkBehaviour {
 
-    public override void OnStartLocalPlayer() // this is our player
-    {
-        base.OnStartLocalPlayer();
-
-
+    [TargetRpc]
+    public void TargetSetupPlayer(NetworkConnection targetPlayer){
         RigidbodyFirstPersonController rbc = GetComponent<RigidbodyFirstPersonController>();
         rbc.enabled = true;
         rbc.cam.enabled = true;
         rbc.cam.GetComponent<AudioListener>().enabled = true;
+ 
     }
 
 }
