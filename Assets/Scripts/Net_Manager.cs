@@ -14,7 +14,8 @@ public class Net_Manager : NetworkManager{
 	[SerializeField]
 	Gun_Base startingSecondaryWeapon;
 
-
+	//Trying to create a new branch for adding networking stuff....
+	// Adding this random content to this file so git will actually commit something to the remote
 
 
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
