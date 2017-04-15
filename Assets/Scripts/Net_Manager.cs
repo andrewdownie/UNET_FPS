@@ -16,6 +16,7 @@ public class Net_Manager : NetworkManager{
 
 
 
+
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
 		Debug.Log("Adding player to game...");
