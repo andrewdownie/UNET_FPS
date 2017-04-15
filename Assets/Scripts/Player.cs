@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System;
 
@@ -90,20 +91,17 @@ public class Player : Player_Base {
         /// Handle shooting
         ///
         if(Input.GetKey(KeyCode.Mouse0)){
-            gunSlot.Shoot(Input.GetKeyDown(KeyCode.Mouse0));
-
+            CmdShoot(Input.GetKeyDown(KeyCode.Mouse0));
         } 
 
 
-        ///
-        /// Multiplayer testing stuff
-        ///
-        if(Input.GetKeyDown(KeyCode.Mouse0)){
-            // do something fruity
-            GameObject go = new GameObject();
-            go.transform.parent = transform;
-            go.name = "do sumthi fruity";                
-        }
         
     }
+
+    [Command]
+    void CmdShoot(bool mouseDown){
+        gunSlot.Shoot(mouseDown);
+    }
+
+    
 }
