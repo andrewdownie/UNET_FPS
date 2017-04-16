@@ -103,5 +103,23 @@ public class Player : Player_Base {
         gunSlot.Shoot(mouseDown);
     }
 
+    [ClientRpc]
+    public override void RpcConnectWeapons(NetworkIdentity primaryWeapon, NetworkIdentity secondaryWeapon){
+        if(secondaryWeapon != null){
+            Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
+            secondary.SetOwningPlayer(this);
+            gunSlot.SetSecondary(secondary);
+        }
+
+        if(primaryWeapon != null){
+            Gun_Base primary = primaryWeapon.gameObject.GetComponent<Gun_Base>();
+            primary.SetOwningPlayer(this);
+            gunSlot.TryPickup(primary);
+        }
+        
+
+    }
+
     
+
 }

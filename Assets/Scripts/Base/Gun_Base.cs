@@ -23,4 +23,6 @@ public abstract class Gun_Base : MonoBehaviour {
 	public abstract int ClipSize{get;}
 	public abstract int BulletsInClip{get;}
 
+
+	public abstract void SetOwningPlayer(Player_Base newOwner);
 }

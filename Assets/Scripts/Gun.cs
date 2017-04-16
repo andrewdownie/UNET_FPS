@@ -128,31 +128,34 @@ public class Gun : Gun_Base {
             Debug.Log("Collided with: " + coll.name);
 
             Player_Base _player = coll.GetComponent<Player_Base>();
-            if (_player != null)
+            SetOwningPlayer(_player);
+        }
+    }
+
+    public override void SetOwningPlayer(Player_Base newOwner){
+        if (newOwner != null)
+        {
+            GunSlot_Base _gunSlot = newOwner.GunSlot;
+
+            if (_gunSlot != null && _gunSlot.TryPickup(this))
             {
-                GunSlot_Base _gunSlot = _player.GunSlot;
+                player = newOwner;
+                gunSlot = _gunSlot;
+                gameObject.transform.parent = _gunSlot.transform;
 
-                if (_gunSlot != null && _gunSlot.TryPickup(this))
+                Destroy(GetComponent<Rigidbody>());
+                enabled = true;
+
+                Collider[] colliders = GetComponents<Collider>();
+                foreach (Collider c in colliders)
                 {
-                    player = _player;
-                    gunSlot = _gunSlot;
-                    gameObject.transform.parent = _gunSlot.transform;
-
-                    Destroy(GetComponent<Rigidbody>());
-                    enabled = true;
-
-                    Collider[] colliders = GetComponents<Collider>();
-                    foreach (Collider c in colliders)
-                    {
-                        c.enabled = false;
-                    }
-
-                    transform.localPosition = Vector3.zero;
-                    transform.localRotation = Quaternion.Euler(0, 180, 0);
-                    AlignGun();
+                    c.enabled = false;
                 }
-            }
 
+                transform.localPosition = Vector3.zero;
+                transform.localRotation = Quaternion.Euler(0, 180, 0);
+                AlignGun();
+            }
         }
     }
 

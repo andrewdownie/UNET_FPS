@@ -20,4 +20,8 @@ public abstract class Player_Base : NetworkBehaviour {
 
 	public abstract Rigidbody Rigidbody{get;}
 
+	[ClientRpc]
+	public abstract void RpcConnectWeapons(NetworkIdentity primaryWeapon, NetworkIdentity secondaryWeapon);
+
+
 }
