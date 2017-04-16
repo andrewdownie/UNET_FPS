@@ -10,6 +10,8 @@ public class LocalSetup : NetworkBehaviour {
         rbc.enabled = true;
         rbc.cam.enabled = true;
         rbc.cam.GetComponent<AudioListener>().enabled = true;
+
+        GetComponent<Player>().enabled = true;
  
     }
 

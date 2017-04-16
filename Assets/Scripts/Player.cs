@@ -25,8 +25,14 @@ public class Player : Player_Base {
     private AmmoInventory_Base ammo;
 
     void Start(){
+
+
+
+
+
         ammo.SetCB_AmmoChanged(CB_AmmoInventory);
         gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
+
     }
 
     public override Vitals_Base Vitals{
@@ -100,6 +106,11 @@ public class Player : Player_Base {
 
     [Command]
     void CmdShoot(bool mouseDown){
+        RpcShoot(mouseDown);
+    }
+
+    [ClientRpc]
+    void RpcShoot(bool mouseDown){
         gunSlot.Shoot(mouseDown);
     }
 

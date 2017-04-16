@@ -115,7 +115,7 @@ public class GunSlot : GunSlot_Base {
         }
 
         equippedGun.Shoot(firstDown);
-        CB_AmmoChanged();
+        //CB_AmmoChanged();
     }
 
     public override int BulletsInClip{

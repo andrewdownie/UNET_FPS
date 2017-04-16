@@ -24,4 +24,5 @@ public abstract class Player_Base : NetworkBehaviour {
 	public abstract void RpcConnectWeapons(NetworkIdentity primaryWeapon, NetworkIdentity secondaryWeapon);
 
 
+
 }

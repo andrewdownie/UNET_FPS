@@ -55,7 +55,6 @@ public class NetPlayer : NetworkBehaviour{
 		NetworkServer.Spawn(gunGO);
 
 		NetworkIdentity gunIdentity = gunGO.GetComponent<NetworkIdentity>();
-		gunIdentity.localPlayerAuthority = true;
 		gunIdentity.AssignClientAuthority(conn);
 
 		return gunIdentity;
