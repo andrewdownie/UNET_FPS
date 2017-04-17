@@ -85,7 +85,7 @@ public class Player : Player_Base {
 
 
         if(Input.GetKeyDown(KeyCode.R)){
-            gunSlot.Reload();
+            CmdReload();
         }
 
         if(Input.GetKeyDown(KeyCode.Q)){
@@ -108,10 +108,18 @@ public class Player : Player_Base {
     void CmdShoot(bool mouseDown){
         RpcShoot(mouseDown);
     }
-
     [ClientRpc]
     void RpcShoot(bool mouseDown){
         gunSlot.Shoot(mouseDown);
+    }
+
+    [Command]
+    void CmdReload(){
+        RpcReload();
+    }
+    [ClientRpc]
+    void RpcReload(){
+        gunSlot.Reload();
     }
 
     [ClientRpc]
