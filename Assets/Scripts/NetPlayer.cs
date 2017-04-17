@@ -9,6 +9,8 @@ public class NetPlayer : NetworkBehaviour{
 	private NetworkConnection conn;
 	[SerializeField]
 	private Player_Base player;
+	[SerializeField]
+	private NetworkIdentity playerID;
 
 	[SerializeField]
 	private NetworkIdentity primaryWeapon;
@@ -19,6 +21,7 @@ public class NetPlayer : NetworkBehaviour{
 		
 		conn = playerConn;
 		this.player = player;
+		playerID = player.GetComponent<NetworkIdentity>();
 
 
 		this.primaryWeapon = null;

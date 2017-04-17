@@ -14,7 +14,12 @@ public class Net_Manager : NetworkManager{
 	[SerializeField]
 	Gun_Base startingSecondaryWeapon;
 
+	public static Net_Manager instance;
 
+
+	void Start(){
+		instance = this;
+	}
 
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
@@ -34,15 +39,21 @@ public class Net_Manager : NetworkManager{
 		ls.TargetSetupPlayer(conn);
 
 
+		ConnectWeapons();
+	}
+
+	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
+
+	}
+
+
+	private void ConnectWeapons(){
 		foreach(NetPlayer netPlayer in netPlayerList){
 			NetworkIdentity primaryWeapon = netPlayer.PrimaryWeapon;
 			NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
 			netPlayer.Player.RpcConnectWeapons(primaryWeapon, secondaryWeapon);
 		}
-
 	}
-
-
 
 
 	public override void OnServerReady(NetworkConnection conn){

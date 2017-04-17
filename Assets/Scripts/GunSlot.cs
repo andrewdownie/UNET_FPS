@@ -35,7 +35,7 @@ public class GunSlot : GunSlot_Base {
         if(equippedGun != null){
             equippedGun.gameObject.SetActive(true);        
             equippedGun.AlignGun();
-            //CB_AmmoChanged();
+            //CB_AmmoChanged();/////////////
         }
     }
 	
@@ -51,7 +51,7 @@ public class GunSlot : GunSlot_Base {
             primaryGun = null;
         }
 
-        //CB_AmmoChanged();
+        //CB_AmmoChanged();//////////////////
     }
 
     public override void SetSecondary(Gun_Base gun){
@@ -98,14 +98,14 @@ public class GunSlot : GunSlot_Base {
             equippedGun = primaryGun;
         }
         equippedGun.gameObject.SetActive(true);
-        //CB_AmmoChanged();
+        //CB_AmmoChanged();//////////////
         equippedGun.AlignGun();
     }
 
 
     public override void Reload(){
         equippedGun.Reload();
-        //CB_AmmoChanged();
+        //CB_AmmoChanged();////////////
     }
 
 
@@ -115,7 +115,7 @@ public class GunSlot : GunSlot_Base {
         }
 
         equippedGun.Shoot(firstDown);
-        //CB_AmmoChanged();
+        //CB_AmmoChanged();//////////////
     }
 
     public override int BulletsInClip{

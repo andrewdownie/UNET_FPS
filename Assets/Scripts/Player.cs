@@ -80,7 +80,7 @@ public class Player : Player_Base {
         }
 
         if(Input.GetKeyDown(KeyCode.E)){
-            gunSlot.Drop();
+            CmdDrop();
         }
 
 
@@ -104,6 +104,18 @@ public class Player : Player_Base {
         
     }
 
+
+    [Command]
+    void CmdDrop(){
+        RpcDrop();
+        Net_Manager.instance.SetPrimary(GetComponent<NetworkIdentity>(), gunSlot.EquippedGun.GetComponent<NetworkIdentity>()); // How get ID of equpped weapon?
+    }
+    [ClientRpc]
+    void RpcDrop(){
+        gunSlot.Drop();
+    }
+
+
     [Command]
     void CmdShoot(bool mouseDown){
         RpcShoot(mouseDown);
@@ -113,6 +125,7 @@ public class Player : Player_Base {
         gunSlot.Shoot(mouseDown);
     }
 
+
     [Command]
     void CmdReload(){
         RpcReload();
@@ -121,6 +134,7 @@ public class Player : Player_Base {
     void RpcReload(){
         gunSlot.Reload();
     }
+
 
     [ClientRpc]
     public override void RpcConnectWeapons(NetworkIdentity primaryWeapon, NetworkIdentity secondaryWeapon){
