@@ -285,7 +285,7 @@ public class Shotgun : Gun_Base {
 					bulletsInClip += bulletsFromInventory;
 					timeSinceLastReload = 0;
 					canReload = false;
-					HUD.SetClipAmmo(bulletsInClip, clipSize);
+					//HUD.SetClipAmmo(bulletsInClip, clipSize);///////
 				}
 				else{
 					reloading = false;

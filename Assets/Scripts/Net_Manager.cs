@@ -42,8 +42,11 @@ public class Net_Manager : NetworkManager{
 		ConnectWeapons();
 	}
 
-	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
-
+	public void PickupPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
+		//TODO: this
+	}
+	public void DropPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
+		//TODO: this
 	}
 
 

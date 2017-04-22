@@ -108,7 +108,7 @@ public class Player : Player_Base {
     [Command]
     void CmdDrop(){
         RpcDrop();
-        Net_Manager.instance.SetPrimary(GetComponent<NetworkIdentity>(), gunSlot.EquippedGun.GetComponent<NetworkIdentity>()); // How get ID of equpped weapon?
+        Net_Manager.instance.DropPrimary(GetComponent<NetworkIdentity>(), gunSlot.EquippedGun.GetComponent<NetworkIdentity>()); // How get ID of equpped weapon?
     }
     [ClientRpc]
     void RpcDrop(){
