@@ -40,21 +40,40 @@ public class Net_Manager : NetworkManager{
 
 
 		ConnectWeapons();
+		SetPlayerNames();
 	}
 
 	public void PickupPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
-		//TODO: this
+		foreach(NetPlayer np in netPlayerList){
+			if(np.PlayerID == playerID){
+				np.PrimaryWeapon = gunID;
+				break;
+			}	
+		}	
 	}
 	public void DropPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
 		//TODO: this
 	}
 
 
-	private void ConnectWeapons(){
+
+	public void ConnectWeapons(){
 		foreach(NetPlayer netPlayer in netPlayerList){
-			NetworkIdentity primaryWeapon = netPlayer.PrimaryWeapon;
-			NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
-			netPlayer.Player.RpcConnectWeapons(primaryWeapon, secondaryWeapon);
+			if(netPlayer.PrimaryWeapon != null){
+				NetworkIdentity primaryWeapon = netPlayer.PrimaryWeapon;
+				netPlayer.Player.RpcConnectPrimary(primaryWeapon);
+			}
+
+			if(netPlayer.SecondaryWeapon != null){
+				NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
+				netPlayer.Player.RpcConnectSecondary(secondaryWeapon);
+			}
+		}
+	}
+
+	private void SetPlayerNames(){
+		for(int i = 0; i < netPlayerList.Count; i++){
+			netPlayerList[i].Player.RpcSetPlayerName("Player" + i); 
 		}
 	}
 

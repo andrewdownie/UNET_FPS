@@ -72,6 +72,9 @@ public class Player : Player_Base {
     }
 
 
+    ///
+    /// Keyboard input
+    ///
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.H))
@@ -89,7 +92,7 @@ public class Player : Player_Base {
         }
 
         if(Input.GetKeyDown(KeyCode.Q)){
-            gunSlot.NextWeapon();
+            CmdNextWeapon();
         }
 
 
@@ -102,6 +105,15 @@ public class Player : Player_Base {
 
 
         
+    }
+
+    [Command]
+    void CmdNextWeapon(){
+        RpcNextWeapon();
+    }
+    [ClientRpc]
+    void RpcNextWeapon(){
+        gunSlot.NextWeapon();
     }
 
 
@@ -135,22 +147,52 @@ public class Player : Player_Base {
         gunSlot.Reload();
     }
 
+    [ClientRpc]
+    public override void RpcSetPlayerName(string playerName){
+        transform.name = playerName;
+    }
+
 
     [ClientRpc]
-    public override void RpcConnectWeapons(NetworkIdentity primaryWeapon, NetworkIdentity secondaryWeapon){
+    public override void RpcConnectSecondary(NetworkIdentity secondaryWeapon){
+        Debug.LogError("RpcConnectSecondary");
+        
         if(secondaryWeapon != null){
+            Debug.LogError("1");
             Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
-            secondary.SetOwningPlayer(this);
-            gunSlot.SetSecondary(secondary);
+            if(secondary != null){
+                Debug.LogError("2: " + secondary);
+                secondary.SetOwningPlayer(this);
+                gunSlot.SetSecondary(secondary);
+            }
+            else{
+                Debug.LogError("RpcConnectWeapons: secondary gameobject was null");
+            }
         }
+        else{
+            Debug.LogError("RpcConnectWeapons: secondary NETID was null");
+        }
+
+        
+    }
+
+    [ClientRpc]
+    public override void RpcConnectPrimary(NetworkIdentity primaryWeapon){
+        Debug.LogError("RpcConnectSecondary");
 
         if(primaryWeapon != null){
             Gun_Base primary = primaryWeapon.gameObject.GetComponent<Gun_Base>();
-            primary.SetOwningPlayer(this);
-            gunSlot.TryPickup(primary);
+            if(primary != null){
+                primary.SetOwningPlayer(this);
+                gunSlot.TryPickup(primary);
+            }
+            else{
+                Debug.LogError("RpcConnectWeapons: primary gameobject was null");
+            }
         }
-        
-
+        else{
+            Debug.LogError("RpcConnectWeapons: primary NETID was null");
+        }
     }
 
     

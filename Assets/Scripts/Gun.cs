@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 //TODO: replace player reference, to indirect references through GunSlot
 public class Gun : Gun_Base {
@@ -123,40 +124,62 @@ public class Gun : Gun_Base {
 
     void OnTriggerEnter(Collider coll)
     {
-        if (coll.tag == "Player" && player == null)
+        if (coll.tag == "Player" && player == null)// && isLocalPlayer does not work here
         {
             Debug.Log("Collided with: " + coll.name);
 
             Player_Base _player = coll.GetComponent<Player_Base>();
-            SetOwningPlayer(_player);
+            GunSlot_Base _gunSlot = _player.GunSlot;
+
+
+            if (_gunSlot != null && _gunSlot.TryPickup(this))
+            {
+                SetOwningPlayer(_player);
+            }
+
         }
     }
 
+    //TODO: figure out how to set the owning player over the network...
     public override void SetOwningPlayer(Player_Base newOwner){
+
         if (newOwner != null)
         {
             GunSlot_Base _gunSlot = newOwner.GunSlot;
 
-            if (_gunSlot != null && _gunSlot.TryPickup(this))
+            player = newOwner;
+            gunSlot = _gunSlot;
+            gameObject.transform.parent = _gunSlot.transform;
+
+            Destroy(GetComponent<Rigidbody>());
+            enabled = true;
+
+            Collider[] colliders = GetComponents<Collider>();
+            foreach (Collider c in colliders)
             {
-                player = newOwner;
-                gunSlot = _gunSlot;
-                gameObject.transform.parent = _gunSlot.transform;
-
-                Destroy(GetComponent<Rigidbody>());
-                enabled = true;
-
-                Collider[] colliders = GetComponents<Collider>();
-                foreach (Collider c in colliders)
-                {
-                    c.enabled = false;
-                }
-
-                transform.localPosition = Vector3.zero;
-                transform.localRotation = Quaternion.Euler(0, 180, 0);
-                AlignGun();
+                c.enabled = false;
             }
+
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.Euler(0, 180, 0);
+            AlignGun();
+
+            if(isLocalPlayer){
+                CmdSetOwningPlayer(GetComponent<NetworkIdentity>());
+            }
+
         }
+    }
+
+
+    [Command]
+    void CmdSetOwningPlayer(NetworkIdentity newOwnerID){
+        NetworkIdentity gunID = GetComponent<NetworkIdentity>();
+
+        Net_Manager.instance.PickupPrimary(newOwnerID, gunID);
+        //Net_Manager.instance.ConnectWeapons();//This makes unity crash...
+        
+
     }
 
     IEnumerator DropGunTimer(){

@@ -47,11 +47,14 @@ public class NetPlayer : NetworkBehaviour{
 	}
 	public NetworkIdentity PrimaryWeapon{
 		get{return primaryWeapon;}
+		set{primaryWeapon = value;}
 	}
 	public NetworkIdentity SecondaryWeapon{
 		get{return secondaryWeapon;}
 	}
-
+	public NetworkIdentity PlayerID{
+		get{return playerID;}
+	}
 
 	private NetworkIdentity SpawnGun(Gun_Base gun){
 		GameObject gunGO = Instantiate(gun.gameObject);

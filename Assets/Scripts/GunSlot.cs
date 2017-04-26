@@ -21,7 +21,10 @@ public class GunSlot : GunSlot_Base {
 	// Use this for initialization
 	void Start () {
 
+        primaryGun = null;
+        secondaryGun = null;
 
+        /* 
         if(secondaryGun != null){
             secondaryGun.gameObject.SetActive(false);
             equippedGun = secondaryGun;
@@ -37,6 +40,7 @@ public class GunSlot : GunSlot_Base {
             equippedGun.AlignGun();
             //CB_AmmoChanged();/////////////
         }
+        */
     }
 	
     public override void Drop(){
@@ -55,22 +59,26 @@ public class GunSlot : GunSlot_Base {
     }
 
     public override void SetSecondary(Gun_Base gun){
+        Debug.LogError("Set secondary: " + gun);
+        
         secondaryGun = gun;
         secondaryGun.gameObject.SetActive(true);
         equippedGun = secondaryGun;
         equippedGun.AlignGun();
+        Debug.LogError("Set secondary: " + secondaryGun);
 //        CB_AmmoChanged();//////////////////////////////////////
     }
 
     public override bool TryPickup(Gun_Base gun){
+
         if(primaryGun == null){
             primaryGun = gun;
             equippedGun = primaryGun;
+            equippedGun.gameObject.SetActive(true);
 
             if(secondaryGun != null){
                 secondaryGun.gameObject.SetActive(false);
             }
-
             //CB_AmmoChanged();////////////////////////////////
             return true;
         }

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public abstract class Gun_Base : MonoBehaviour {
+
+public abstract class Gun_Base : NetworkBehaviour {
 
 	public abstract void Reload();
 
