@@ -18,11 +18,12 @@ public class Net_Manager : NetworkManager{
 
 
 	void Start(){
-		instance = this;
-	}
-
-	void Update(){
-		Debug.Log("Meow");
+		if(instance == null){
+			instance = this;
+		}
+		else{
+			Debug.Log("There is more than one Net_Manager instance, you fool");
+		}
 	}
 
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -36,7 +37,8 @@ public class Net_Manager : NetworkManager{
 
 
 		NetPlayer np = gameObject.AddComponent<NetPlayer>();
-		np.Constructor(conn, newPlayer.GetComponent<Player_Base>(), "Player" + netPlayerList.Count, startingPrimaryWeapon, startingSecondaryWeapon);
+		string playerName = "Player" + netPlayerList.Count;
+		np.Constructor(conn, newPlayer.GetComponent<Player_Base>(), playerName, startingPrimaryWeapon, startingSecondaryWeapon);
 		netPlayerList.Add(np);
 		SetPlayerNames();
 
@@ -48,17 +50,35 @@ public class Net_Manager : NetworkManager{
 	}
 
 	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
+		Debug.LogError("Setting primary weapon for player.");
+
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
 				np.PrimaryWeapon = gunID;
+				//np.Player.RpcConnectPrimary(np.PrimaryWeapon);
+				Debug.LogError("Foudn the new owner id");
 				break;
 			}	
 		}	
+
 	}
 	public void DropPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
 		//TODO: this
 	}
 
+	public void SetSecondary(NetworkIdentity playerID, NetworkIdentity gunID){
+		Debug.LogError("Setting secondary weapon for player.");
+
+		foreach(NetPlayer np in netPlayerList){
+			if(np.PlayerID == playerID){
+				np.SecondaryWeapon = gunID;
+				//np.Player.RpcConnectPrimary(np.PrimaryWeapon);
+				Debug.LogError("Foudn the new owner id");
+				break;
+			}	
+		}	
+
+	}
 
 
 	public void ConnectWeapons(){

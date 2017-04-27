@@ -55,6 +55,7 @@ public class NetPlayer : NetworkBehaviour{
 	}
 	public NetworkIdentity SecondaryWeapon{
 		get{return secondaryWeapon;}
+		set{secondaryWeapon = value;}
 	}
 	public NetworkIdentity PlayerID{
 		get{return playerID;}

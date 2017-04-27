@@ -31,7 +31,6 @@ public class Editor_Net_Manager : Editor {
 		}
 
 
-		//this.Repaint();
 
 	}
 

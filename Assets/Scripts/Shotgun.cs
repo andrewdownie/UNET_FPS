@@ -181,6 +181,11 @@ public class Shotgun : Gun_Base {
         }
     }
 
+    public override void SetSecondaryOwner(Player_Base newOwner){
+        Debug.LogError("Not implemented: setsecondaryowner");
+    }
+
+
     IEnumerator DropGunTimer(){
         yield return new WaitForSeconds(1.3f);
         player = null;

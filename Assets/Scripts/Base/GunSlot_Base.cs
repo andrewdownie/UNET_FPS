@@ -56,4 +56,5 @@ public abstract class GunSlot_Base : MonoBehaviour {
 
 
 	public abstract void SetSecondary(Gun_Base gun);
+	public abstract void SetPrimary(Gun_Base gun);
 }

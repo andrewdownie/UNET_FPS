@@ -24,14 +24,7 @@ public class Player : Player_Base {
     [SerializeField]
     private AmmoInventory_Base ammo;
 
-    [SerializeField]
-    private Gun_Base tempSecondaryGun;
     void Start(){
-
-
-
-
-
         ammo.SetCB_AmmoChanged(CB_AmmoInventory);
         gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
 
@@ -160,10 +153,9 @@ public class Player : Player_Base {
         
         if(secondaryWeapon != null){
             Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
-            tempSecondaryGun = secondary;
             if(secondary != null){
                 gunSlot.SetSecondary(secondary);
-                secondary.SetOwningPlayer(this);
+                secondary.SetSecondaryOwner(this);
             }
             else{
                 Debug.LogWarning("RpcConnectWeapons: secondary gameobject was null");
@@ -182,8 +174,9 @@ public class Player : Player_Base {
         if(primaryWeapon != null){
             Gun_Base primary = primaryWeapon.gameObject.GetComponent<Gun_Base>();
             if(primary != null){
+                gunSlot.SetPrimary(primary);
                 primary.SetOwningPlayer(this);
-                gunSlot.TryPickup(primary);
+                //gunSlot.TryPickup(primary);
             }
             else{
                 Debug.LogWarning("RpcConnectWeapons: primary gameobject was null");

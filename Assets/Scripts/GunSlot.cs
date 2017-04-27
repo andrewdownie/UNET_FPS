@@ -68,6 +68,18 @@ public class GunSlot : GunSlot_Base {
 //        CB_AmmoChanged();//////////////////////////////////////
     }
 
+
+    public override void SetPrimary(Gun_Base _gun){
+        
+        primaryGun = _gun;
+        primaryGun.gameObject.SetActive(true);
+        equippedGun = primaryGun;
+        equippedGun.AlignGun();
+
+//        CB_AmmoChanged();//////////////////////////////////////
+    }
+
+
     public override bool TryPickup(Gun_Base gun){
 
         if(primaryGun == null){

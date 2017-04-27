@@ -10,6 +10,7 @@ public class Gun : Gun_Base {
     [SerializeField]
     private GunType gunType;
 
+    [SerializeField]
     private Player_Base player;
     private GunSlot_Base gunSlot;
 
@@ -124,7 +125,9 @@ public class Gun : Gun_Base {
 
     void OnTriggerEnter(Collider coll)
     {
-        if (coll.tag == "Player" && player == null)// && isLocalPlayer does not work here
+        //The only thing OnTriggerEnter should do is check if the slot is empty, and then send a cmd to the server to link
+        //  Then from there, the gun is linked to the player, and the link is rpc'd to all clients
+        if (coll.tag == "Player" && player == null)
         {
             Debug.Log("Collided with: " + coll.name);
 
@@ -142,7 +145,9 @@ public class Gun : Gun_Base {
 
     //TODO: figure out how to set the owning player over the network...
     public override void SetOwningPlayer(Player_Base newOwner){
+        Debug.LogError("SetOwningPlayer");
 
+        // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)
         {
             GunSlot_Base _gunSlot = newOwner.GunSlot;
@@ -164,22 +169,50 @@ public class Gun : Gun_Base {
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             AlignGun();
 
-            if(isLocalPlayer){
-                //CmdSetOwningPlayer(GetComponent<NetworkIdentity>());/////////////
+            if(isServer){
+                NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
+                NetworkIdentity gunID = GetComponent<NetworkIdentity>();
+
+                Net_Manager.instance.SetPrimary(newOwnerID, gunID);
             }
 
         }
     }
 
 
-    [Command]
-    void CmdSetOwningPlayer(NetworkIdentity newOwnerID){
-        NetworkIdentity gunID = GetComponent<NetworkIdentity>();
+    public override void SetSecondaryOwner(Player_Base newOwner){
+        Debug.LogError("SetOwningPlayer");
 
-        Net_Manager.instance.SetPrimary(newOwnerID, gunID);
-        //Net_Manager.instance.ConnectWeapons();//This makes unity crash...
-        
+        // A lot of this stuff should probably happen in the rpc? 
+        if (newOwner != null)
+        {
+            GunSlot_Base _gunSlot = newOwner.GunSlot;
 
+            player = newOwner;
+            gunSlot = _gunSlot;
+            gameObject.transform.parent = _gunSlot.transform;
+
+            Destroy(GetComponent<Rigidbody>());
+            enabled = true;
+
+            Collider[] colliders = GetComponents<Collider>();
+            foreach (Collider c in colliders)
+            {
+                c.enabled = false;
+            }
+
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.Euler(0, 180, 0);
+            AlignGun();
+
+            if(isServer){
+                NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
+                NetworkIdentity gunID = GetComponent<NetworkIdentity>();
+
+                Net_Manager.instance.SetSecondary(newOwnerID, gunID);
+            }
+
+        }
     }
 
     IEnumerator DropGunTimer(){
