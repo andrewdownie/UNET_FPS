@@ -50,13 +50,13 @@ public class Net_Manager : NetworkManager{
 	}
 
 	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
-		Debug.LogError("Setting primary weapon for player.");
+		//Debug.LogError("Setting primary weapon for player.");
 
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
 				np.PrimaryWeapon = gunID;
 				//np.Player.RpcConnectPrimary(np.PrimaryWeapon);
-				Debug.LogError("Foudn the new owner id");
+				//Debug.LogError("Foudn the new owner id");
 				break;
 			}	
 		}	
@@ -67,13 +67,11 @@ public class Net_Manager : NetworkManager{
 	}
 
 	public void SetSecondary(NetworkIdentity playerID, NetworkIdentity gunID){
-		Debug.LogError("Setting secondary weapon for player.");
+		//Debug.LogError("Setting secondary weapon for player.");
 
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
 				np.SecondaryWeapon = gunID;
-				//np.Player.RpcConnectPrimary(np.PrimaryWeapon);
-				Debug.LogError("Foudn the new owner id");
 				break;
 			}	
 		}	
@@ -89,6 +87,7 @@ public class Net_Manager : NetworkManager{
 			NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
 			netPlayer.Player.RpcConnectSecondary(secondaryWeapon);
 		}
+
 	}
 
 	private void SetPlayerNames(){

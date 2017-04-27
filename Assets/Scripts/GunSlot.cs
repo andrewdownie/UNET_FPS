@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEngine.Networking;
+using UnityEngine;
 using System.Collections;
 using System;
 
@@ -15,31 +16,47 @@ public class GunSlot : GunSlot_Base {
     [SerializeField]
     private Gun_Base secondaryGun;
 
+   [SerializeField][SyncVar] 
+   bool primaryEquipped;
+
 
     private Gun_Base equippedGun;
 
-	// Use this for initialization
+    private void GunChanged(bool primaryEquipped){
+        Debug.LogError("GunChanged for player: " + player.name);
+
+        if(primaryGun != null){
+            if(primaryEquipped){
+                primaryGun.gameObject.SetActive(true);
+            }
+            else{
+                primaryGun.gameObject.SetActive(false);
+            }
+        }
+        else if(primaryEquipped){
+            Debug.LogError("Primary is equipped, but there is no primary weapon?"); 
+        }
+
+        if(secondaryGun != null){
+            if(!primaryEquipped){
+                secondaryGun.gameObject.SetActive(true);
+            }
+            else{
+                secondaryGun.gameObject.SetActive(false);
+            }
+        }
+        else if(!primaryEquipped){
+            Debug.LogError("Secondary is equipped, but there is no secondary weapon?");
+        }
+
+
+        this.primaryEquipped = primaryEquipped;
+    }
+
 	void Awake () {
         primaryGun = null;
         secondaryGun = null;
 
-        /* 
-        if(secondaryGun != null){
-            secondaryGun.gameObject.SetActive(false);
-            equippedGun = secondaryGun;
-        }
-
-        if(primaryGun != null){
-            primaryGun.gameObject.SetActive(false);
-            equippedGun = primaryGun;
-        }
-
-        if(equippedGun != null){
-            equippedGun.gameObject.SetActive(true);        
-            equippedGun.AlignGun();
-            //CB_AmmoChanged();/////////////
-        }
-        */
     }
 	
     public override void Drop(){
@@ -58,21 +75,36 @@ public class GunSlot : GunSlot_Base {
         //CB_AmmoChanged();//////////////////
     }
 
+    public override void SetSecondaryActive(bool active){
+        secondaryGun.gameObject.SetActive(active);
+    }
+
+    public override void SetPrimaryActive(bool active){
+        primaryGun.gameObject.SetActive(active);
+    }
+
+    public override Gun_Base PrimaryGun{
+        get{return primaryGun;}
+    }
+    public override Gun_Base SecondaryGun{
+        get{return secondaryGun;}
+    }
+
     public override void SetSecondary(Gun_Base _gun){
         
         secondaryGun = _gun;
-        secondaryGun.gameObject.SetActive(true);
         equippedGun = secondaryGun;
         equippedGun.AlignGun();
+
 
 //        CB_AmmoChanged();//////////////////////////////////////
     }
 
 
     public override void SetPrimary(Gun_Base _gun){
+
         
         primaryGun = _gun;
-        primaryGun.gameObject.SetActive(true);
         equippedGun = primaryGun;
         equippedGun.AlignGun();
 
@@ -86,11 +118,14 @@ public class GunSlot : GunSlot_Base {
             primaryGun = gun;
             equippedGun = primaryGun;
             equippedGun.gameObject.SetActive(true);
+            primaryEquipped = true;
 
             if(secondaryGun != null){
                 secondaryGun.gameObject.SetActive(false);
             }
             //CB_AmmoChanged();////////////////////////////////
+
+            player.GunPickedUp();
             return true;
         }
         return false;
@@ -100,26 +135,34 @@ public class GunSlot : GunSlot_Base {
         ToggleEquip();
     }
 
-    public override void NextWeapon(){
-        ToggleEquip();
+    public override bool NextWeapon(){
+        return ToggleEquip();
     }
 
-    private void ToggleEquip(){
+    private bool ToggleEquip(){
         if(primaryGun == null){
-            return;
+            return false;
         }
 
         equippedGun.gameObject.SetActive(false);
         if(equippedGun == primaryGun){
             equippedGun = secondaryGun;
+            primaryEquipped = false;
         }
         else{
             equippedGun = primaryGun;
+            primaryEquipped = true;
         }
         equippedGun.gameObject.SetActive(true);
         //CB_AmmoChanged();//////////////
         equippedGun.AlignGun();
+
+        if(equippedGun == primaryGun){
+            return true;
+        }
+        return false;
     }
+
 
 
     public override void Reload(){

@@ -145,7 +145,6 @@ public class Gun : Gun_Base {
 
     //TODO: figure out how to set the owning player over the network...
     public override void SetOwningPlayer(Player_Base newOwner){
-        Debug.LogError("SetOwningPlayer");
 
         // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)
@@ -181,7 +180,7 @@ public class Gun : Gun_Base {
 
 
     public override void SetSecondaryOwner(Player_Base newOwner){
-        Debug.LogError("SetOwningPlayer");
+        //Debug.LogError("SetOwningPlayer");
 
         // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)

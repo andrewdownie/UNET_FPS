@@ -24,10 +24,44 @@ public class Player : Player_Base {
     [SerializeField]
     private AmmoInventory_Base ammo;
 
+    [SerializeField][SyncVar(hook="GunChanged")]
+    bool primaryEquipped;
+
     void Start(){
         ammo.SetCB_AmmoChanged(CB_AmmoInventory);
         gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
+        primaryEquipped = false;
+    } 
 
+    private void GunChanged(bool primaryEquipped){
+        Debug.LogError("GunChanged for player: " + this.name);
+
+        if(gunSlot.PrimaryGun != null){
+            if(primaryEquipped){
+                gunSlot.PrimaryGun.gameObject.SetActive(true);
+            }
+            else{
+                gunSlot.PrimaryGun.gameObject.SetActive(false);
+            }
+        }
+        else if(primaryEquipped){
+            Debug.LogError("Primary is equipped, but there is no primary weapon?"); 
+        }
+
+        if(gunSlot.SecondaryGun != null){
+            if(!primaryEquipped){
+                gunSlot.SecondaryGun.gameObject.SetActive(true);
+            }
+            else{
+                gunSlot.SecondaryGun.gameObject.SetActive(false);
+            }
+        }
+        else if(!primaryEquipped){
+            Debug.LogError("Secondary is equipped, but there is no secondary weapon?");
+        }
+
+
+        this.primaryEquipped = primaryEquipped;
     }
 
     public override Vitals_Base Vitals{
@@ -58,7 +92,12 @@ public class Player : Player_Base {
 
     public override bool TryPickupGun(Gun_Base gun){
         //TODO: make the pickup gun script target the weapon slot directly
+        //TODO: it doesn't look like this is used anymore
         return gunSlot.TryPickup(gun);
+    }
+
+    public override void GunPickedUp(){
+        primaryEquipped = true;
     }
 
     private void CB_AmmoInventory(){
@@ -87,7 +126,9 @@ public class Player : Player_Base {
         }
 
         if(Input.GetKeyDown(KeyCode.Q)){
-            CmdNextWeapon();
+            primaryEquipped = gunSlot.NextWeapon();
+
+            //CmdNextWeapon();
         }
 
 

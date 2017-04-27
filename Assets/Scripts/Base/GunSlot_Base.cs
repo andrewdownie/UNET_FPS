@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 using System;
 
-public abstract class GunSlot_Base : MonoBehaviour {
+public abstract class GunSlot_Base : NetworkBehaviour {
 
 	/// <summary>
 	/// TryPickup: the weapon slot will try to take ownership of the gun passed in.
@@ -27,7 +28,7 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	/// <summary>
 	/// NextWeapon: cycles to the next weapon in the list of all guns the weapon slot has.
 	/// </summary>
-	public abstract void NextWeapon();
+	public abstract bool NextWeapon();
 
 	/// <summary>
 	/// Reloads the currently equipped weapon.
@@ -57,4 +58,9 @@ public abstract class GunSlot_Base : MonoBehaviour {
 
 	public abstract void SetSecondary(Gun_Base gun);
 	public abstract void SetPrimary(Gun_Base gun);
+
+	public abstract void SetSecondaryActive(bool active);
+	public abstract void SetPrimaryActive(bool active);
+	public abstract Gun_Base PrimaryGun{get;}
+	public abstract Gun_Base SecondaryGun{get;}
 }

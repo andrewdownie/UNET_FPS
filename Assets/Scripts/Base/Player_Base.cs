@@ -8,6 +8,7 @@ public abstract class Player_Base : NetworkBehaviour {
 
 
 	public abstract bool TryPickupGun(Gun_Base gun);
+	public abstract void GunPickedUp();
 
 
 	public abstract AudioSource AudioSource{get;}
