@@ -112,7 +112,7 @@ public class Gun : Gun_Base {
         rb.useGravity = true;
 
 
-
+    
         Collider[] colliders = GetComponents<Collider>();
         foreach (Collider c in colliders)
         {
@@ -165,7 +165,7 @@ public class Gun : Gun_Base {
             AlignGun();
 
             if(isLocalPlayer){
-                CmdSetOwningPlayer(GetComponent<NetworkIdentity>());
+                //CmdSetOwningPlayer(GetComponent<NetworkIdentity>());/////////////
             }
 
         }
@@ -176,7 +176,7 @@ public class Gun : Gun_Base {
     void CmdSetOwningPlayer(NetworkIdentity newOwnerID){
         NetworkIdentity gunID = GetComponent<NetworkIdentity>();
 
-        Net_Manager.instance.PickupPrimary(newOwnerID, gunID);
+        Net_Manager.instance.SetPrimary(newOwnerID, gunID);
         //Net_Manager.instance.ConnectWeapons();//This makes unity crash...
         
 

@@ -24,6 +24,8 @@ public class Player : Player_Base {
     [SerializeField]
     private AmmoInventory_Base ammo;
 
+    [SerializeField]
+    private Gun_Base tempSecondaryGun;
     void Start(){
 
 
@@ -67,7 +69,7 @@ public class Player : Player_Base {
     }
 
     private void CB_AmmoInventory(){
-        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType)); //TODO: change GetGunType() to getter
+        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType)); 
         HUD.SetClipAmmo(gunSlot.EquippedGun.BulletsInClip, gunSlot.EquippedGun.ClipSize);
     }
 
@@ -160,10 +162,11 @@ public class Player : Player_Base {
         if(secondaryWeapon != null){
             Debug.LogError("1");
             Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
+            tempSecondaryGun = secondary;
             if(secondary != null){
                 Debug.LogError("2: " + secondary);
-                secondary.SetOwningPlayer(this);
                 gunSlot.SetSecondary(secondary);
+                secondary.SetOwningPlayer(this);
             }
             else{
                 Debug.LogError("RpcConnectWeapons: secondary gameobject was null");

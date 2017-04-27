@@ -34,16 +34,16 @@ public class Net_Manager : NetworkManager{
 		NetPlayer np = gameObject.AddComponent<NetPlayer>();
 		np.Constructor(conn, newPlayer.GetComponent<Player_Base>(), startingPrimaryWeapon, startingSecondaryWeapon);
 		netPlayerList.Add(np);
+		SetPlayerNames();
 
 		LocalSetup ls = newPlayer.GetComponent<LocalSetup>();
 		ls.TargetSetupPlayer(conn);
 
 
 		ConnectWeapons();
-		SetPlayerNames();
 	}
 
-	public void PickupPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
+	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
 				np.PrimaryWeapon = gunID;
@@ -59,15 +59,11 @@ public class Net_Manager : NetworkManager{
 
 	public void ConnectWeapons(){
 		foreach(NetPlayer netPlayer in netPlayerList){
-			if(netPlayer.PrimaryWeapon != null){
-				NetworkIdentity primaryWeapon = netPlayer.PrimaryWeapon;
-				netPlayer.Player.RpcConnectPrimary(primaryWeapon);
-			}
+			NetworkIdentity primaryWeapon = netPlayer.PrimaryWeapon;
+			netPlayer.Player.RpcConnectPrimary(primaryWeapon);
 
-			if(netPlayer.SecondaryWeapon != null){
-				NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
-				netPlayer.Player.RpcConnectSecondary(secondaryWeapon);
-			}
+			NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
+			netPlayer.Player.RpcConnectSecondary(secondaryWeapon);
 		}
 	}
 

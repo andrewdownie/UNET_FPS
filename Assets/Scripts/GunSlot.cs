@@ -19,8 +19,7 @@ public class GunSlot : GunSlot_Base {
     private Gun_Base equippedGun;
 
 	// Use this for initialization
-	void Start () {
-
+	void Awake () {
         primaryGun = null;
         secondaryGun = null;
 
@@ -44,6 +43,7 @@ public class GunSlot : GunSlot_Base {
     }
 	
     public override void Drop(){
+
         if(primaryGun != null && equippedGun != secondaryGun)
         {
             equippedGun = secondaryGun;
@@ -58,14 +58,17 @@ public class GunSlot : GunSlot_Base {
         //CB_AmmoChanged();//////////////////
     }
 
-    public override void SetSecondary(Gun_Base gun){
-        Debug.LogError("Set secondary: " + gun);
+    public override void SetSecondary(Gun_Base _gun){
+        Debug.LogError(player.name + ": Set secondary: " + _gun);
         
-        secondaryGun = gun;
+        secondaryGun = _gun;
         secondaryGun.gameObject.SetActive(true);
         equippedGun = secondaryGun;
         equippedGun.AlignGun();
-        Debug.LogError("Set secondary: " + secondaryGun);
+
+        secondaryGun.transform.localScale = new Vector3(10, 10, 10);
+        
+        Debug.LogError(player.name + " now has the gun: " + secondaryGun);
 //        CB_AmmoChanged();//////////////////////////////////////
     }
 
