@@ -157,23 +157,20 @@ public class Player : Player_Base {
 
     [ClientRpc]
     public override void RpcConnectSecondary(NetworkIdentity secondaryWeapon){
-        Debug.LogError("RpcConnectSecondary");
         
         if(secondaryWeapon != null){
-            Debug.LogError("1");
             Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
             tempSecondaryGun = secondary;
             if(secondary != null){
-                Debug.LogError("2: " + secondary);
                 gunSlot.SetSecondary(secondary);
                 secondary.SetOwningPlayer(this);
             }
             else{
-                Debug.LogError("RpcConnectWeapons: secondary gameobject was null");
+                Debug.LogWarning("RpcConnectWeapons: secondary gameobject was null");
             }
         }
         else{
-            Debug.LogError("RpcConnectWeapons: secondary NETID was null");
+            Debug.LogWarning("RpcConnectWeapons: secondary NETID was null");
         }
 
         
@@ -181,7 +178,6 @@ public class Player : Player_Base {
 
     [ClientRpc]
     public override void RpcConnectPrimary(NetworkIdentity primaryWeapon){
-        Debug.LogError("RpcConnectSecondary");
 
         if(primaryWeapon != null){
             Gun_Base primary = primaryWeapon.gameObject.GetComponent<Gun_Base>();
@@ -190,11 +186,11 @@ public class Player : Player_Base {
                 gunSlot.TryPickup(primary);
             }
             else{
-                Debug.LogError("RpcConnectWeapons: primary gameobject was null");
+                Debug.LogWarning("RpcConnectWeapons: primary gameobject was null");
             }
         }
         else{
-            Debug.LogError("RpcConnectWeapons: primary NETID was null");
+            Debug.LogWarning("RpcConnectWeapons: primary NETID was null");
         }
     }
 

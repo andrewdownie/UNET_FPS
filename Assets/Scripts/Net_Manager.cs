@@ -21,6 +21,10 @@ public class Net_Manager : NetworkManager{
 		instance = this;
 	}
 
+	void Update(){
+		Debug.Log("Meow");
+	}
+
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
 		Debug.Log("Adding player to game...");
@@ -32,7 +36,7 @@ public class Net_Manager : NetworkManager{
 
 
 		NetPlayer np = gameObject.AddComponent<NetPlayer>();
-		np.Constructor(conn, newPlayer.GetComponent<Player_Base>(), startingPrimaryWeapon, startingSecondaryWeapon);
+		np.Constructor(conn, newPlayer.GetComponent<Player_Base>(), "Player" + netPlayerList.Count, startingPrimaryWeapon, startingSecondaryWeapon);
 		netPlayerList.Add(np);
 		SetPlayerNames();
 
@@ -69,7 +73,7 @@ public class Net_Manager : NetworkManager{
 
 	private void SetPlayerNames(){
 		for(int i = 0; i < netPlayerList.Count; i++){
-			netPlayerList[i].Player.RpcSetPlayerName("Player" + i); 
+			netPlayerList[i].Player.RpcSetPlayerName(netPlayerList[i].PlayerName); 
 		}
 	}
 
@@ -78,6 +82,10 @@ public class Net_Manager : NetworkManager{
 		NetworkServer.SetClientReady(conn);
 		Debug.Log("Server is now ready");
 		
+	}
+
+	public List<NetPlayer> NetPlayerList{
+		get{return netPlayerList;}
 	}
 
 

@@ -59,16 +59,12 @@ public class GunSlot : GunSlot_Base {
     }
 
     public override void SetSecondary(Gun_Base _gun){
-        Debug.LogError(player.name + ": Set secondary: " + _gun);
         
         secondaryGun = _gun;
         secondaryGun.gameObject.SetActive(true);
         equippedGun = secondaryGun;
         equippedGun.AlignGun();
 
-        secondaryGun.transform.localScale = new Vector3(10, 10, 10);
-        
-        Debug.LogError(player.name + " now has the gun: " + secondaryGun);
 //        CB_AmmoChanged();//////////////////////////////////////
     }
 

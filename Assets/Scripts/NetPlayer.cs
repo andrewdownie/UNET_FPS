@@ -17,10 +17,14 @@ public class NetPlayer : NetworkBehaviour{
 	[SerializeField]
 	private NetworkIdentity secondaryWeapon;
 
-	public void Constructor(NetworkConnection playerConn, Player_Base player, Gun_Base primaryWeapon, Gun_Base secondaryWeapon){
+	[SerializeField]
+	string playerName;
+
+	public void Constructor(NetworkConnection playerConn, Player_Base player, string playerName, Gun_Base primaryWeapon, Gun_Base secondaryWeapon){
 		
 		conn = playerConn;
 		this.player = player;
+		this.playerName = playerName;
 		playerID = player.GetComponent<NetworkIdentity>();
 
 
@@ -54,6 +58,10 @@ public class NetPlayer : NetworkBehaviour{
 	}
 	public NetworkIdentity PlayerID{
 		get{return playerID;}
+	}
+
+	public string PlayerName{
+		get{return playerName;}
 	}
 
 	private NetworkIdentity SpawnGun(Gun_Base gun){
