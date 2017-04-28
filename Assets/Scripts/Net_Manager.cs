@@ -46,7 +46,8 @@ public class Net_Manager : NetworkManager{
 		ls.TargetSetupPlayer(conn);
 
 
-		ConnectWeapons();
+		ConnectPrimarys();
+		ConnectSecondarys();
 	}
 
 	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
@@ -60,7 +61,7 @@ public class Net_Manager : NetworkManager{
 				break;
 			}	
 		}	
-
+		ConnectPrimarys();
 	}
 	public void DropPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
 		//TODO: this
@@ -78,17 +79,24 @@ public class Net_Manager : NetworkManager{
 
 	}
 
+	public void ConnectPrimarys(){
 
-	public void ConnectWeapons(){
 		foreach(NetPlayer netPlayer in netPlayerList){
 			NetworkIdentity primaryWeapon = netPlayer.PrimaryWeapon;
 			netPlayer.Player.RpcConnectPrimary(primaryWeapon);
+		}
 
+	}
+
+	public void ConnectSecondarys(){
+
+		foreach(NetPlayer netPlayer in netPlayerList){
 			NetworkIdentity secondaryWeapon = netPlayer.SecondaryWeapon;
 			netPlayer.Player.RpcConnectSecondary(secondaryWeapon);
 		}
 
 	}
+
 
 	private void SetPlayerNames(){
 		for(int i = 0; i < netPlayerList.Count; i++){

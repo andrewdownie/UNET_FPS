@@ -16,42 +16,10 @@ public class GunSlot : GunSlot_Base {
     [SerializeField]
     private Gun_Base secondaryGun;
 
-   [SerializeField][SyncVar] 
-   bool primaryEquipped;
 
 
     private Gun_Base equippedGun;
 
-    private void GunChanged(bool primaryEquipped){
-        Debug.LogError("GunChanged for player: " + player.name);
-
-        if(primaryGun != null){
-            if(primaryEquipped){
-                primaryGun.gameObject.SetActive(true);
-            }
-            else{
-                primaryGun.gameObject.SetActive(false);
-            }
-        }
-        else if(primaryEquipped){
-            Debug.LogError("Primary is equipped, but there is no primary weapon?"); 
-        }
-
-        if(secondaryGun != null){
-            if(!primaryEquipped){
-                secondaryGun.gameObject.SetActive(true);
-            }
-            else{
-                secondaryGun.gameObject.SetActive(false);
-            }
-        }
-        else if(!primaryEquipped){
-            Debug.LogError("Secondary is equipped, but there is no secondary weapon?");
-        }
-
-
-        this.primaryEquipped = primaryEquipped;
-    }
 
 	void Awake () {
         primaryGun = null;
@@ -118,7 +86,6 @@ public class GunSlot : GunSlot_Base {
             primaryGun = gun;
             equippedGun = primaryGun;
             equippedGun.gameObject.SetActive(true);
-            primaryEquipped = true;
 
             if(secondaryGun != null){
                 secondaryGun.gameObject.SetActive(false);
@@ -147,11 +114,9 @@ public class GunSlot : GunSlot_Base {
         equippedGun.gameObject.SetActive(false);
         if(equippedGun == primaryGun){
             equippedGun = secondaryGun;
-            primaryEquipped = false;
         }
         else{
             equippedGun = primaryGun;
-            primaryEquipped = true;
         }
         equippedGun.gameObject.SetActive(true);
         //CB_AmmoChanged();//////////////

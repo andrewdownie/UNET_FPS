@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using UnityEngine;
 using System;
 
-public abstract class GunSlot_Base : NetworkBehaviour {
+public abstract class GunSlot_Base : MonoBehaviour {
 
 	/// <summary>
 	/// TryPickup: the weapon slot will try to take ownership of the gun passed in.

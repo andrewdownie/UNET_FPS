@@ -149,6 +149,13 @@ public class Gun : Gun_Base {
         // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)
         {
+            if(isServer && player == null){
+                NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
+                NetworkIdentity gunID = GetComponent<NetworkIdentity>();
+
+                Net_Manager.instance.SetPrimary(newOwnerID, gunID);
+            }
+
             GunSlot_Base _gunSlot = newOwner.GunSlot;
 
             player = newOwner;
@@ -168,12 +175,6 @@ public class Gun : Gun_Base {
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             AlignGun();
 
-            if(isServer){
-                NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
-                NetworkIdentity gunID = GetComponent<NetworkIdentity>();
-
-                Net_Manager.instance.SetPrimary(newOwnerID, gunID);
-            }
 
         }
     }

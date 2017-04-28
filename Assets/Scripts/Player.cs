@@ -126,9 +126,8 @@ public class Player : Player_Base {
         }
 
         if(Input.GetKeyDown(KeyCode.Q)){
-            primaryEquipped = gunSlot.NextWeapon();
-
-            //CmdNextWeapon();
+            //primaryEquipped = gunSlot.NextWeapon();
+            CmdNextWeapon();
         }
 
 
@@ -145,7 +144,8 @@ public class Player : Player_Base {
 
     [Command]
     void CmdNextWeapon(){
-        RpcNextWeapon();
+        primaryEquipped = gunSlot.NextWeapon();
+        //RpcNextWeapon();
     }
     [ClientRpc]
     void RpcNextWeapon(){
