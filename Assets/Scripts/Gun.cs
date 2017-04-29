@@ -137,6 +137,12 @@ public class Gun : Gun_Base {
 
             if (_gunSlot != null && _gunSlot.TryPickup(this))
             {
+                if(isServer){
+                    NetworkIdentity newOwnerID = _player.GetComponent<NetworkIdentity>();
+                    NetworkIdentity gunID = GetComponent<NetworkIdentity>();
+
+                    Net_Manager.instance.SetPrimary(newOwnerID, gunID);
+                }
                 SetOwningPlayer(_player);
             }
 
@@ -149,12 +155,6 @@ public class Gun : Gun_Base {
         // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)
         {
-            if(isServer && player == null){
-                NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
-                NetworkIdentity gunID = GetComponent<NetworkIdentity>();
-
-                Net_Manager.instance.SetPrimary(newOwnerID, gunID);
-            }
 
             GunSlot_Base _gunSlot = newOwner.GunSlot;
 
