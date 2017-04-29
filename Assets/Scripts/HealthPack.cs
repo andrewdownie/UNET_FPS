@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections.Generic;
 
-public class HealthPack : MonoBehaviour {
+public class HealthPack : NetworkBehaviour {
 
 
 
@@ -17,23 +18,49 @@ public class HealthPack : MonoBehaviour {
     void OnTriggerEnter(Collider coll)
     {
         
-        /// TODO: this needs to be changed to add to the players health pack slot if the slot it empty.
         if(coll.tag == "Player")
         {
-            Player combat = coll.GetComponent<Player>();
 
+            if(isServer){
+                Player player = coll.GetComponent<Player>();
+                if(player.Vitals.CanAddHealthpack()){
+                    NetworkIdentity playerID = coll.GetComponent<NetworkIdentity>();
 
-            if (combat.Vitals.AddHealthpack())
-            {
-                Destroy(gameObject, pickupSound.length + 1f);
+                    CmdPickup(playerID);
+                }
 
-                audioSource.PlayOneShot(pickupSound);
-
-                hide.Hide();
             }
-            
         }
 
 
     }
+
+
+    [Command]
+    void CmdPickup(NetworkIdentity netID){
+        RpcPickup(netID);
+    }
+
+
+    [ClientRpc]
+    void RpcPickup(NetworkIdentity netID){
+        Player player = netID.GetComponent<Player>();
+
+        //Destroy(gameObject, pickupSound.length + 1f);
+        player.Vitals.AddHealthpack();
+        audioSource.PlayOneShot(pickupSound);
+        hide.Hide();
+
+        if(isServer){
+            StartCoroutine(DelayedDestroy());
+        }
+    }
+
+
+    IEnumerator DelayedDestroy(float soundDuration){
+        yield return new WaitForSeconds(soundDuration + 1);
+        NetworkServer.Destroy(this.gameObject);
+    }
+
+
 }

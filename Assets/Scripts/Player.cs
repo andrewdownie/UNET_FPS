@@ -34,7 +34,6 @@ public class Player : Player_Base {
     } 
 
     private void GunChanged(bool primaryEquipped){
-        Debug.LogError("GunChanged for player: " + this.name);
 
         if(gunSlot.PrimaryGun != null){
             if(primaryEquipped){

@@ -49,14 +49,9 @@ public class Vitals : Vitals_Base {
 		//TODO: set HUD
 	}
 
-	public override bool AddHealthpack(){
-		if(hasHealthpack){
-			return false;
-		}
-
+	public override void AddHealthpack(){
 		hasHealthpack = true;
 		HUD.SetHealthPackVisible(true);
-		return true;
 	}
 
 	public override void UseHealthpack(){
@@ -70,6 +65,10 @@ public class Vitals : Vitals_Base {
         HUD.SetHealthPackVisible(false);
 		
 		HUD.SetHealth(curHealth, maxHealth);
+	}
+
+	public override bool CanAddHealthpack(){
+		return !hasHealthpack;	
 	}
 
 }
