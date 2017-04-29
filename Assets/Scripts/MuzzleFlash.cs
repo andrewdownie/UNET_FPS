@@ -10,9 +10,6 @@ public class MuzzleFlash : MuzzleFlash_Base {
 	[SerializeField]
 	private MeshRenderer flash;
 
-	[SerializeField]
-	private UninteruptableTimer timer;
-
 	void Start () {
 		flash.enabled = false;
 	}
@@ -20,11 +17,20 @@ public class MuzzleFlash : MuzzleFlash_Base {
 	public override void ShowFlash(){
 		ShowFlash(defaultFlashDuration);
 	}
+
+	public override void HideFlash(){
+		flash.enabled = false;
+	}
 	
 	public override void ShowFlash(float duration){
 		transform.Rotate(0, Random.Range(-180, 180), 0);
-		ToggleFlash();
-		timer.Time(ToggleFlash, duration);
+		flash.enabled = true;
+		StartCoroutine(TimeFlash());
+	}
+
+	IEnumerator TimeFlash(){
+		yield return new WaitForSeconds(defaultFlashDuration);
+		HideFlash();
 	}
 
 	private void ToggleFlash(){

@@ -63,4 +63,7 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	public abstract void SetPrimaryActive(bool active);
 	public abstract Gun_Base PrimaryGun{get;}
 	public abstract Gun_Base SecondaryGun{get;}
+
+	public abstract void EquipPrimary();
+	public abstract void EquipSecondary();
 }

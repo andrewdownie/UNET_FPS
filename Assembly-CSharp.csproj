@@ -77,7 +77,6 @@
      <Compile Include="Assets\Scripts\Shell.cs" />
      <Compile Include="Assets\Scripts\Shotgun.cs" />
      <Compile Include="Assets\Scripts\ShotgunPellet.cs" />
-     <Compile Include="Assets\Scripts\UninteruptableTimer.cs" />
      <Compile Include="Assets\Scripts\Vitals.cs" />
      <Compile Include="Assets\Scripts\Zombie.cs" />
      <Compile Include="Assets\Scripts\ZombieAI.cs" />

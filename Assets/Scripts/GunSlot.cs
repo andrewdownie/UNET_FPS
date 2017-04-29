@@ -128,6 +128,24 @@ public class GunSlot : GunSlot_Base {
         return false;
     }
 
+    public override void EquipPrimary(){
+        if(primaryGun != null){
+            equippedGun = primaryGun;
+        }
+        else{
+            Debug.LogError("EquipPrimary(): primary gun is null");
+        }
+    }
+
+    public override void EquipSecondary(){
+        if(secondaryGun != null){
+            equippedGun = secondaryGun;
+        }
+        else{
+            Debug.LogError("EquipSecondary(): secondary gun is null");
+        }
+
+    }
 
 
     public override void Reload(){

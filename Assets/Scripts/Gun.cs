@@ -179,6 +179,10 @@ public class Gun : Gun_Base {
         }
     }
 
+    void OnDisable() {
+        muzzleFlash.HideFlash();
+    }
+
 
     public override void SetSecondaryOwner(Player_Base newOwner){
         //Debug.LogError("SetOwningPlayer");

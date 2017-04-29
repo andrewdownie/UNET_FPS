@@ -39,6 +39,7 @@ public class Player : Player_Base {
         if(gunSlot.PrimaryGun != null){
             if(primaryEquipped){
                 gunSlot.PrimaryGun.gameObject.SetActive(true);
+                gunSlot.EquipPrimary(); 
             }
             else{
                 gunSlot.PrimaryGun.gameObject.SetActive(false);
@@ -51,6 +52,7 @@ public class Player : Player_Base {
         if(gunSlot.SecondaryGun != null){
             if(!primaryEquipped){
                 gunSlot.SecondaryGun.gameObject.SetActive(true);
+                gunSlot.EquipSecondary();
             }
             else{
                 gunSlot.SecondaryGun.gameObject.SetActive(false);

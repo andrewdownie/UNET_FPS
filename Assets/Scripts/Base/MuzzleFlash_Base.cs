@@ -5,5 +5,7 @@ using UnityEngine;
 public abstract class MuzzleFlash_Base : MonoBehaviour {
 	public abstract void ShowFlash();
 
+	public abstract void HideFlash();
+
 	public abstract void ShowFlash(float duration);
 }
