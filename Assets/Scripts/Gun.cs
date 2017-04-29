@@ -22,7 +22,7 @@ public class Gun : Gun_Base {
     [Header("Weapon Firing")]
     [SerializeField]
     private int clipSize = 5;
-    [SerializeField]
+    [SerializeField][SyncVar]
     private int bulletsInClip = 5;
 
 
@@ -107,7 +107,6 @@ public class Gun : Gun_Base {
 
     public override void Drop()
     {
-        enabled = false;
 
         Rigidbody rb = gameObject.AddComponent<Rigidbody>();
         rb.useGravity = true;
@@ -122,6 +121,7 @@ public class Gun : Gun_Base {
 
         StartCoroutine(DropGunTimer());
     }
+
 
     void OnTriggerEnter(Collider coll)
     {

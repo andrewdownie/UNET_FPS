@@ -63,8 +63,19 @@ public class Net_Manager : NetworkManager{
 		}	
 		ConnectPrimarys();
 	}
-	public void DropPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
-		//TODO: this
+	public void DropPrimary(NetworkIdentity playerID){
+
+		foreach(NetPlayer np in netPlayerList){
+			if(np.PlayerID == playerID){
+				np.PrimaryWeapon = null;
+				break;
+			}	
+		}	
+
+		//Player_Base player = playerID.GetComponent<Player_Base>();
+		//player.RpcDrop();
+
+		ConnectPrimarys();
 	}
 
 	public void SetSecondary(NetworkIdentity playerID, NetworkIdentity gunID){
