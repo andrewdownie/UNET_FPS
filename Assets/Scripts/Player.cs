@@ -114,7 +114,7 @@ public class Player : Player_Base {
     {
         if (Input.GetKeyDown(KeyCode.H))
         {
-            vitals.UseHealthpack();
+            CmdUseHealthPack();
         }
 
         if(Input.GetKeyDown(KeyCode.E)){
@@ -141,6 +141,19 @@ public class Player : Player_Base {
 
 
         
+    }
+
+    [Command]
+    void CmdUseHealthPack(){
+        if(vitals.HasHealthpack()){
+            RpcUseHealthPack();
+        }
+    }
+
+    [ClientRpc]
+    void RpcUseHealthPack(){
+        Debug.LogError(this.gameObject.name + " used a health pack");
+        vitals.UseHealthpack();
     }
 
     [Command]

@@ -71,4 +71,8 @@ public class Vitals : Vitals_Base {
 		return !hasHealthpack;	
 	}
 
+	public override bool HasHealthpack(){
+		return hasHealthpack;
+	}
+
 }

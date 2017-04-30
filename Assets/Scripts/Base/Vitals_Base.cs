@@ -18,5 +18,8 @@ public abstract class Vitals_Base : MonoBehaviour {
 	/// </summary>
 	public abstract void UseHealthpack();
 
+	//: Less than capacity
 	public abstract bool CanAddHealthpack();
+	//: At least one 
+	public abstract bool HasHealthpack();
 }

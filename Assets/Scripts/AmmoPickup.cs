@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections.Generic;
+using System.Collections;
 
-public class AmmoPickup : MonoBehaviour {
+public class AmmoPickup : NetworkBehaviour {
     [SerializeField]
     private GunType typeOfAmmo;
 
@@ -21,20 +23,40 @@ public class AmmoPickup : MonoBehaviour {
 
     void OnTriggerEnter(Collider coll)
     {
-        if (coll.tag == "Player")
+        if (isServer && coll.tag == "Player")
         {
-            Player player = coll.GetComponent<Player>();
-
-
-            player.PickupAmmo(typeOfAmmo, numberOfbullets);
-            Destroy(gameObject, pickupSound.length + 1f);
-
-            audioSource.PlayOneShot(pickupSound);
-            hide.Hide();
-
+            CmdPickupAmmo(coll.GetComponent<NetworkIdentity>());
         }
 
+    }
 
+    [Command]
+    void CmdPickupAmmo(NetworkIdentity netID){
+        RpcPickupAmmo(netID);
+    } 
+
+    [ClientRpc]
+    void RpcPickupAmmo(NetworkIdentity netID){
+
+        Player player = netID.GetComponent<Player>();
+        Debug.LogError(player.name + " picked up ammo");
+
+
+        player.PickupAmmo(typeOfAmmo, numberOfbullets);
+        Destroy(gameObject, pickupSound.length + 1f);
+
+        audioSource.PlayOneShot(pickupSound);
+        hide.Hide();
+
+        if(isServer){
+            StartCoroutine(DelayedDestroy(pickupSound.length + 1f));
+        }
+
+    }
+
+    IEnumerator DelayedDestroy(float soundDuration){
+        yield return new WaitForSeconds(soundDuration + 1);
+        NetworkServer.Destroy(this.gameObject);
     }
 
 

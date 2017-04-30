@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using System.Collections;
 using System.Collections.Generic;
 
 public class HealthPack : NetworkBehaviour {
@@ -52,7 +53,7 @@ public class HealthPack : NetworkBehaviour {
         hide.Hide();
 
         if(isServer){
-            StartCoroutine(DelayedDestroy());
+            StartCoroutine(DelayedDestroy(pickupSound.length + 1f));
         }
     }
 
