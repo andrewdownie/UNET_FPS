@@ -44,11 +44,13 @@ public class GunSlot : GunSlot_Base {
     }
 
     public override void SetSecondaryActive(bool active){
-        secondaryGun.gameObject.SetActive(active);
+        //secondaryGun.gameObject.SetActive(active);
+        secondaryGun.gameObject.SetActive(true);
     }
 
     public override void SetPrimaryActive(bool active){
-        primaryGun.gameObject.SetActive(active);
+        //primaryGun.gameObject.SetActive(active);
+        primaryGun.gameObject.SetActive(true);
     }
 
     public override Gun_Base PrimaryGun{
@@ -88,7 +90,7 @@ public class GunSlot : GunSlot_Base {
             equippedGun.gameObject.SetActive(true);
 
             if(secondaryGun != null){
-                secondaryGun.gameObject.SetActive(false);
+                //secondaryGun.gameObject.SetActive(false);////////////////////////////
             }
             //CB_AmmoChanged();////////////////////////////////
 
@@ -111,7 +113,7 @@ public class GunSlot : GunSlot_Base {
             return false;
         }
 
-        equippedGun.gameObject.SetActive(false);
+        //equippedGun.gameObject.SetActive(false);
         if(equippedGun == primaryGun){
             equippedGun = secondaryGun;
         }

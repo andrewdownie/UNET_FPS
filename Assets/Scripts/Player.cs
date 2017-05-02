@@ -41,7 +41,7 @@ public class Player : Player_Base {
                 gunSlot.EquipPrimary(); 
             }
             else{
-                gunSlot.PrimaryGun.gameObject.SetActive(false);
+                //gunSlot.PrimaryGun.gameObject.SetActive(false);////////////
             }
         }
         else if(primaryEquipped){
@@ -54,7 +54,7 @@ public class Player : Player_Base {
                 gunSlot.EquipSecondary();
             }
             else{
-                gunSlot.SecondaryGun.gameObject.SetActive(false);
+                //gunSlot.SecondaryGun.gameObject.SetActive(false);/////////////
             }
         }
         else if(!primaryEquipped){
