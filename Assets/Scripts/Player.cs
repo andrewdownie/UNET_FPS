@@ -31,11 +31,15 @@ public class Player : Player_Base {
         ammo.SetCB_AmmoChanged(CB_AmmoInventory);
         gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
         primaryEquipped = false;
+
+
     } 
 
     //TODO: when a player joins -> make the guns that are turned on / off match what gun every player already in the game has 
 
+
     private void GunChanged(bool primaryEquipped){
+        Debug.LogError("Gun Changed");
 
         if(gunSlot.PrimaryGun != null){
             if(primaryEquipped){
@@ -218,6 +222,8 @@ public class Player : Player_Base {
             if(secondary != null){
                 gunSlot.SetSecondary(secondary);
                 secondary.SetSecondaryOwner(this);
+
+                GunChanged(primaryEquipped);
             }
             else{
                 Debug.LogWarning("RpcConnectWeapons: secondary gameobject was null");
@@ -239,6 +245,7 @@ public class Player : Player_Base {
                 gunSlot.SetPrimary(primary);
                 primary.SetOwningPlayer(this);
                 //gunSlot.TryPickup(primary);
+                GunChanged(primaryEquipped);
             }
             else{
                 Debug.LogWarning("RpcConnectWeapons: primary gameobject was null");
