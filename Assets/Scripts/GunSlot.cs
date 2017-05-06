@@ -24,8 +24,8 @@ public class GunSlot : GunSlot_Base {
 	void Awake () {
         primaryGun = null;
         secondaryGun = null;
-
     }
+
 	
     public override void Drop(){
 
@@ -133,15 +133,28 @@ public class GunSlot : GunSlot_Base {
     public override void EquipPrimary(){
         if(primaryGun != null){
             equippedGun = primaryGun;
+            primaryGun.TurnOn();
+
+            if(secondaryGun != null){
+                //secondaryGun.TurnOff();
+            }
         }
         else{
             Debug.LogError("EquipPrimary(): primary gun is null");
         }
+
     }
 
     public override void EquipSecondary(){
         if(secondaryGun != null){
             equippedGun = secondaryGun;
+
+            secondaryGun.TurnOn();
+
+            if(primaryGun != null){
+                //primaryGun.TurnOff();
+            }
+
         }
         else{
             Debug.LogError("EquipSecondary(): secondary gun is null");

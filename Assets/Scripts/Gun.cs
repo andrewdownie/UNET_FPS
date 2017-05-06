@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 //TODO: replace player reference, to indirect references through GunSlot
 public class Gun : Gun_Base {
     [SerializeField]
+    Transform modelParent;
+    [SerializeField]
     LayerMask alignMask;
 
     [SerializeField]
@@ -46,9 +48,7 @@ public class Gun : Gun_Base {
 
     [SerializeField]
     private Shell_Base shellPrefab;
-
     [SerializeField]
-    //private ParticleSystem muzzleFlash;
     private MuzzleFlash_Base muzzleFlash;
 
     [SerializeField]
@@ -100,7 +100,7 @@ public class Gun : Gun_Base {
 	void Update () {
 
         //TODO: record the time since last shot once, and compare the saved value to
-        //      the current value
+        //      the current value (then this wouldn't have to eat cpu time in the update method)
         timeSinceLastShot += Time.deltaTime;
 	}
 
@@ -182,6 +182,29 @@ public class Gun : Gun_Base {
     void OnDisable() {
         muzzleFlash.HideFlash();
     }
+
+    public override void TurnOn(){
+
+        foreach(MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>()){
+           t.enabled = true; 
+        }    
+        muzzleFlash.HideFlash();
+        //this.enabled = true;
+
+    }
+
+    public override void TurnOff(){
+
+        foreach(MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>()){
+           t.enabled = false; 
+        }    
+        muzzleFlash.HideFlash();
+
+        //this.enabled = false;
+
+    }
+
+    
 
 
     public override void SetSecondaryOwner(Player_Base newOwner){

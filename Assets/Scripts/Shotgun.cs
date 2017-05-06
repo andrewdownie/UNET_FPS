@@ -185,6 +185,14 @@ public class Shotgun : Gun_Base {
         Debug.LogError("Not implemented: setsecondaryowner");
     }
 
+    public override void TurnOn(){
+       Debug.LogError("TurnOn() method not implemented in Shotgun class");
+    }
+
+    public override void TurnOff(){
+       Debug.LogError("TurnOff() method not implemented in Shotgun class");
+    }
+
 
     IEnumerator DropGunTimer(){
         yield return new WaitForSeconds(1.3f);

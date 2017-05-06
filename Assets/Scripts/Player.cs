@@ -33,15 +33,19 @@ public class Player : Player_Base {
         primaryEquipped = false;
     } 
 
+    //TODO: when a player joins -> make the guns that are turned on / off match what gun every player already in the game has 
+
     private void GunChanged(bool primaryEquipped){
 
         if(gunSlot.PrimaryGun != null){
             if(primaryEquipped){
-                gunSlot.PrimaryGun.gameObject.SetActive(true);
+                //gunSlot.PrimaryGun.gameObject.SetActive(true);
                 gunSlot.EquipPrimary(); 
+                gunSlot.PrimaryGun.TurnOn();
             }
             else{
                 //gunSlot.PrimaryGun.gameObject.SetActive(false);////////////
+                gunSlot.PrimaryGun.TurnOff();
             }
         }
         else if(primaryEquipped){
@@ -50,11 +54,13 @@ public class Player : Player_Base {
 
         if(gunSlot.SecondaryGun != null){
             if(!primaryEquipped){
-                gunSlot.SecondaryGun.gameObject.SetActive(true);
+                //gunSlot.SecondaryGun.gameObject.SetActive(true);
                 gunSlot.EquipSecondary();
+                gunSlot.SecondaryGun.TurnOn();
             }
             else{
                 //gunSlot.SecondaryGun.gameObject.SetActive(false);/////////////
+                gunSlot.SecondaryGun.TurnOff();
             }
         }
         else if(!primaryEquipped){
@@ -63,6 +69,7 @@ public class Player : Player_Base {
 
 
         this.primaryEquipped = primaryEquipped;
+        
     }
 
     public override Vitals_Base Vitals{

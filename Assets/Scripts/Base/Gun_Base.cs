@@ -28,4 +28,7 @@ public abstract class Gun_Base : NetworkBehaviour {
 
 	public abstract void SetOwningPlayer(Player_Base newOwner);
 	public abstract void SetSecondaryOwner(Player_Base newOwner);
+
+	public abstract void TurnOn();
+	public abstract void TurnOff();
 }
