@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
+
 public class ZombieAI : MonoBehaviour {
+    [SerializeField]
+    NetworkIdentity zombieID;
     [SerializeField]
     private ZombieAIState aiState = ZombieAIState.idle;
 
@@ -60,6 +64,9 @@ public class ZombieAI : MonoBehaviour {
 
     void Update()
     {
+        if(zombieID.isServer == false){
+            return;
+        }
 
 
         if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering)

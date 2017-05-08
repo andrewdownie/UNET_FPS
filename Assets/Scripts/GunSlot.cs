@@ -113,7 +113,6 @@ public class GunSlot : GunSlot_Base {
             return false;
         }
 
-        //equippedGun.gameObject.SetActive(false);
         if(equippedGun == primaryGun){
             equippedGun = secondaryGun;
         }
@@ -121,7 +120,9 @@ public class GunSlot : GunSlot_Base {
             equippedGun = primaryGun;
         }
         equippedGun.gameObject.SetActive(true);
-        //CB_AmmoChanged();//////////////
+        if(player.isLocalPlayer){
+           // ////////////////////////////////// CB_AmmoChanged();
+        }
         equippedGun.AlignGun();
 
         if(equippedGun == primaryGun){
@@ -133,11 +134,6 @@ public class GunSlot : GunSlot_Base {
     public override void EquipPrimary(){
         if(primaryGun != null){
             equippedGun = primaryGun;
-            primaryGun.TurnOn();
-
-            if(secondaryGun != null){
-                //secondaryGun.TurnOff();
-            }
         }
         else{
             Debug.LogError("EquipPrimary(): primary gun is null");
@@ -149,12 +145,6 @@ public class GunSlot : GunSlot_Base {
         if(secondaryGun != null){
             equippedGun = secondaryGun;
 
-            secondaryGun.TurnOn();
-
-            if(primaryGun != null){
-                //primaryGun.TurnOff();
-            }
-
         }
         else{
             Debug.LogError("EquipSecondary(): secondary gun is null");
@@ -165,7 +155,9 @@ public class GunSlot : GunSlot_Base {
 
     public override void Reload(){
         equippedGun.Reload();
-        //CB_AmmoChanged();////////////
+        if(player.isLocalPlayer){
+            // /////////////////CB_AmmoChanged();
+        }
     }
 
 
@@ -175,7 +167,9 @@ public class GunSlot : GunSlot_Base {
         }
 
         equippedGun.Shoot(firstDown);
-        //CB_AmmoChanged();//////////////
+        if(player.isLocalPlayer){
+            // //////////////CB_AmmoChanged();
+        }
     }
 
     public override int BulletsInClip{

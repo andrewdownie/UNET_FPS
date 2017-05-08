@@ -189,7 +189,6 @@ public class Gun : Gun_Base {
            t.enabled = true; 
         }    
         muzzleFlash.HideFlash();
-        //this.enabled = true;
 
     }
 
@@ -199,18 +198,13 @@ public class Gun : Gun_Base {
            t.enabled = false; 
         }    
         muzzleFlash.HideFlash();
-
-        //this.enabled = false;
-
     }
 
     
 
 
     public override void SetSecondaryOwner(Player_Base newOwner){
-        //Debug.LogError("SetOwningPlayer");
 
-        // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)
         {
             GunSlot_Base _gunSlot = newOwner.GunSlot;
@@ -253,7 +247,6 @@ public class Gun : Gun_Base {
         if(player != null){
             Transform camera = transform.parent.parent;
             RaycastHit hit;
-            //Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
             Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
             
             Vector3 point = hit.point;
@@ -294,7 +287,8 @@ public class Gun : Gun_Base {
                 ///
                 /// Create the bullet
                 ///
-                player.AudioSource.PlayOneShot(shoot);
+                //player.AudioSource.PlayOneShot(shoot);
+                AudioSource.PlayClipAtPoint(shoot, player.transform.position);
                 bulletsInClip -= 1;
 
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
@@ -304,10 +298,6 @@ public class Gun : Gun_Base {
 
                 Align(bullet.transform, new Vector3(0, 0, 0));
 
-                /*Transform t = ((ParticleSystem)Instantiate(muzzleFlash)).GetComponent<Transform>();
-                t.position = bulletSpawnPoint.position;
-                t.rotation = bulletSpawnPoint.rotation;
-                t.parent = bulletSpawnPoint;*/
 
                 muzzleFlash.ShowFlash();
 

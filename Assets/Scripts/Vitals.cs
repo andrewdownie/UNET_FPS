@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Vitals : Vitals_Base {
+
 	[SerializeField]
 	float curHealth = 100, maxHealth = 200;
 
@@ -20,23 +22,30 @@ public class Vitals : Vitals_Base {
 	[SerializeField]
 	private AudioClip healSound;
 
+	public override void OnStartAuthority(){
 
+		if(hasAuthority){
+			HUD.SetHealth(curHealth, maxHealth);
+			HUD.SetHealthPackVisible(hasHealthpack);
 
-	void Start(){
-		HUD.SetHealth(curHealth, maxHealth);
-        HUD.SetHealthPackVisible(hasHealthpack);
+			HUD.SetRespawnButtonVisible(curHealth == 0);
 
-        HUD.SetRespawnButtonVisible(curHealth == 0);
-
-		audioSource = GetComponent<AudioSource>();
-		if(audioSource == null){
-			Debug.LogWarning("Vitals: audio source not found.");
+			audioSource = GetComponent<AudioSource>();
+			if(audioSource == null){
+				Debug.LogWarning("Vitals: audio source not found.");
+			}
 		}
 	}
 
 	public override void ChangeHealth(float amount){
 		curHealth = Mathf.Clamp(curHealth + amount, 0, maxHealth);
-		HUD.SetHealth(curHealth, maxHealth);
+
+		if(hasAuthority){
+			HUD.SetHealth(curHealth, maxHealth);
+			HUD.SetRespawnButtonVisible(curHealth == 0);
+		}	
+
+
 	}
 
 	public override void ChangeStamina(float amount){
@@ -51,7 +60,9 @@ public class Vitals : Vitals_Base {
 
 	public override void AddHealthpack(){
 		hasHealthpack = true;
-		HUD.SetHealthPackVisible(true);
+		if(hasAuthority){
+			HUD.SetHealthPackVisible(true);
+		}
 	}
 
 	public override void UseHealthpack(){
@@ -62,9 +73,11 @@ public class Vitals : Vitals_Base {
 		hasHealthpack = false;
 		ChangeHealth(120);
 		audioSource.PlayOneShot(healSound);
-        HUD.SetHealthPackVisible(false);
-		
-		HUD.SetHealth(curHealth, maxHealth);
+
+		if(hasAuthority){
+			HUD.SetHealthPackVisible(false);
+			HUD.SetHealth(curHealth, maxHealth);
+		}
 	}
 
 	public override bool CanAddHealthpack(){

@@ -7,7 +7,6 @@ public abstract class Player_Base : NetworkBehaviour {
 	public abstract void PickupAmmo(GunType gunType, int amount);
 
 
-	public abstract bool TryPickupGun(Gun_Base gun);
 	public abstract void GunPickedUp();
 
 

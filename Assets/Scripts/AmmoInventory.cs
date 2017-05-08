@@ -15,8 +15,7 @@ public class AmmoInventory : AmmoInventory_Base {
 
 
 
-    void Start(){
-        bullets = new Dictionary<GunType, int>();
+    void Awake(){
 
         //TODO: custom unity inspector gui applied to a dictionary (unsupported by unity), 
         //      does not remember the values entered (values get forgotten at runtime)
@@ -31,6 +30,9 @@ public class AmmoInventory : AmmoInventory_Base {
     }
 
     public override int Count(GunType gunType){
+        if(gunType == null){
+            return 0;
+        }
         return bullets[gunType];
     }
 
@@ -59,9 +61,9 @@ public class AmmoInventory : AmmoInventory_Base {
             bullets[gunType] = 0;
         }
 
-        if(CB_AmmoChanged != null){
-            CB_AmmoChanged();
-        }
+       /* if(CB_AmmoChanged != null){
+            CB_AmmoChanged();// This needs to happen after the gun has updated how much ammo is in the clip...
+        }*/
 
         return returnAmount; 
     }

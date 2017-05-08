@@ -1,9 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
 public class HitMarkerCallback : MonoBehaviour {
 
     private AudioSource audioSource;
+
+    [SerializeField]
+    NetworkIdentity gunID;
 
     [SerializeField]
     private AudioClip hitMarkerSound;
@@ -16,6 +20,10 @@ public class HitMarkerCallback : MonoBehaviour {
 	
     public void ConfirmHit()
     {
+        if(!gunID.hasAuthority){
+            return;
+        }
+
         audioSource.PlayOneShot(hitMarkerSound);
         StartCoroutine(ShowHideHitMarker());
     }

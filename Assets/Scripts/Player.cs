@@ -28,27 +28,25 @@ public class Player : Player_Base {
     bool primaryEquipped;
 
     void Start(){
-        ammo.SetCB_AmmoChanged(CB_AmmoInventory);
-        gunSlot.SetCB_AmmoChanged(CB_AmmoInventory);
+        ammo.SetCB_AmmoChanged(UpdateAmmoHUD);
+        gunSlot.SetCB_AmmoChanged(UpdateAmmoHUD);
         primaryEquipped = false;
 
-
+        UpdateAmmoHUD();
     } 
 
-    //TODO: when a player joins -> make the guns that are turned on / off match what gun every player already in the game has 
 
 
     private void GunChanged(bool primaryEquipped){
-        Debug.LogError("Gun Changed");
+        //Debug.LogError("Gun Changed");
 
         if(gunSlot.PrimaryGun != null){
             if(primaryEquipped){
-                //gunSlot.PrimaryGun.gameObject.SetActive(true);
                 gunSlot.EquipPrimary(); 
                 gunSlot.PrimaryGun.TurnOn();
+                UpdateAmmoHUD();
             }
             else{
-                //gunSlot.PrimaryGun.gameObject.SetActive(false);////////////
                 gunSlot.PrimaryGun.TurnOff();
             }
         }
@@ -58,12 +56,11 @@ public class Player : Player_Base {
 
         if(gunSlot.SecondaryGun != null){
             if(!primaryEquipped){
-                //gunSlot.SecondaryGun.gameObject.SetActive(true);
                 gunSlot.EquipSecondary();
                 gunSlot.SecondaryGun.TurnOn();
+                UpdateAmmoHUD();
             }
             else{
-                //gunSlot.SecondaryGun.gameObject.SetActive(false);/////////////
                 gunSlot.SecondaryGun.TurnOff();
             }
         }
@@ -102,17 +99,12 @@ public class Player : Player_Base {
         ammo.Add(gunType, amount);
     }
 
-    public override bool TryPickupGun(Gun_Base gun){
-        //TODO: make the pickup gun script target the weapon slot directly
-        //TODO: it doesn't look like this is used anymore
-        return gunSlot.TryPickup(gun);
-    }
 
     public override void GunPickedUp(){
         primaryEquipped = true;
     }
 
-    private void CB_AmmoInventory(){
+    private void UpdateAmmoHUD(){
         HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType)); 
         HUD.SetClipAmmo(gunSlot.EquippedGun.BulletsInClip, gunSlot.EquippedGun.ClipSize);
     }
@@ -138,7 +130,6 @@ public class Player : Player_Base {
         }
 
         if(Input.GetKeyDown(KeyCode.Q)){
-            //primaryEquipped = gunSlot.NextWeapon();
             CmdNextWeapon();
         }
 
@@ -148,6 +139,7 @@ public class Player : Player_Base {
         ///
         if(Input.GetKey(KeyCode.Mouse0)){
             CmdShoot(Input.GetKeyDown(KeyCode.Mouse0));
+            UpdateAmmoHUD();
         } 
 
 
@@ -170,7 +162,6 @@ public class Player : Player_Base {
     [Command]
     void CmdNextWeapon(){
         primaryEquipped = gunSlot.NextWeapon();
-        //RpcNextWeapon();
     }
     [ClientRpc]
     void RpcNextWeapon(){
@@ -181,11 +172,12 @@ public class Player : Player_Base {
     [Command]
     void CmdDrop(){
         RpcDrop();
-        Net_Manager.instance.DropPrimary(GetComponent<NetworkIdentity>()); // How get ID of equpped weapon?
+        Net_Manager.instance.DropPrimary(GetComponent<NetworkIdentity>()); 
     }
     [ClientRpc]
     public void RpcDrop(){
         gunSlot.Drop();
+        primaryEquipped = false;
     }
 
 
@@ -206,6 +198,10 @@ public class Player : Player_Base {
     [ClientRpc]
     void RpcReload(){
         gunSlot.Reload();
+
+        if(hasAuthority){
+            UpdateAmmoHUD();
+        }
     }
 
     [ClientRpc]
@@ -244,7 +240,6 @@ public class Player : Player_Base {
             if(primary != null){
                 gunSlot.SetPrimary(primary);
                 primary.SetOwningPlayer(this);
-                //gunSlot.TryPickup(primary);
                 GunChanged(primaryEquipped);
             }
             else{

@@ -22,7 +22,7 @@ public class Net_Manager : NetworkManager{
 			instance = this;
 		}
 		else{
-			Debug.Log("There is more than one Net_Manager instance, you fool");
+			Debug.Log("There is more than one Net_Manager instance, (fly) you fool");
 		}
 	}
 

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public abstract class Vitals_Base : MonoBehaviour {
+public abstract class Vitals_Base : NetworkBehaviour {
 	public abstract void ChangeHealth(float amount);
 	public abstract void ChangeStamina(float amount);
 	public abstract void ChangeMana(float amount);
