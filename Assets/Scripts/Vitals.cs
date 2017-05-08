@@ -5,22 +5,36 @@ using UnityEngine.Networking;
 
 public class Vitals : Vitals_Base {
 
-	[SerializeField]
-	float curHealth = 100, maxHealth = 200;
+	[SerializeField][SyncVar(hook="UpdateHealthGUI")]
+	float curHealth = 100;
+	[SerializeField][SyncVar]
+	float maxHealth = 200;
 
-	[SerializeField]
+	[SerializeField][SyncVar]
 	float curStamina, maxStamina;
 
-	[SerializeField]
+	[SerializeField][SyncVar]
 	float curMana, maxMana;
 
-	[SerializeField]
+	[SerializeField][SyncVar]
 	bool hasHealthpack;
 
 	private AudioSource audioSource;
 
 	[SerializeField]
 	private AudioClip healSound;
+
+
+	//TODO: even if this works 100% correctly, it's not setup as cleanly as it could be
+	//      	-> ChangeHealth will be called by all clients, but not do anything because of the syncvar (I think...)
+	void UpdateHealthGUI(float curHealth){
+		this.curHealth = curHealth;
+
+		if(hasAuthority){
+			HUD.SetHealth(curHealth, maxHealth);
+			HUD.SetRespawnButtonVisible(curHealth == 0);
+		}
+	}
 
 	public override void OnStartAuthority(){
 
