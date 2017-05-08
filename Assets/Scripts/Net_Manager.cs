@@ -26,6 +26,26 @@ public class Net_Manager : NetworkManager{
 		}
 	}
 
+
+	public override void OnServerDisconnect(NetworkConnection conn){
+		Debug.LogError("OnServerDisconnect");
+		NetPlayer playerThatLeft = null;
+
+		foreach(NetPlayer np in netPlayerList){
+			if(np.Conn == conn){
+				playerThatLeft = np;
+			}
+		}
+
+		if(playerThatLeft != null){
+			NetworkServer.Destroy(playerThatLeft.Player.gameObject);
+			netPlayerList.Remove(playerThatLeft);
+			Destroy(playerThatLeft);
+		}
+
+		
+	}
+
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
 		Debug.Log("Adding player to game...");
