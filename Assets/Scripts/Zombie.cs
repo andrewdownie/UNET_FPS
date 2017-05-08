@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Zombie : MonoBehaviour {
 
@@ -20,10 +21,18 @@ public class Zombie : MonoBehaviour {
     private ZombieAI zombieAI;
     private AudioSource audioSource;
 
+    private Rigidbody rigid;
+
+    [SerializeField]
+    private Image healthBar;
+
 	// Use this for initialization
 	void Start () {
         audioSource = GetComponent<AudioSource>();
+        rigid = GetComponent<Rigidbody>();
         zombieAI = GetComponent<ZombieAI>();
+
+        healthBar.fillAmount = curHealth / maxHealth;
 	}
 	
 	// Update is called once per frame
@@ -35,6 +44,8 @@ public class Zombie : MonoBehaviour {
     public void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition)
     {
         curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);
+
+        healthBar.fillAmount = curHealth / maxHealth;
 
         zombieAI.GotAttacked();
 
@@ -51,6 +62,7 @@ public class Zombie : MonoBehaviour {
             audioSource.PlayOneShot(zombieDie);
             Destroy(gameObject, 5);
 
+            rigid.velocity = 0.1f * rigid.velocity;
             
 
             Instantiate(deathSplatter, new Vector3(hitLocation.x, 1, hitLocation.z), Quaternion.Euler(-90, 0, 0));

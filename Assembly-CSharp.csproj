@@ -67,6 +67,7 @@
      <Compile Include="Assets\Scripts\HealthPack.cs" />
      <Compile Include="Assets\Scripts\HideGameObject.cs" />
      <Compile Include="Assets\Scripts\HitMarkerCallback.cs" />
+     <Compile Include="Assets\Scripts\Lib\CameraFacingBillboard.cs" />
      <Compile Include="Assets\Scripts\LocalSetup.cs" />
      <Compile Include="Assets\Scripts\MuzzleFlash.cs" />
      <Compile Include="Assets\Scripts\NetPlayer.cs" />

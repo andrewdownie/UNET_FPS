@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Vitals : Vitals_Base {
 
@@ -24,11 +25,14 @@ public class Vitals : Vitals_Base {
 	[SerializeField]
 	private AudioClip healSound;
 
+	[SerializeField]
+	private Image healthBar;
 
 	//TODO: even if this works 100% correctly, it's not setup as cleanly as it could be
 	//      	-> ChangeHealth will be called by all clients, but not do anything because of the syncvar (I think...)
 	void UpdateHealthGUI(float curHealth){
 		this.curHealth = curHealth;
+		healthBar.fillAmount = curHealth / maxHealth;
 
 		if(hasAuthority){
 			HUD.SetHealth(curHealth, maxHealth);
@@ -44,10 +48,16 @@ public class Vitals : Vitals_Base {
 
 			HUD.SetRespawnButtonVisible(curHealth == 0);
 
-			audioSource = GetComponent<AudioSource>();
-			if(audioSource == null){
-				Debug.LogWarning("Vitals: audio source not found.");
-			}
+
+		}
+	}
+
+	void Start(){
+		healthBar.fillAmount = curHealth / maxHealth;
+
+		audioSource = GetComponent<AudioSource>();
+		if(audioSource == null){
+			Debug.LogWarning("Vitals: audio source not found.");
 		}
 	}
 

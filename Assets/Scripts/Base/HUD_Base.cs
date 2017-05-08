@@ -28,9 +28,10 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
     /////
     void Awake()
     {
-        if (FindObjectsOfType(typeof(Canvas)).Length > 1)
+        
+        if (GameObject.FindGameObjectsWithTag("HUD").Length > 1)
         {
-            Debug.LogWarning("Destroying excess Canvas's...");
+            Debug.LogWarning("Destroying excess HUD's...");
             Destroy(gameObject);
         }
 
