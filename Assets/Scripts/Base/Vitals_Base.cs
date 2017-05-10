@@ -23,4 +23,9 @@ public abstract class Vitals_Base : NetworkBehaviour {
 	public abstract bool CanAddHealthpack();
 	//: At least one 
 	public abstract bool HasHealthpack();
+
+	public abstract bool alive{get;}
+	public abstract bool dead{get;}
+
+	public abstract void Revive();
 }

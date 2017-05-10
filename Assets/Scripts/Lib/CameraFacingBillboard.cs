@@ -16,7 +16,15 @@ public class CameraFacingBillboard : MonoBehaviour
             return;
         }
 
-        transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward,
-            Camera.main.transform.rotation * Vector3.up);
+
+        float x, y;
+        Camera c = Camera.main;
+        x = c.transform.rotation.x;
+        y = c.transform.rotation.y;
+        Quaternion camRot = Quaternion.Euler(x, y, 0);
+
+        
+        transform.LookAt(transform.position + c.transform.rotation * Vector3.forward,
+            camRot * Vector3.up);
     }
 }

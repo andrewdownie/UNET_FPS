@@ -34,7 +34,7 @@ public class ZombieAI : MonoBehaviour {
     private AudioClip[] zombieAttackSounds;
 
 
-    private Player target;
+    private Player_Base target;
 
 
     private bool readyToAttack;
@@ -71,15 +71,22 @@ public class ZombieAI : MonoBehaviour {
 
         if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering)
         {
-            RaycastHit hitInfo;
+            RaycastHit[] hitInfo;
 
-            Physics.SphereCast(transform.position, currentCastRadius, transform.forward, out hitInfo, currentCastRadius, playerLayerMask);
+            hitInfo = Physics.SphereCastAll(transform.position, currentCastRadius, transform.forward, playerLayerMask);
 
-            if(hitInfo.transform != null)
-            {
-                target = hitInfo.transform.gameObject.GetComponent<Player>();
-                aiState = ZombieAIState.chasing;
+            foreach(RaycastHit rc in hitInfo){
+                if(rc.transform != null)
+                {
+                    Player_Base target = rc.transform.gameObject.GetComponent<Player>();
+                    if(target != null && target.Vitals.alive){
+                        this.target = target;
+                        aiState = ZombieAIState.chasing;
+                        break;
+                    } 
+                }
             }
+
         }
 
 
@@ -89,7 +96,13 @@ public class ZombieAI : MonoBehaviour {
             if(target == null){
                 aiState = ZombieAIState.idle;
                 return; 
-                }
+            }
+
+            if(target.Vitals.dead){
+                target = null;
+                BecomeCurious();
+                return;
+            }
 
             rigid.MovePosition(Vector3.MoveTowards(transform.position, target.transform.position, moveSpeed * Time.deltaTime));
 

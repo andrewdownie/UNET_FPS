@@ -27,13 +27,45 @@ public class Player : Player_Base {
     [SerializeField][SyncVar(hook="GunChanged")]
     bool primaryEquipped;
 
+    [SerializeField][SyncVar(hook="ReviveTimeChanged")]
+    float reviveTime;
+
+    [SerializeField]
+    float REVIVE_TIME = 3f;
+    [SerializeField]
+    Player_Base targetRevive;
+    [SerializeField]
+    LayerMask playerLayerMask;
+
+    bool reviving;
+
     void Start(){
         ammo.SetCB_AmmoChanged(UpdateAmmoHUD);
         gunSlot.SetCB_AmmoChanged(UpdateAmmoHUD);
         primaryEquipped = false;
 
         UpdateAmmoHUD();
+
+        if(targetRevive == null){
+            HUD.SetReviveImageFill(0);
+            HUD.SetReviveText("");
+        }
     } 
+
+    private void ReviveTimeChanged(float reviveTime){
+        if(hasAuthority){
+            HUD.SetReviveImageFill(reviveTime / REVIVE_TIME);
+
+            if(reviveTime > 0){
+                HUD.SetReviveText("Hold 'x' to revive " + targetRevive.name);
+            }
+            else{
+                HUD.SetReviveText("");
+            }
+        }
+
+        this.reviveTime = reviveTime;
+    }
 
 
 
@@ -143,9 +175,68 @@ public class Player : Player_Base {
             UpdateAmmoHUD();
         } 
 
+        if(Input.GetKeyDown(KeyCode.H)){
+            if(targetRevive != null){
+                reviving = true;
+                reviveTime = 0;
+            }
+        }
 
-        
+        if(Input.GetKeyUp(KeyCode.H)){
+            reviving = false;
+            reviveTime = 0;
+            HUD.SetReviveImageFill(1);
+        }
+
+
+        if(reviving){
+            reviveTime += Time.deltaTime;
+
+            if(targetRevive == null){
+                reviving = false;
+            }
+            else if(reviveTime >= REVIVE_TIME){
+                targetRevive.Vitals.Revive();
+                targetRevive = null;
+                reviving = false;
+            }
+        } 
+
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1.3f, playerLayerMask);
+
+        if(colliders.Length == 1){
+            HUD.SetReviveText("");
+            HUD.SetReviveImageFill(0);
+        }
+        else{
+
+            foreach(Collider c in colliders){
+                if(c.transform == transform){
+                    continue;
+                }
+
+                Player_Base targetRevive = c.GetComponent<Player_Base>();
+                if(targetRevive.Vitals.dead){
+                    this.targetRevive = targetRevive;
+                    HUD.SetReviveText("Hold 'h' to revive " + c.name);
+
+                    float revivePercent = reviveTime / REVIVE_TIME;
+                    if(revivePercent == 0){
+                        revivePercent = 1;
+                    }
+                    HUD.SetReviveImageFill(revivePercent);
+                    break;
+                }
+
+            }
+        }
+
+
+            
+
     }
+
 
     [Command]
     void CmdUseHealthPack(){
@@ -209,6 +300,8 @@ public class Player : Player_Base {
     public override void RpcSetPlayerName(string playerName){
         transform.name = playerName;
     }
+    
+
 
 
     [ClientRpc]

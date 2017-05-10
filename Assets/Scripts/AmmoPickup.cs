@@ -39,7 +39,6 @@ public class AmmoPickup : NetworkBehaviour {
     void RpcPickupAmmo(NetworkIdentity netID){
 
         Player player = netID.GetComponent<Player>();
-        Debug.LogError(player.name + " picked up ammo");
 
 
         player.PickupAmmo(typeOfAmmo, numberOfbullets);

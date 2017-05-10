@@ -73,11 +73,6 @@ public class Zombie : MonoBehaviour {
             
         }
 
-        
-        
-        
-
-        
     }
 
 

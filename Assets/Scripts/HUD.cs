@@ -39,12 +39,16 @@ public class HUD : HUD_Base<HUD> {
     [SerializeField]
     Text deathMessage;
     [SerializeField]
-    Image respawnButton;
+    Image reviveImg;
     [SerializeField]
-    Text respawnButtonText;
+    Text reviveTxt;
+
 
     [Header("Aimer")]
     Image aimer;
+
+
+    
 
 
     /////
@@ -87,16 +91,21 @@ public class HUD : HUD_Base<HUD> {
         singleton.hitMarker.enabled = visible;
     }
 
-
-    public static void SetRespawnButtonVisible(bool visible)
-    {
+    public static void SetDeathMessageVisible(bool visible){
         singleton.deathMessage.enabled = visible;
-        singleton.respawnButton.enabled = visible;
-        singleton.respawnButtonText.enabled = visible;
     }
+
 
     public static void SetAimerVisible(bool visible)
     {
         singleton.aimer.enabled = visible;
+    }
+
+    public static void SetReviveText(string text){
+        singleton.reviveTxt.text = text;
+    }
+
+    public static void SetReviveImageFill(float percentage01){
+        singleton.reviveImg.fillAmount = percentage01;
     }
 }
