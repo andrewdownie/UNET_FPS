@@ -102,6 +102,7 @@ public class Player : Player_Base {
 
     public override void GunPickedUp(){
         primaryEquipped = true;
+        gunSlot.SecondaryGun.TurnOff();
     }
 
     private void UpdateAmmoHUD(){
@@ -250,6 +251,7 @@ public class Player : Player_Base {
             Debug.LogWarning("RpcConnectWeapons: primary NETID was null");
         }
     }
+
 
     
 

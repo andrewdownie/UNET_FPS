@@ -3,8 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Vitals : Vitals_Base {
+	[SerializeField]
+	Collider reviveCollider;
+
+	[SerializeField]
+	RigidbodyFirstPersonController playerControllerScript;	
 
 	[SerializeField][SyncVar(hook="UpdateHealthGUI")]
 	float curHealth = 100;
@@ -28,16 +34,44 @@ public class Vitals : Vitals_Base {
 	[SerializeField]
 	private Image healthBar;
 
+	private Player_Base player;
+
 	//TODO: even if this works 100% correctly, it's not setup as cleanly as it could be
 	//      	-> ChangeHealth will be called by all clients, but not do anything because of the syncvar (I think...)
 	void UpdateHealthGUI(float curHealth){
-		this.curHealth = curHealth;
 		healthBar.fillAmount = curHealth / maxHealth;
 
+
+		bool dead = (curHealth == 0);
+		bool previouslyDead = (this.curHealth == 0);
 		if(hasAuthority){
 			HUD.SetHealth(curHealth, maxHealth);
-			HUD.SetRespawnButtonVisible(curHealth == 0);
+			HUD.SetRespawnButtonVisible(dead);
+			playerControllerScript.enabled = !dead;
+			player.enabled = !dead;
+
+			if(dead){
+				player.GunSlot.EquippedGun.TurnOff();
+			}
+			else{
+				player.GunSlot.EquippedGun.TurnOn();
+
+			}
 		}
+
+		if(dead){
+			if(!previouslyDead){
+				transform.Rotate(0, 0, 90);
+			}
+		}
+		else{
+			if(previouslyDead){
+				transform.Rotate(0, 0, -90);
+			}
+		}
+
+
+		this.curHealth = curHealth;
 	}
 
 	public override void OnStartAuthority(){
@@ -59,15 +93,25 @@ public class Vitals : Vitals_Base {
 		if(audioSource == null){
 			Debug.LogWarning("Vitals: audio source not found.");
 		}
+
+		player = GetComponent<Player_Base>();
 	}
 
 	public override void ChangeHealth(float amount){
 		curHealth = Mathf.Clamp(curHealth + amount, 0, maxHealth);
 
+
+		/* 
 		if(hasAuthority){
 			HUD.SetHealth(curHealth, maxHealth);
-			HUD.SetRespawnButtonVisible(curHealth == 0);
+
+			bool dead = (curHealth == 0);
+			HUD.SetRespawnButtonVisible(dead);
+			playerControllerScript.enabled = !dead;
+			
 		}	
+		*/
+
 
 
 	}

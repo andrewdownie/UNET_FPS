@@ -5,6 +5,9 @@ using UnityEngine;
 //TODO: replace player reference, to indirect references through GunSlot
 public class Shotgun : Gun_Base {
     [SerializeField]
+    Transform modelParent;
+
+    [SerializeField]
     private LayerMask alignMask;
 
     [SerializeField]
@@ -60,6 +63,7 @@ public class Shotgun : Gun_Base {
 
     [SerializeField]
     HitMarkerCallback hitMarkerCallback;
+
     
 
     void Start()
@@ -186,11 +190,19 @@ public class Shotgun : Gun_Base {
     }
 
     public override void TurnOn(){
-       Debug.LogError("TurnOn() method not implemented in Shotgun class");
+        foreach(MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>()){
+           t.enabled = true; 
+        }    
+        muzzleFlash.HideFlash();
+
     }
 
     public override void TurnOff(){
-       Debug.LogError("TurnOff() method not implemented in Shotgun class");
+        foreach(MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>()){
+           t.enabled = false; 
+        }    
+        muzzleFlash.HideFlash();
+
     }
 
 

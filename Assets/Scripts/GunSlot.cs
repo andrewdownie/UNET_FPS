@@ -67,6 +67,7 @@ public class GunSlot : GunSlot_Base {
         equippedGun.AlignGun();
 
 
+
 //        CB_AmmoChanged();//////////////////////////////////////
     }
 
@@ -77,6 +78,7 @@ public class GunSlot : GunSlot_Base {
         primaryGun = _gun;
         equippedGun = primaryGun;
         equippedGun.AlignGun();
+
 
 //        CB_AmmoChanged();//////////////////////////////////////
     }
