@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
-public class Zombie : MonoBehaviour {
+public class Zombie : NetworkBehaviour {
 
     [SerializeField]
     private float curHealth = 100, maxHealth = 100;
@@ -26,6 +27,10 @@ public class Zombie : MonoBehaviour {
     [SerializeField]
     private Image healthBar;
 
+
+    [SerializeField]
+    MonsterSpawner_Base spawner;
+
 	// Use this for initialization
 	void Start () {
         audioSource = GetComponent<AudioSource>();
@@ -39,6 +44,10 @@ public class Zombie : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void SetSpawner(MonsterSpawner_Base spawner){
+        this.spawner = spawner;
+    }
 
 
     public void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition)
@@ -60,7 +69,8 @@ public class Zombie : MonoBehaviour {
         {
             hide.Hide();
             audioSource.PlayOneShot(zombieDie);
-            Destroy(gameObject, 5);
+            //Destroy(gameObject, 5);
+            DestroyDelay(5f);
 
             rigid.velocity = 0.1f * rigid.velocity;
             
@@ -75,5 +85,12 @@ public class Zombie : MonoBehaviour {
 
     }
 
+
+    IEnumerator DestroyDelay(float delay){
+        if(isServer){
+            yield return new WaitForSeconds(delay);
+            NetworkServer.Destroy(gameObject);
+        }
+    }
 
 }

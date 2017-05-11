@@ -20,7 +20,9 @@ public class MonsterSpawner : MonsterSpawner_Base {
 
 	[Header("Spawn Settings")]
 	[SerializeField]
-	float spawnRate = 2;
+	float spawnDelay = 2;
+	[SerializeField]
+	float timeSinceLastSpawn;
 	[SerializeField]
 	Zombie zombiePrefabToSpawn;
 
@@ -71,6 +73,16 @@ public class MonsterSpawner : MonsterSpawner_Base {
 		if(timeSinceAttacked >= healthRegenDelay){
 			ApplyDamage(healthRegenRate * Time.deltaTime * -1);
 		}
+
+		timeSinceLastSpawn += Time.deltaTime;
+
+		if(timeSinceLastSpawn >= spawnDelay){
+			GameObject newZombie = Instantiate(zombiePrefabToSpawn.gameObject, transform.position, Quaternion.identity);
+			newZombie.GetComponent<Zombie>().SetSpawner(this);
+			NetworkServer.Spawn(newZombie);
+			timeSinceLastSpawn = 0;
+		}
+
 	}
 
 

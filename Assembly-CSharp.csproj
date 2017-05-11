@@ -46,8 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\MonsterSpawner.cs" />
-     <Compile Include="Assets\MonsterSpawner_Base.cs" />
      <Compile Include="Assets\Scripts\AmmoInventory.cs" />
      <Compile Include="Assets\Scripts\AmmoPickup.cs" />
      <Compile Include="Assets\Scripts\Base\AmmoInventory_Base.cs" />
@@ -55,6 +53,7 @@
      <Compile Include="Assets\Scripts\Base\GunSlot_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Gun_Base.cs" />
      <Compile Include="Assets\Scripts\Base\HUD_Base.cs" />
+     <Compile Include="Assets\Scripts\Base\MonsterSpawner_Base.cs" />
      <Compile Include="Assets\Scripts\Base\MuzzleFlash_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Player_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Shell_Base.cs" />
@@ -71,6 +70,7 @@
      <Compile Include="Assets\Scripts\HitMarkerCallback.cs" />
      <Compile Include="Assets\Scripts\Lib\CameraFacingBillboard.cs" />
      <Compile Include="Assets\Scripts\LocalSetup.cs" />
+     <Compile Include="Assets\Scripts\MonsterSpawner.cs" />
      <Compile Include="Assets\Scripts\MuzzleFlash.cs" />
      <Compile Include="Assets\Scripts\NetPlayer.cs" />
      <Compile Include="Assets\Scripts\Net_Manager.cs" />
