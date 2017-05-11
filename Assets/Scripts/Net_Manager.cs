@@ -17,14 +17,39 @@ public class Net_Manager : NetworkManager{
 	public static Net_Manager instance;
 
 
+
 	void Start(){
+
 		if(instance == null){
 			instance = this;
 		}
 		else{
 			Debug.Log("There is more than one Net_Manager instance, (fly) you fool");
 		}
+
+
+
+
+
+
 	}
+
+	Vector3 SpawnPoint(){
+		Vector3 spawnPoint = Vector3.zero;
+
+		GameObject spawnObject = GameObject.Find("SpawnPoint");
+
+		if(spawnObject != null){
+			spawnPoint = spawnObject.transform.position;
+		}
+		else{
+			Debug.LogError("GameObject with the name: SpawnPoint was not found, player will be spawned at (0, 0, 0)");
+		}
+
+
+		return spawnPoint;
+	}
+
 
 
 	public override void OnServerDisconnect(NetworkConnection conn){
@@ -49,7 +74,7 @@ public class Net_Manager : NetworkManager{
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
 		Debug.Log("Adding player to game...");
-		GameObject newPlayer = Instantiate(playerPrefab);
+		GameObject newPlayer = Instantiate(playerPrefab, SpawnPoint(), Quaternion.identity);
 
 		NetworkServer.Spawn(newPlayer);
 		NetworkIdentity newIdentity = newPlayer.GetComponent<NetworkIdentity>();
