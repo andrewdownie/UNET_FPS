@@ -13,7 +13,7 @@ public class ZombieAI : MonoBehaviour {
     private LayerMask playerLayerMask;
 
     [SerializeField]
-    private float baseCastRadius = 7;
+    private float baseCastRadius = 13;
     [SerializeField]
     private float curiousDuration;
     [SerializeField]

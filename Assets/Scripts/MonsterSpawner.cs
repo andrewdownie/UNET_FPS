@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class MonsterSpawner : MonsterSpawner_Base {
 	[Header("Spawner Health")]
@@ -20,17 +21,39 @@ public class MonsterSpawner : MonsterSpawner_Base {
 
 	[Header("Spawn Settings")]
 	[SerializeField]
-	float spawnDelay = 2;
+	float SPAWN_DELAY = 5;
 	[SerializeField]
 	float timeSinceLastSpawn;
 	[SerializeField]
 	Zombie zombiePrefabToSpawn;
+	[SerializeField]
+	int maxSpawned = 1;
+	[SerializeField]
+	int currentlySpawned;
 
+	[SerializeField]
+	Image healthBar;
+
+	[SerializeField]
+	ParticleSystem hitSplatter;
+	[SerializeField]
+	ParticleSystem deathSplatter;
+	[SerializeField]
+	Renderer[] disableRendersOnDeath;
+	[SerializeField]
+	Behaviour[] disableBehavioursOnDeath;	
 
 	void Start(){
 		if(!isServer){
 			enabled = false;
 		}
+
+		currentlySpawned = 0;
+		currentHealth = maxHealth;
+	}
+
+	public override void RemoveSpawnee(){
+		currentlySpawned--;
 	}
 
 
@@ -41,15 +64,21 @@ public class MonsterSpawner : MonsterSpawner_Base {
 	}
 
 	[Command]
-	public override void CmdSubtractHealth(float amount){
+	public override void CmdSubtractHealth(float amount, Vector3 pointOfImpact, Vector3 locationOfBullet){
 		ApplyDamage(amount);
+
+		ParticleSystem ps = (ParticleSystem)Instantiate(hitSplatter, pointOfImpact, Quaternion.identity);
+
+        ps.transform.LookAt(locationOfBullet);
+
 	}
+	
 
 	void ApplyDamage(float damageAmount){
 		currentHealth = Mathf.Clamp(currentHealth - damageAmount, 0, maxHealth);
 
 		if(currentHealth == 0){
-			NetworkServer.Destroy(gameObject);
+			StartCoroutine(DestroyDelay(3));
 		}
 
 		if(damageAmount > 0){
@@ -60,30 +89,62 @@ public class MonsterSpawner : MonsterSpawner_Base {
 	}
 
 	void HealthChanged(float currentHealth){
-		//TODO: Set health bar here
+		healthBar.fillAmount = currentHealth / maxHealth;
+
+
+		if(currentHealth == 0){
+			foreach(Behaviour b in disableBehavioursOnDeath){
+				b.enabled = false;
+			}
+			foreach(Renderer r in disableRendersOnDeath){
+				r.enabled = false;
+			}
+
+			float x, z;
+			x = transform.position.x;
+			z = transform.position.z;
+
+			//unity is being a buggy pos atm, wont read the SPAWN_DELAY variable from the inspector, makes it hard to test death splatter.
+			//	-> however it will read a new value from the inspector if I rename SPAWN_DELAY to something else
+			Instantiate(deathSplatter, new Vector3(x, 0.8f, z), Quaternion.Euler(-90, 0, 0));
+            //Instantiate(deathSplatter, new Vector3(x, 0.6f, z), Quaternion.Euler(0, 90, 0));
+            //Instantiate(deathSplatter, new Vector3(x, 0.6f, z), Quaternion.Euler(0, 180, 0));
+            //Instantiate(deathSplatter, new Vector3(x, 0.6f, z), Quaternion.Euler(0, 0, 0));
+            //Instantiate(deathSplatter, new Vector3(x, 0.6f, z), Quaternion.Euler(0, 270, 0));
+		}
+
 
 		this.currentHealth = currentHealth;
-
 	}
 
 
 	void Update(){
 		timeSinceAttacked += Time.deltaTime;
 
-		if(timeSinceAttacked >= healthRegenDelay){
+		if(timeSinceAttacked >= healthRegenDelay && currentHealth < maxHealth){
 			ApplyDamage(healthRegenRate * Time.deltaTime * -1);
 		}
 
-		timeSinceLastSpawn += Time.deltaTime;
 
-		if(timeSinceLastSpawn >= spawnDelay){
-			GameObject newZombie = Instantiate(zombiePrefabToSpawn.gameObject, transform.position, Quaternion.identity);
+		if(timeSinceLastSpawn >= SPAWN_DELAY){
+			currentlySpawned++;
+			timeSinceLastSpawn = 0;
+
+			GameObject newZombie = Instantiate(zombiePrefabToSpawn.gameObject, transform.position + new Vector3(0, 3, 0), Quaternion.identity);
 			newZombie.GetComponent<Zombie>().SetSpawner(this);
 			NetworkServer.Spawn(newZombie);
-			timeSinceLastSpawn = 0;
+		}
+		else if(currentlySpawned < maxSpawned){
+			timeSinceLastSpawn += Time.deltaTime;
 		}
 
 	}
 
+	IEnumerator DestroyDelay(float delay){
+		if(isServer){
+			yield return new WaitForSeconds(delay);
+			NetworkServer.Destroy(gameObject);
+		}
+	}
 
 }

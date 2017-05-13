@@ -28,6 +28,7 @@ public class Bullet : Bullet_Base {
     private HitMarkerCallback hitMarkerCallback;
 
     private Rigidbody rigid;
+    private int enemyLayer;
     
 	void Start () {
         rigid = GetComponent<Rigidbody>();
@@ -46,6 +47,8 @@ public class Bullet : Bullet_Base {
         lineRenderer.enabled = true;
 
         Destroy(this, 4);
+        
+        enemyLayer = LayerMask.NameToLayer("Enemy");
     }
 
     float RandPosNeg()
@@ -61,19 +64,30 @@ public class Bullet : Bullet_Base {
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.tag == "Zombie")
+        //TODO: change tag zombie, to enemey, and add enemy tag to monster spawners
+        //if(collision.transform.tag == "Zombie")
+        if(collision.gameObject.layer == enemyLayer)
         {
 
             RaycastHit hit;
             Physics.Raycast(transform.position + transform.forward * -2, transform.forward, out hit);
 
             Zombie zombie = collision.gameObject.GetComponent<Zombie>();
-            zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
+            if(zombie != null){
+                zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
+            }
+            else{
+                MonsterSpawner_Base msb = collision.gameObject.GetComponent<MonsterSpawner_Base>();
+                if(msb != null){
+                    msb.CmdSubtractHealth(bulletDamageAmount, hit.point, transform.position);
+                }
+            }
 
             hitMarkerCallback.ConfirmHit();
 
             
         }
+
 
         enabled = false;
         lineRenderer.enabled = false;

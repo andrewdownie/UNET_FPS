@@ -70,16 +70,16 @@ public class Zombie : NetworkBehaviour {
             hide.Hide();
             audioSource.PlayOneShot(zombieDie);
             //Destroy(gameObject, 5);
-            DestroyDelay(5f);
+            StartCoroutine(DestroyDelay(5f));
 
             rigid.velocity = 0.1f * rigid.velocity;
             
 
-            Instantiate(deathSplatter, new Vector3(hitLocation.x, 1, hitLocation.z), Quaternion.Euler(-90, 0, 0));
-            Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 0, 0));
-            Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 90, 0));
-            Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 180, 0));
-            Instantiate(deathSplatter, new Vector3(hitLocation.x, 0.8f, hitLocation.z), Quaternion.Euler(0, 270, 0));
+            Instantiate(deathSplatter, new Vector3(hitLocation.x, 1.2f, hitLocation.z), Quaternion.Euler(-90, 0, 0));
+            Instantiate(deathSplatter, new Vector3(hitLocation.x, 1f, hitLocation.z), Quaternion.Euler(0, 0, 0));
+            Instantiate(deathSplatter, new Vector3(hitLocation.x, 1f, hitLocation.z), Quaternion.Euler(0, 90, 0));
+            Instantiate(deathSplatter, new Vector3(hitLocation.x, 1f, hitLocation.z), Quaternion.Euler(0, 180, 0));
+            Instantiate(deathSplatter, new Vector3(hitLocation.x, 1f, hitLocation.z), Quaternion.Euler(0, 270, 0));
             
         }
 
@@ -88,6 +88,7 @@ public class Zombie : NetworkBehaviour {
 
     IEnumerator DestroyDelay(float delay){
         if(isServer){
+            spawner.RemoveSpawnee();
             yield return new WaitForSeconds(delay);
             NetworkServer.Destroy(gameObject);
         }
