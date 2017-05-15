@@ -42,6 +42,9 @@ public class MonsterSpawner : MonsterSpawner_Base {
 	Renderer[] disableRendersOnDeath;
 	[SerializeField]
 	Behaviour[] disableBehavioursOnDeath;	
+	[SerializeField]
+	Collider[] disableCollidersOnDeath;
+	
 
 	void Start(){
 		if(!isServer){
@@ -99,6 +102,9 @@ public class MonsterSpawner : MonsterSpawner_Base {
 			foreach(Renderer r in disableRendersOnDeath){
 				r.enabled = false;
 			}
+			foreach(Collider c in disableCollidersOnDeath){
+				c.enabled = false;
+			}
 
 			float x, z;
 			x = transform.position.x;
@@ -126,12 +132,12 @@ public class MonsterSpawner : MonsterSpawner_Base {
 		}
 
 
-		if(timeSinceLastSpawn >= SPAWN_DELAY){
+		if(timeSinceLastSpawn >= SPAWN_DELAY && currentHealth > 0){
 			currentlySpawned++;
 			timeSinceLastSpawn = 0;
 
 			GameObject newZombie = Instantiate(zombiePrefabToSpawn.gameObject, transform.position + new Vector3(0, 3, 0), Quaternion.identity);
-			newZombie.GetComponent<Zombie>().SetSpawner(this);
+			newZombie.GetComponent<Zombie>().SetSpawner((MonsterSpawner_Base)this);
 			NetworkServer.Spawn(newZombie);
 		}
 		else if(currentlySpawned < maxSpawned){

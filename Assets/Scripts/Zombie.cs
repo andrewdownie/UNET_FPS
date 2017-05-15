@@ -32,7 +32,7 @@ public class Zombie : NetworkBehaviour {
     MonsterSpawner_Base spawner;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         audioSource = GetComponent<AudioSource>();
         rigid = GetComponent<Rigidbody>();
         zombieAI = GetComponent<ZombieAI>();
@@ -47,6 +47,10 @@ public class Zombie : NetworkBehaviour {
 
     public void SetSpawner(MonsterSpawner_Base spawner){
         this.spawner = spawner;
+
+        if(zombieAI != null){
+            zombieAI.JustGotSpawned(spawner);
+        }        
     }
 
 

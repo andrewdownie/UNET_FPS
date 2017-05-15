@@ -43,6 +43,9 @@ public class ZombieAI : MonoBehaviour {
     private Rigidbody rigid;
     private AudioSource audioSource;
 
+    private MonsterSpawner_Base parentSpawner;
+    private Vector3 randomSpawnDirection;
+
 	// Use this for initialization
 	void Start () {
 
@@ -55,7 +58,7 @@ public class ZombieAI : MonoBehaviour {
 	
     public void GotAttacked()
     {
-        if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering)
+        if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering || aiState == ZombieAIState.justGotSpawned)
         {
             StopCoroutine(BecomeCurious());
             StartCoroutine(BecomeCurious());
@@ -67,6 +70,7 @@ public class ZombieAI : MonoBehaviour {
         if(zombieID.isServer == false){
             return;
         }
+
 
 
         if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering)
@@ -118,6 +122,14 @@ public class ZombieAI : MonoBehaviour {
             }
         }
         
+
+        if(aiState == ZombieAIState.justGotSpawned){
+            rigid.MovePosition(Vector3.MoveTowards(transform.position, transform.forward * moveSpeed, moveSpeed * Time.deltaTime));
+
+            if(Vector3.Distance(transform.position, parentSpawner.transform.position) > 1.6f){
+                aiState = ZombieAIState.idle;
+            }
+        }
     }
 
     void PlayAttackSound()
@@ -141,6 +153,12 @@ public class ZombieAI : MonoBehaviour {
         yield return new WaitForSeconds(curiousDuration);
         currentCastRadius = baseCastRadius;
     }
+
+    public void JustGotSpawned(MonsterSpawner_Base parentSpawner){
+        this.parentSpawner = parentSpawner;
+        aiState = ZombieAIState.justGotSpawned;
+        randomSpawnDirection = new Vector3(Random.value, Random.value);
+    }
 }
 
 public enum ZombieAIState
@@ -149,4 +167,5 @@ public enum ZombieAIState
     wandering,
     chasing,
     dying,
+    justGotSpawned,
 }
