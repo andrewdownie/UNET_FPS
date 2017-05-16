@@ -44,7 +44,6 @@ public class ZombieAI : MonoBehaviour {
     private AudioSource audioSource;
 
     private MonsterSpawner_Base parentSpawner;
-    private Vector3 randomSpawnDirection;
 
 	// Use this for initialization
 	void Start () {
@@ -124,12 +123,14 @@ public class ZombieAI : MonoBehaviour {
         
 
         if(aiState == ZombieAIState.justGotSpawned){
-            rigid.MovePosition(Vector3.MoveTowards(transform.position, transform.forward * moveSpeed, moveSpeed * Time.deltaTime));
+            rigid.MovePosition(Vector3.MoveTowards(transform.position, transform.position + (transform.forward * 1000), moveSpeed * Time.deltaTime));
 
-            if(Vector3.Distance(transform.position, parentSpawner.transform.position) > 1.6f){
+            if(Vector3.Distance(transform.position, parentSpawner.transform.position) > 3.0f){
                 aiState = ZombieAIState.idle;
             }
         }
+
+
     }
 
     void PlayAttackSound()
@@ -157,7 +158,8 @@ public class ZombieAI : MonoBehaviour {
     public void JustGotSpawned(MonsterSpawner_Base parentSpawner){
         this.parentSpawner = parentSpawner;
         aiState = ZombieAIState.justGotSpawned;
-        randomSpawnDirection = new Vector3(Random.value, Random.value);
+
+        transform.rotation = parentSpawner.transform.rotation * Quaternion.Euler(0, -45, 0);
     }
 }
 

@@ -62,13 +62,13 @@ public class MonsterSpawner : MonsterSpawner_Base {
 
 
 	[Command]
-	public override void CmdAddHealth(float amount){
-		ApplyDamage(-amount);
+	public override void CmdAddHealth(float amountToAdd){
+		ApplyDamage(-amountToAdd);
 	}
 
 	[Command]
-	public override void CmdSubtractHealth(float amount, Vector3 pointOfImpact, Vector3 locationOfBullet){
-		ApplyDamage(amount);
+	public override void CmdSubtractHealth(float amountToSubtract, Vector3 pointOfImpact, Vector3 locationOfBullet){
+		ApplyDamage(amountToSubtract);
 
 		ParticleSystem ps = (ParticleSystem)Instantiate(hitSplatter, pointOfImpact, Quaternion.identity);
 
@@ -141,6 +141,9 @@ public class MonsterSpawner : MonsterSpawner_Base {
 			NetworkServer.Spawn(newZombie);
 		}
 		else if(currentlySpawned < maxSpawned){
+			if(currentlySpawned < 0){
+				currentlySpawned = 1;
+			}
 			timeSinceLastSpawn += Time.deltaTime;
 		}
 

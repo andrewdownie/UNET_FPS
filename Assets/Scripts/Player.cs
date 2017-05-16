@@ -247,7 +247,6 @@ public class Player : Player_Base {
 
     [ClientRpc]
     void RpcUseHealthPack(){
-        Debug.LogError(this.gameObject.name + " used a health pack");
         vitals.UseHealthpack();
     }
 

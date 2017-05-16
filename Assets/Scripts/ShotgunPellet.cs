@@ -31,6 +31,7 @@ public class ShotgunPellet : Bullet_Base {
     private Rigidbody rigid;
 
     Vector3 spawnPoint;
+    private int enemyLayer;
     
 
 	//TODO: move this to abstract method in Bullet_Base class
@@ -53,23 +54,38 @@ public class ShotgunPellet : Bullet_Base {
 
         rigid.AddForce(force, ForceMode.Impulse);
         lineRenderer.enabled = true;
+
+        enemyLayer = LayerMask.NameToLayer("Enemy");
+
         Destroy(gameObject, 10f);
 	}
 
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.tag == "Zombie")
+
+        if(collision.gameObject.layer == enemyLayer)
         {
 
             RaycastHit hit;
             Physics.Raycast(transform.position + transform.forward * -2, transform.forward, out hit);
 
             Zombie zombie = collision.gameObject.GetComponent<Zombie>();
-            zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
+            if(zombie != null){
+                zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
+            }
+            else{
+                MonsterSpawner_Base msb = collision.gameObject.GetComponent<MonsterSpawner_Base>();
+                if(msb != null){
+                    msb.CmdSubtractHealth(bulletDamageAmount, hit.point, transform.position);
+                }
+            }
 
             hitMarkerCallback.ConfirmHit();
+
+            
         }
+
 
         enabled = false;
         lineRenderer.enabled = false;
