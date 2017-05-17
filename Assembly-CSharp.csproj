@@ -57,6 +57,8 @@
      <Compile Include="Assets\Scripts\Base\Player_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Shell_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Vitals_Base.cs" />
+     <Compile Include="Assets\Scripts\Base\ZombieAI_Base.cs" />
+     <Compile Include="Assets\Scripts\Base\Zombie_Base.cs" />
      <Compile Include="Assets\Scripts\Baseless\AmmoPickup.cs" />
      <Compile Include="Assets\Scripts\Baseless\ColorSetup.cs" />
      <Compile Include="Assets\Scripts\Baseless\DestroyGameObject.cs" />
@@ -69,7 +71,6 @@
      <Compile Include="Assets\Scripts\Baseless\PlayerControl.cs" />
      <Compile Include="Assets\Scripts\Baseless\RandomColor.cs" />
      <Compile Include="Assets\Scripts\Baseless\StartGame.cs" />
-     <Compile Include="Assets\Scripts\Baseless\Zombie.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\GunSlot.cs" />
@@ -83,6 +84,7 @@
      <Compile Include="Assets\Scripts\Shotgun.cs" />
      <Compile Include="Assets\Scripts\ShotgunPellet.cs" />
      <Compile Include="Assets\Scripts\Vitals.cs" />
+     <Compile Include="Assets\Scripts\Zombie.cs" />
      <Compile Include="Assets\Scripts\ZombieAI.cs" />
      <None Include="Assets\Standard Assets\Prototyping\Shaders\WorldCoordDiffuse.shader" />
      <None Include="Assets\Images\links.txt" />

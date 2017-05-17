@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 
 
-public class ZombieAI : MonoBehaviour {
+public class ZombieAI : ZombieAI_Base {
     [SerializeField]
     NetworkIdentity zombieID;
     [SerializeField]
@@ -36,6 +36,9 @@ public class ZombieAI : MonoBehaviour {
 
     private Player_Base target;
 
+    [SerializeField]
+    Zombie_Base zombieBase;
+
 
     private bool readyToAttack;
 
@@ -55,7 +58,7 @@ public class ZombieAI : MonoBehaviour {
         currentCastRadius = baseCastRadius;
 	}
 	
-    public void GotAttacked()
+    public override void GotAttacked()
     {
         if(aiState == ZombieAIState.idle || aiState == ZombieAIState.wandering || aiState == ZombieAIState.justGotSpawned)
         {
@@ -115,7 +118,7 @@ public class ZombieAI : MonoBehaviour {
             {
                 aiState = ZombieAIState.idle;
             }
-            else if(distanceToTarget < 2 && readyToAttack)
+            else if(distanceToTarget < 1.8f && readyToAttack && zombieBase.alive)
             {
                 StartCoroutine(Attack());
             }
@@ -155,7 +158,7 @@ public class ZombieAI : MonoBehaviour {
         currentCastRadius = baseCastRadius;
     }
 
-    public void JustGotSpawned(MonsterSpawner_Base parentSpawner){
+    public override void JustGotSpawned(MonsterSpawner_Base parentSpawner){
         this.parentSpawner = parentSpawner;
         aiState = ZombieAIState.justGotSpawned;
 

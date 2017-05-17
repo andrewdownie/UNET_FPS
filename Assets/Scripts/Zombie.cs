@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 
-public class Zombie : NetworkBehaviour {
+public class Zombie : Zombie_Base {
 
     [SerializeField]
     private float curHealth = 100, maxHealth = 100;
@@ -45,7 +45,7 @@ public class Zombie : NetworkBehaviour {
 	
 	}
 
-    public void SetSpawner(MonsterSpawner_Base spawner){
+    public override void SetSpawner(MonsterSpawner_Base spawner){
         this.spawner = spawner;
 
         if(zombieAI != null){
@@ -54,7 +54,7 @@ public class Zombie : NetworkBehaviour {
     }
 
 
-    public void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition)
+    public override void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition)
     {
         curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);
 
@@ -95,6 +95,13 @@ public class Zombie : NetworkBehaviour {
             spawner.RemoveSpawnee();
             yield return new WaitForSeconds(delay);
             NetworkServer.Destroy(gameObject);
+        }
+    }
+
+
+    public override bool alive{
+        get{
+            return curHealth > 0;
         }
     }
 

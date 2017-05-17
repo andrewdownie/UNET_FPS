@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
-using System;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -36,6 +35,8 @@ public class Player : Player_Base {
     Player_Base targetRevive;
     [SerializeField]
     LayerMask playerLayerMask;
+    [SerializeField]
+    LayerMask enemyMask;
 
     bool reviving;
 
@@ -148,33 +149,47 @@ public class Player : Player_Base {
     ///
     void Update()
     {
+        ///
+        /// Use health pack
+        ///
         if (Input.GetKeyDown(KeyCode.H))
         {
             CmdUseHealthPack();
         }
 
+        ///
+        /// Drop weapon
+        ///
         if(Input.GetKeyDown(KeyCode.E)){
             CmdDrop();
         }
 
-
+        ///
+        /// Reload
+        ///
         if(Input.GetKeyDown(KeyCode.R)){
             CmdReload();
         }
 
+        ///
+        /// Switch weapons
+        ///
         if(Input.GetKeyDown(KeyCode.Q)){
             CmdNextWeapon();
         }
 
 
         ///
-        /// Handle shooting
+        /// Shoot 
         ///
         if(Input.GetKey(KeyCode.Mouse0)){
             CmdShoot(Input.GetKeyDown(KeyCode.Mouse0));
             UpdateAmmoHUD();
         } 
 
+        ///
+        /// Start - Revive Ally
+        ///
         if(Input.GetKeyDown(KeyCode.H)){
             if(targetRevive != null){
                 reviving = true;
@@ -182,6 +197,9 @@ public class Player : Player_Base {
             }
         }
 
+        ///
+        /// Stop - Revive Ally
+        ///
         if(Input.GetKeyUp(KeyCode.H)){
             reviving = false;
             reviveTime = 0;
@@ -189,6 +207,20 @@ public class Player : Player_Base {
         }
 
 
+        ///
+        /// Melee
+        ///
+        if(Input.GetKeyDown(KeyCode.F)){
+            CmdMelee(); 
+        }
+
+
+        ReviveAlly();
+        CheckForDeadAllies();            
+
+    }
+
+    void ReviveAlly(){
         if(reviving){
             reviveTime += Time.deltaTime;
 
@@ -201,8 +233,9 @@ public class Player : Player_Base {
                 reviving = false;
             }
         } 
+    }
 
-
+    void CheckForDeadAllies(){
         Collider[] colliders = Physics.OverlapSphere(transform.position, 1.3f, playerLayerMask);
 
         if(colliders.Length == 1){
@@ -231,11 +264,24 @@ public class Player : Player_Base {
 
             }
         }
+    }
 
+    [Command]
+    void CmdMelee(){
+        Collider[] enemies = Physics.OverlapSphere(transform.position, 2f, enemyMask);
 
-            
+        foreach(Collider c in enemies){
+            if(c.GetComponent<Zombie_Base>()){
+                c.GetComponent<Zombie_Base>().TakeDamage(15, Vector3.zero, Vector3.zero);
+                c.GetComponent<Rigidbody>().AddForce(transform.forward * 1000, ForceMode.Impulse);
+                //Add knock back to zombie here///////////////////////////////////////////////////////////////////////
+            }
+        }
+
 
     }
+
+
 
 
     [Command]

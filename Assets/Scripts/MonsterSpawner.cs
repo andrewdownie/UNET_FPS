@@ -25,9 +25,9 @@ public class MonsterSpawner : MonsterSpawner_Base {
 	[SerializeField]
 	float timeSinceLastSpawn;
 	[SerializeField]
-	Zombie zombiePrefabToSpawn;
+	GameObject zombiePrefabToSpawn;
 	[SerializeField]
-	int maxSpawned = 1;
+	int MAX_SPAWNED = 1;
 	[SerializeField]
 	int currentlySpawned;
 
@@ -136,11 +136,15 @@ public class MonsterSpawner : MonsterSpawner_Base {
 			currentlySpawned++;
 			timeSinceLastSpawn = 0;
 
-			GameObject newZombie = Instantiate(zombiePrefabToSpawn.gameObject, transform.position + new Vector3(0, 3, 0), Quaternion.identity);
-			newZombie.GetComponent<Zombie>().SetSpawner((MonsterSpawner_Base)this);
+			GameObject newZombie = Instantiate(zombiePrefabToSpawn, transform.position + new Vector3(0, 3, 0), Quaternion.identity);
+			if(!newZombie.GetComponent<Zombie_Base>()){
+				Debug.Log("Found zombie base");
+			}
+
+			newZombie.GetComponent<Zombie_Base>().SetSpawner((MonsterSpawner_Base)this);
 			NetworkServer.Spawn(newZombie);
 		}
-		else if(currentlySpawned < maxSpawned){
+		else if(currentlySpawned < MAX_SPAWNED){
 			if(currentlySpawned < 0){
 				currentlySpawned = 1;
 			}
