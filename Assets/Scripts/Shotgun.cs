@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //TODO: replace player reference, to indirect references through GunSlot
-public class Shotgun : Gun_Base {
+public class Shotgun : Gun_Base
+{
     [SerializeField]
     Transform modelParent;
 
@@ -20,15 +21,15 @@ public class Shotgun : Gun_Base {
     [SerializeField]
     private AudioClip shoot, reload, outOfAmmo;
 
-    
+
     [Header("Weapon Firing")]
     [SerializeField]
     private int clipSize = 5;
     [SerializeField]
     private int bulletsInClip = 5;
 
-	[SerializeField]
-	private int pelletCount = 10;
+    [SerializeField]
+    private int pelletCount = 10;
 
 
     [SerializeField]
@@ -38,11 +39,11 @@ public class Shotgun : Gun_Base {
     float timeBetweenShots = 0.3f;
     float timeSinceLastShot = 1f;
 
-	[SerializeField]
-	private float timeBetweenReloads;
-	private float timeSinceLastReload;
+    [SerializeField]
+    private float timeBetweenReloads;
+    private float timeSinceLastReload;
 
-	bool canShoot, canReload, reloading;
+    bool canShoot, canReload, reloading;
 
 
     [Header("Other Setup")]
@@ -51,7 +52,7 @@ public class Shotgun : Gun_Base {
 
     [SerializeField]
     private Transform shellSpawnPoint;
-    
+
     [SerializeField]
     private ShotgunPellet shotgunPelletPrefab;
 
@@ -64,7 +65,7 @@ public class Shotgun : Gun_Base {
     [SerializeField]
     HitMarkerCallback hitMarkerCallback;
 
-    
+
 
     void Start()
     {
@@ -75,7 +76,7 @@ public class Shotgun : Gun_Base {
     {
         Transform parent = transform.parent;
 
-        if(parent == null)
+        if (parent == null)
         {
             enabled = false;
             return;
@@ -83,53 +84,57 @@ public class Shotgun : Gun_Base {
 
         GunSlot weaponSlot = parent.GetComponent<GunSlot>();
 
-        if(weaponSlot != null)
+        if (weaponSlot != null)
         {
             this.gunSlot = weaponSlot;
 
             Player player = weaponSlot.Player;
 
-            if(player != null)
+            if (player != null)
             {
                 this.player = player;
             }
         }
-        
+
     }
 
-    public override int BulletsInClip{
-        get{return bulletsInClip;}
+    public override int BulletsInClip
+    {
+        get { return bulletsInClip; }
     }
 
-    public override int ClipSize{
-        get{return clipSize;}
+    public override int ClipSize
+    {
+        get { return clipSize; }
     }
-	
 
-
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update()
+    {
         //TODO: record the time since last shot once, and compare the saved value to
         //      the current value
         timeSinceLastShot += Time.deltaTime;
-		timeSinceLastReload += Time.deltaTime;
+        timeSinceLastReload += Time.deltaTime;
 
-		if(timeSinceLastShot >= timeBetweenShots){
-			canShoot = true;
-		}
+        if (timeSinceLastShot >= timeBetweenShots)
+        {
+            canShoot = true;
+        }
 
-		if(timeSinceLastReload >= timeBetweenReloads){
-			canReload = true;
-		}
+        if (timeSinceLastReload >= timeBetweenReloads)
+        {
+            canReload = true;
+        }
 
-		if(reloading){
-			Reload();
-		}
-	}
+        if (reloading)
+        {
+            Reload();
+        }
+    }
 
 
 
-	//TODO: instead of adding a rigid body, have a rigid body on by default, and toggle 'isKinematic' (don't actually know if this will do what I want, but it would be much better than what I have if it does)
+    //TODO: instead of adding a rigid body, have a rigid body on by default, and toggle 'isKinematic' (don't actually know if this will do what I want, but it would be much better than what I have if it does)
     public override void Drop()
     {
         enabled = false;
@@ -158,7 +163,8 @@ public class Shotgun : Gun_Base {
         }
     }
 
-    public override void SetOwningPlayer(Player_Base newOwner){
+    public override void SetOwningPlayer(Player_Base newOwner)
+    {
         if (newOwner != null)
         {
             GunSlot_Base _gunSlot = newOwner.GunSlot;
@@ -185,56 +191,67 @@ public class Shotgun : Gun_Base {
         }
     }
 
-    public override void SetSecondaryOwner(Player_Base newOwner){
+    public override void SetSecondaryOwner(Player_Base newOwner)
+    {
         Debug.LogError("Not implemented: setsecondaryowner");
     }
 
-    public override void TurnOn(){
-        foreach(MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>()){
-           t.enabled = true; 
-        }    
+    public override void TurnOn()
+    {
+        foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
+        {
+            t.enabled = true;
+        }
         muzzleFlash.HideFlash();
 
     }
 
-    public override void TurnOff(){
-        foreach(MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>()){
-           t.enabled = false; 
-        }    
+    public override void TurnOff()
+    {
+        foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
+        {
+            t.enabled = false;
+        }
         muzzleFlash.HideFlash();
 
     }
 
 
-    IEnumerator DropGunTimer(){
+    IEnumerator DropGunTimer()
+    {
         yield return new WaitForSeconds(1.3f);
         player = null;
         gunSlot = null;
-    } 
+    }
 
 
-    public override void Align(Transform alignObject, Vector3 additionalRotation){
+    public override void Align(Transform alignObject, Vector3 additionalRotation)
+    {
 
-        if(player != null){
+        if (player != null)
+        {
             Transform camera = transform.parent.parent;
             RaycastHit hit;
             //Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
             Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
-            
+
             Vector3 point = hit.point;
 
-            if(point == Vector3.zero){
+            if (point == Vector3.zero)
+            {
                 point = camera.forward * 100000;
             }
             alignObject.LookAt(point);
             alignObject.Rotate(additionalRotation);
-            
+
         }
     }
 
 
-    public override void AlignGun(){
-        if(player != null){
+    public override void AlignGun()
+    {
+        if (player != null)
+        {
             Transform camera = transform.parent.parent;
             Vector3 point = camera.position + (camera.forward * 10000);
 
@@ -245,37 +262,40 @@ public class Shotgun : Gun_Base {
     }
 
 
-    public override void Shoot(bool firstDown){
-        if(!automatic && !firstDown){
+    public override void Shoot(bool firstDown)
+    {
+        if (!automatic && !firstDown)
+        {
             return;
         }
 
         if (canShoot)
         {
             timeSinceLastShot = 0;
-			canShoot = false;
-			canReload = false;
-			reloading = false;
+            canShoot = false;
+            canReload = false;
+            reloading = false;
 
             if (bulletsInClip > 0)
             {
-            
+
                 ///
                 /// Create the bullets
                 ///
                 player.AudioSource.PlayOneShot(shoot);
                 bulletsInClip -= 1;
 
-				for(int i = 0; i < pelletCount; i++){
-					ShotgunPellet bullet = ((GameObject)Instantiate(shotgunPelletPrefab.gameObject)).GetComponent<ShotgunPellet>();
-					bullet.transform.position = bulletSpawnPoint.position;
-					bullet.transform.rotation = bulletSpawnPoint.rotation;
-					bullet.SetHitMarkerCallBack(hitMarkerCallback);
+                for (int i = 0; i < pelletCount; i++)
+                {
+                    ShotgunPellet bullet = ((GameObject)Instantiate(shotgunPelletPrefab.gameObject)).GetComponent<ShotgunPellet>();
+                    bullet.transform.position = bulletSpawnPoint.position;
+                    bullet.transform.rotation = bulletSpawnPoint.rotation;
+                    bullet.SetHitMarkerCallBack(hitMarkerCallback);
                     bullet.InitBulletTrail(bullet.transform.position);
                     bullet.SetupBulletVelocity(i == 0);
 
                     //Align(bullet.transform, bulletSpawnPoint.rotation.eulerAngles);
-				}
+                }
 
                 muzzleFlash.ShowFlash();
 
@@ -284,8 +304,8 @@ public class Shotgun : Gun_Base {
                 ///
                 Shell_Base shell = (Shell_Base)Instantiate(shellPrefab, shellSpawnPoint.position, transform.rotation * shellSpawnPoint.localRotation);
                 shell.AddVelocity(player.Rigidbody.velocity);
-           
-            
+
+
             }
             else
             {
@@ -295,38 +315,43 @@ public class Shotgun : Gun_Base {
         }
     }
 
-    public override void Reload(){
-        
+    public override void Reload()
+    {
 
-        if(bulletsInClip < clipSize)
+
+        if (bulletsInClip < clipSize)
         {
-			if(canShoot && canReload){
-				reloading = true;
-				int bulletsFromInventory = player.Ammo.Request(gunType, 1);
+            if (canShoot && canReload)
+            {
+                reloading = true;
+                int bulletsFromInventory = player.Ammo.Request(gunType, 1);
 
-				if(bulletsFromInventory > 0)
-				{
-					player.AudioSource.PlayOneShot(reload);
-					bulletsInClip += bulletsFromInventory;
-					timeSinceLastReload = 0;
-					canReload = false;
-					//HUD.SetClipAmmo(bulletsInClip, clipSize);///////
-				}
-				else{
-					reloading = false;
-				}
-			}
+                if (bulletsFromInventory > 0)
+                {
+                    player.AudioSource.PlayOneShot(reload);
+                    bulletsInClip += bulletsFromInventory;
+                    timeSinceLastReload = 0;
+                    canReload = false;
+                    //HUD.SetClipAmmo(bulletsInClip, clipSize);///////
+                }
+                else
+                {
+                    reloading = false;
+                }
+            }
 
-           
+
         }
-		else{
-			reloading = false;
-		}
+        else
+        {
+            reloading = false;
+        }
     }
 
-    public override GunType GunType{
-        get{return gunType;}
+    public override GunType GunType
+    {
+        get { return gunType; }
     }
 
-    
+
 }

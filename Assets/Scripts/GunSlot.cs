@@ -197,4 +197,7 @@ public class GunSlot : GunSlot_Base {
     public override Player Player{
         get{return player;}
     }
+
+
+
 }

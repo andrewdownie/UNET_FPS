@@ -9,7 +9,8 @@ using System.Collections.Generic;
 ///     2. Act as an interface for picking items up in the world.
 ///     3. Handle user input (in the update method)
 /// </summary>
-public class Player : Player_Base {
+public class Player : Player_Base
+{
 
     [SerializeField]
     private AudioSource audioSource;
@@ -23,10 +24,12 @@ public class Player : Player_Base {
     [SerializeField]
     private AmmoInventory_Base ammo;
 
-    [SerializeField][SyncVar(hook="GunChanged")]
+    [SerializeField]
+    [SyncVar(hook = "GunChanged")]
     bool primaryEquipped;
 
-    [SerializeField][SyncVar(hook="ReviveTimeChanged")]
+    [SerializeField]
+    [SyncVar(hook = "ReviveTimeChanged")]
     float reviveTime;
 
     [SerializeField]
@@ -40,27 +43,39 @@ public class Player : Player_Base {
 
     bool reviving;
 
-    void Start(){
+    float meleePercent;
+    float meleeSpeed = 500;
+
+    [SerializeField]
+    AudioClip meleeSound;
+
+    void Start()
+    {
         ammo.SetCB_AmmoChanged(UpdateAmmoHUD);
         gunSlot.SetCB_AmmoChanged(UpdateAmmoHUD);
         primaryEquipped = false;
 
         UpdateAmmoHUD();
 
-        if(targetRevive == null){
+        if (targetRevive == null)
+        {
             HUD.SetReviveImageFill(0);
             HUD.SetReviveText("");
         }
-    } 
+    }
 
-    private void ReviveTimeChanged(float reviveTime){
-        if(hasAuthority){
+    private void ReviveTimeChanged(float reviveTime)
+    {
+        if (hasAuthority)
+        {
             HUD.SetReviveImageFill(reviveTime / REVIVE_TIME);
 
-            if(reviveTime > 0){
+            if (reviveTime > 0)
+            {
                 HUD.SetReviveText("Hold 'x' to revive " + targetRevive.name);
             }
-            else{
+            else
+            {
                 HUD.SetReviveText("");
             }
         }
@@ -70,60 +85,74 @@ public class Player : Player_Base {
 
 
 
-    private void GunChanged(bool primaryEquipped){
+    private void GunChanged(bool primaryEquipped)
+    {
         //Debug.LogError("Gun Changed");
 
-        if(gunSlot.PrimaryGun != null){
-            if(primaryEquipped){
-                gunSlot.EquipPrimary(); 
+        if (gunSlot.PrimaryGun != null)
+        {
+            if (primaryEquipped)
+            {
+                gunSlot.EquipPrimary();
                 gunSlot.PrimaryGun.TurnOn();
                 UpdateAmmoHUD();
             }
-            else{
+            else
+            {
                 gunSlot.PrimaryGun.TurnOff();
             }
         }
-        else if(primaryEquipped){
-            Debug.LogError("Primary is equipped, but there is no primary weapon?"); 
+        else if (primaryEquipped)
+        {
+            Debug.LogError("Primary is equipped, but there is no primary weapon?");
         }
 
-        if(gunSlot.SecondaryGun != null){
-            if(!primaryEquipped){
+        if (gunSlot.SecondaryGun != null)
+        {
+            if (!primaryEquipped)
+            {
                 gunSlot.EquipSecondary();
                 gunSlot.SecondaryGun.TurnOn();
                 UpdateAmmoHUD();
             }
-            else{
+            else
+            {
                 gunSlot.SecondaryGun.TurnOff();
             }
         }
-        else if(!primaryEquipped){
+        else if (!primaryEquipped)
+        {
             Debug.LogError("Secondary is equipped, but there is no secondary weapon?");
         }
 
 
         this.primaryEquipped = primaryEquipped;
-        
+
     }
 
-    public override Vitals_Base Vitals{
-        get{return vitals;}
+    public override Vitals_Base Vitals
+    {
+        get { return vitals; }
     }
 
-    public override GunSlot_Base GunSlot{
-        get{return gunSlot;}
+    public override GunSlot_Base GunSlot
+    {
+        get { return gunSlot; }
     }
 
-    public override AmmoInventory_Base Ammo{
-        get{return ammo;}
+    public override AmmoInventory_Base Ammo
+    {
+        get { return ammo; }
     }
 
-    public override AudioSource AudioSource{
-        get{return audioSource;}
+    public override AudioSource AudioSource
+    {
+        get { return audioSource; }
     }
 
-    public override Rigidbody Rigidbody{
-        get{return GetComponent<Rigidbody>();}
+    public override Rigidbody Rigidbody
+    {
+        get { return GetComponent<Rigidbody>(); }
     }
 
     public override void PickupAmmo(GunType gunType, int amount)
@@ -133,13 +162,15 @@ public class Player : Player_Base {
     }
 
 
-    public override void GunPickedUp(){
+    public override void GunPickedUp()
+    {
         primaryEquipped = true;
         gunSlot.SecondaryGun.TurnOff();
     }
 
-    private void UpdateAmmoHUD(){
-        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType)); 
+    private void UpdateAmmoHUD()
+    {
+        HUD.SetInventoryAmmo(ammo.Count(gunSlot.EquippedGun.GunType));
         HUD.SetClipAmmo(gunSlot.EquippedGun.BulletsInClip, gunSlot.EquippedGun.ClipSize);
     }
 
@@ -149,6 +180,10 @@ public class Player : Player_Base {
     ///
     void Update()
     {
+
+
+
+
         ///
         /// Use health pack
         ///
@@ -160,21 +195,24 @@ public class Player : Player_Base {
         ///
         /// Drop weapon
         ///
-        if(Input.GetKeyDown(KeyCode.E)){
+        if (Input.GetKeyDown(KeyCode.E))
+        {
             CmdDrop();
         }
 
         ///
         /// Reload
         ///
-        if(Input.GetKeyDown(KeyCode.R)){
+        if (Input.GetKeyDown(KeyCode.R))
+        {
             CmdReload();
         }
 
         ///
         /// Switch weapons
         ///
-        if(Input.GetKeyDown(KeyCode.Q)){
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
             CmdNextWeapon();
         }
 
@@ -182,16 +220,19 @@ public class Player : Player_Base {
         ///
         /// Shoot 
         ///
-        if(Input.GetKey(KeyCode.Mouse0)){
+        if (Input.GetKey(KeyCode.Mouse0) && meleePercent < -100)
+        {
             CmdShoot(Input.GetKeyDown(KeyCode.Mouse0));
             UpdateAmmoHUD();
-        } 
+        }
 
         ///
         /// Start - Revive Ally
         ///
-        if(Input.GetKeyDown(KeyCode.H)){
-            if(targetRevive != null){
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            if (targetRevive != null)
+            {
                 reviving = true;
                 reviveTime = 0;
             }
@@ -200,7 +241,8 @@ public class Player : Player_Base {
         ///
         /// Stop - Revive Ally
         ///
-        if(Input.GetKeyUp(KeyCode.H)){
+        if (Input.GetKeyUp(KeyCode.H))
+        {
             reviving = false;
             reviveTime = 0;
             HUD.SetReviveImageFill(1);
@@ -210,52 +252,88 @@ public class Player : Player_Base {
         ///
         /// Melee
         ///
-        if(Input.GetKeyDown(KeyCode.F)){
-            CmdMelee(); 
+        if (Input.GetKeyDown(KeyCode.F) && meleePercent < -40)
+        {
+            meleePercent = 100;
+            CmdMelee();
         }
 
 
         ReviveAlly();
-        CheckForDeadAllies();            
+        CheckForDeadAllies();
+
+        if (meleePercent > -110)
+        {
+            MeleeAnimation(meleePercent);
+            meleePercent -= meleeSpeed * Time.deltaTime;
+        }
 
     }
 
-    void ReviveAlly(){
-        if(reviving){
+    void MeleeAnimation(float percent)
+    {
+        Vector3 startPos = new Vector3(-0.4f, 0, 0.5f);
+        Vector3 endPos = Vector3.zero;
+
+        Vector3 newPos = Vector3.Slerp(endPos, startPos, percent / 100.0f);
+        gunSlot.EquippedGun.transform.localPosition = newPos;
+
+
+        Quaternion startRot = Quaternion.Euler(0, 90, 0);
+        Quaternion endRot = Quaternion.Euler(30, -35, 10);
+
+        Quaternion newRot = Quaternion.Slerp(startRot, endRot, percent / 70.0f);
+        gunSlot.EquippedGun.transform.localRotation = newRot;
+
+    }
+
+    void ReviveAlly()
+    {
+        if (reviving)
+        {
             reviveTime += Time.deltaTime;
 
-            if(targetRevive == null){
+            if (targetRevive == null)
+            {
                 reviving = false;
             }
-            else if(reviveTime >= REVIVE_TIME){
+            else if (reviveTime >= REVIVE_TIME)
+            {
                 targetRevive.Vitals.Revive();
                 targetRevive = null;
                 reviving = false;
             }
-        } 
+        }
     }
 
-    void CheckForDeadAllies(){
+    void CheckForDeadAllies()
+    {
         Collider[] colliders = Physics.OverlapSphere(transform.position, 1.3f, playerLayerMask);
 
-        if(colliders.Length == 1){
+        if (colliders.Length == 1)
+        {
             HUD.SetReviveText("");
             HUD.SetReviveImageFill(0);
         }
-        else{
+        else
+        {
 
-            foreach(Collider c in colliders){
-                if(c.transform == transform){
+            foreach (Collider c in colliders)
+            {
+                if (c.transform == transform)
+                {
                     continue;
                 }
 
                 Player_Base targetRevive = c.GetComponent<Player_Base>();
-                if(targetRevive.Vitals.dead){
+                if (targetRevive.Vitals.dead)
+                {
                     this.targetRevive = targetRevive;
                     HUD.SetReviveText("Hold 'h' to revive " + c.name);
 
                     float revivePercent = reviveTime / REVIVE_TIME;
-                    if(revivePercent == 0){
+                    if (revivePercent == 0)
+                    {
                         revivePercent = 1;
                     }
                     HUD.SetReviveImageFill(revivePercent);
@@ -267,130 +345,167 @@ public class Player : Player_Base {
     }
 
     [Command]
-    void CmdMelee(){
+    void CmdMelee()
+    {
+        RpcMelee();
+
         Collider[] enemies = Physics.OverlapSphere(transform.position, 2f, enemyMask);
 
-        foreach(Collider c in enemies){
-            if(c.GetComponent<Zombie_Base>()){
+        foreach (Collider c in enemies)
+        {
+            if (c.GetComponent<Zombie_Base>())
+            {
                 c.GetComponent<Zombie_Base>().TakeDamage(15, Vector3.zero, Vector3.zero);
                 c.GetComponent<Rigidbody>().AddForce(transform.forward * 1000, ForceMode.Impulse);
-                //Add knock back to zombie here///////////////////////////////////////////////////////////////////////
             }
         }
 
 
     }
 
+    [ClientRpc]
+    void RpcMelee()
+    {
+        audioSource.PlayOneShot(meleeSound);
+    }
+
+
 
 
 
     [Command]
-    void CmdUseHealthPack(){
-        if(vitals.HasHealthpack()){
+    void CmdUseHealthPack()
+    {
+        if (vitals.HasHealthpack())
+        {
             RpcUseHealthPack();
         }
     }
 
     [ClientRpc]
-    void RpcUseHealthPack(){
+    void RpcUseHealthPack()
+    {
         vitals.UseHealthpack();
     }
 
     [Command]
-    void CmdNextWeapon(){
+    void CmdNextWeapon()
+    {
         primaryEquipped = gunSlot.NextWeapon();
+        MeleeAnimation(meleePercent);
     }
     [ClientRpc]
-    void RpcNextWeapon(){
+    void RpcNextWeapon()
+    {
         gunSlot.NextWeapon();
     }
 
 
     [Command]
-    void CmdDrop(){
+    void CmdDrop()
+    {
         RpcDrop();
-        Net_Manager.instance.DropPrimary(GetComponent<NetworkIdentity>()); 
+        Net_Manager.instance.DropPrimary(GetComponent<NetworkIdentity>());
     }
     [ClientRpc]
-    public void RpcDrop(){
+    public void RpcDrop()
+    {
         gunSlot.Drop();
         primaryEquipped = false;
     }
 
 
     [Command]
-    void CmdShoot(bool mouseDown){
+    void CmdShoot(bool mouseDown)
+    {
         RpcShoot(mouseDown);
     }
     [ClientRpc]
-    void RpcShoot(bool mouseDown){
+    void RpcShoot(bool mouseDown)
+    {
         gunSlot.Shoot(mouseDown);
     }
 
 
     [Command]
-    void CmdReload(){
+    void CmdReload()
+    {
         RpcReload();
     }
     [ClientRpc]
-    void RpcReload(){
+    void RpcReload()
+    {
         gunSlot.Reload();
 
-        if(hasAuthority){
+        if (hasAuthority)
+        {
             UpdateAmmoHUD();
         }
     }
 
     [ClientRpc]
-    public override void RpcSetPlayerName(string playerName){
+    public override void RpcSetPlayerName(string playerName)
+    {
         transform.name = playerName;
     }
-    
+
 
 
 
     [ClientRpc]
-    public override void RpcConnectSecondary(NetworkIdentity secondaryWeapon){
-        
-        if(secondaryWeapon != null){
+    public override void RpcConnectSecondary(NetworkIdentity secondaryWeapon)
+    {
+
+        if (secondaryWeapon != null)
+        {
             Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
-            if(secondary != null){
+            if (secondary != null)
+            {
                 gunSlot.SetSecondary(secondary);
                 secondary.SetSecondaryOwner(this);
 
                 GunChanged(primaryEquipped);
             }
-            else{
+            else
+            {
                 Debug.LogWarning("RpcConnectWeapons: secondary gameobject was null");
             }
         }
-        else{
+        else
+        {
             Debug.LogWarning("RpcConnectWeapons: secondary NETID was null");
         }
 
-        
+
     }
 
     [ClientRpc]
-    public override void RpcConnectPrimary(NetworkIdentity primaryWeapon){
+    public override void RpcConnectPrimary(NetworkIdentity primaryWeapon)
+    {
 
-        if(primaryWeapon != null){
+        if (primaryWeapon != null)
+        {
             Gun_Base primary = primaryWeapon.gameObject.GetComponent<Gun_Base>();
-            if(primary != null){
+            if (primary != null)
+            {
                 gunSlot.SetPrimary(primary);
                 primary.SetOwningPlayer(this);
                 GunChanged(primaryEquipped);
             }
-            else{
+            else
+            {
                 Debug.LogWarning("RpcConnectWeapons: primary gameobject was null");
             }
         }
-        else{
+        else
+        {
             Debug.LogWarning("RpcConnectWeapons: primary NETID was null");
         }
     }
 
 
-    
+
 
 }
+
+
