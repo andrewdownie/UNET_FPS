@@ -264,7 +264,7 @@ public class Player : Player_Base
 
         if (meleePercent > -110)
         {
-            MeleeAnimation(meleePercent);
+            gunSlot.MeleeAnimation(meleePercent);
             meleePercent -= meleeSpeed * Time.deltaTime;
         }
 
@@ -392,7 +392,7 @@ public class Player : Player_Base
     void CmdNextWeapon()
     {
         primaryEquipped = gunSlot.NextWeapon();
-        MeleeAnimation(meleePercent);
+        gunSlot.MeleeAnimation(meleePercent);
     }
     [ClientRpc]
     void RpcNextWeapon()

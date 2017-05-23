@@ -67,4 +67,6 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	public abstract void EquipPrimary();
 	public abstract void EquipSecondary();
 
+	public abstract void MeleeAnimation(float meleePercent);
+
 }

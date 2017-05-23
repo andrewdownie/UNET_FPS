@@ -82,6 +82,23 @@ public class GunSlot : GunSlot_Base {
 
 //        CB_AmmoChanged();//////////////////////////////////////
     }
+    public override void MeleeAnimation(float percent)
+    {
+        Vector3 startPos = new Vector3(-0.098f, -0.17f, 1.144f);
+        Vector3 endPos = new Vector3(0.302f, -0.17f, 0.644f);
+
+        Vector3 newPos = Vector3.Slerp(endPos, startPos, percent / 100.0f);
+        transform.localPosition = newPos;
+
+
+        Quaternion startRot = Quaternion.Euler(0, 0, 0);
+        Quaternion endRot = Quaternion.Euler(30, -125, 10);
+
+        Quaternion newRot = Quaternion.Slerp(startRot, endRot, percent / 70.0f);
+        transform.localRotation = newRot;
+
+    }
+
 
 
     public override bool TryPickup(Gun_Base gun){
