@@ -75,6 +75,9 @@
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\GunSlot.cs" />
      <Compile Include="Assets\Scripts\HUD.cs" />
+     <Compile Include="Assets\Scripts\InterfaceTest\Gun_Impl.cs" />
+     <Compile Include="Assets\Scripts\InterfaceTest\IGun.cs" />
+     <Compile Include="Assets\Scripts\InterfaceTest\ScriptLookingForIGun.cs" />
      <Compile Include="Assets\Scripts\Lib\CameraFacingBillboard.cs" />
      <Compile Include="Assets\Scripts\MonsterSpawner.cs" />
      <Compile Include="Assets\Scripts\MuzzleFlash.cs" />

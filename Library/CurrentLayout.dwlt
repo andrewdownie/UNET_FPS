@@ -36,9 +36,9 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 725
+    x: 732
     y: 0
-    width: 355
+    width: 348
     height: 610
   m_MinSize: {x: 277, y: 71}
   m_MaxSize: {x: 4002, y: 4021}
@@ -66,8 +66,8 @@ MonoBehaviour:
     y: 0
     width: 337
     height: 610
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -114,7 +114,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 337
     y: 0
-    width: 388
+    width: 395
     height: 610
   m_MinSize: {x: 279, y: 71}
   m_MaxSize: {x: 4004, y: 4021}
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_MinSize: {x: 758, y: 563}
   m_MaxSize: {x: 12008, y: 12063}
   vertical: 1
-  controlID: 17
+  controlID: 96
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -395,9 +395,9 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: -353
+    x: -346
     y: 706
-    width: 353
+    width: 346
     height: 589
   m_InitialOpenURL: https://public-cdn.cloud.unity3d.com/editor/production/cloud/hub
   m_GlobalObjectTypeName: 
@@ -513,8 +513,8 @@ MonoBehaviour:
     height: 589
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
+    m_SelectedIDs: e6f5ffff
+    m_LastClickedID: -2586
     m_ExpandedIDs: e6fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -601,19 +601,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Sounds
+    - Assets/Scripts/InterfaceTest
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Sounds
+  - Assets/Scripts/InterfaceTest
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\andre\OneDrive\Development\Unity Projects\UNET_FPS
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 95}
-    m_SelectedIDs: d8350000
-    m_LastClickedID: 13784
-    m_ExpandedIDs: 0000000052250000e2250000e82500006c2700004a290000542900006229000072290000
+    m_SelectedIDs: da320000
+    m_LastClickedID: 13018
+    m_ExpandedIDs: 0000000052250000e2250000e82500006c2700004a29000054290000622900007229000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -666,8 +666,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: e6f5ffff
+    m_LastClickedInstanceID: -2586
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: fc2800008e260000
     m_RenameOverlay:
@@ -746,7 +746,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: -741
     y: 706
-    width: 384
+    width: 391
     height: 589
   m_ScrollPosition: {x: 0, y: 0}
   m_InspectorMode: 0
