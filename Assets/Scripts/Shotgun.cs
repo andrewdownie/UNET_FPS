@@ -107,17 +107,7 @@ public class Shotgun : Gun_Base
     //TODO: instead of adding a rigid body, have a rigid body on by default, and toggle 'isKinematic' (don't actually know if this will do what I want, but it would be much better than what I have if it does)
     public override void Drop()
     {
-        enabled = false;
-
-        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.useGravity = true;
-
-        Collider[] colliders = GetComponents<Collider>();
-        foreach (Collider c in colliders)
-        {
-            c.enabled = true;
-        }
-
+        _Drop(this);
         StartCoroutine(DropGunTimer());
     }
 

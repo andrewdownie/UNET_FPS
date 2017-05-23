@@ -35,4 +35,18 @@ public abstract class Gun_Base : NetworkBehaviour
 
 
 
+
+
+    ///x///
+    ///x/// Protected Static Methods
+    ///x///
+
+    protected static void _Drop(Gun_Base gun)
+    {
+        gun.enabled = false;
+        Rigidbody rb = gun.gameObject.AddComponent<Rigidbody>();
+        rb.useGravity = true;
+        StaticUtility.SetCollidersOnChildren(gun.gameObject, true);
+    }
+
 }

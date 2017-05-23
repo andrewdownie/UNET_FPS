@@ -83,17 +83,7 @@ public class Gun : Gun_Base
 
     public override void Drop()
     {
-
-        Rigidbody rb = gameObject.AddComponent<Rigidbody>();
-        rb.useGravity = true;
-
-
-
-        Collider[] colliders = GetComponents<Collider>();
-        foreach (Collider c in colliders)
-        {
-            c.enabled = true;
-        }
+        _Drop(this);
 
         StartCoroutine(DropGunTimer());
     }
@@ -101,12 +91,8 @@ public class Gun : Gun_Base
 
     void OnTriggerEnter(Collider coll)
     {
-        //The only thing OnTriggerEnter should do is check if the slot is empty, and then send a cmd to the server to link
-        //  Then from there, the gun is linked to the player, and the link is rpc'd to all clients
         if (coll.tag == "Player" && player == null)
         {
-            Debug.Log("Collided with: " + coll.name);
-
             Player_Base _player = coll.GetComponent<Player_Base>();
             GunSlot_Base _gunSlot = _player.GunSlot;
 
@@ -122,7 +108,6 @@ public class Gun : Gun_Base
                 }
                 SetOwningPlayer(_player);
             }
-
         }
     }
 
