@@ -57,36 +57,7 @@ public class Gun : Gun_Base
     HitMarkerCallback hitMarkerCallback;
 
 
-    void Start()
-    {
-        FindGunSlotAndPlayer();
-    }
 
-    void FindGunSlotAndPlayer()
-    {
-        Transform parent = transform.parent;
-
-        if (parent == null)
-        {
-            enabled = false;
-            return;
-        }
-
-        GunSlot weaponSlot = parent.GetComponent<GunSlot>();
-
-        if (weaponSlot != null)
-        {
-            this.gunSlot = weaponSlot;
-
-            Player player = weaponSlot.Player;
-
-            if (player != null)
-            {
-                this.player = player;
-            }
-        }
-
-    }
 
     public override int BulletsInClip
     {
