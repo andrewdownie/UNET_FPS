@@ -94,12 +94,12 @@ public class Player : Player_Base
             if (primaryEquipped)
             {
                 gunSlot.EquipPrimary();
-                gunSlot.PrimaryGun.TurnOn();
+                gunSlot.PrimaryGun.SetVisible(true);
                 UpdateAmmoHUD();
             }
             else
             {
-                gunSlot.PrimaryGun.TurnOff();
+                gunSlot.PrimaryGun.SetVisible(false);
             }
         }
         else if (primaryEquipped)
@@ -112,12 +112,12 @@ public class Player : Player_Base
             if (!primaryEquipped)
             {
                 gunSlot.EquipSecondary();
-                gunSlot.SecondaryGun.TurnOn();
+                gunSlot.SecondaryGun.SetVisible(true);
                 UpdateAmmoHUD();
             }
             else
             {
-                gunSlot.SecondaryGun.TurnOff();
+                gunSlot.SecondaryGun.SetVisible(false);
             }
         }
         else if (!primaryEquipped)
@@ -165,7 +165,7 @@ public class Player : Player_Base
     public override void GunPickedUp()
     {
         primaryEquipped = true;
-        gunSlot.SecondaryGun.TurnOff();
+        gunSlot.SecondaryGun.SetVisible(false);
     }
 
     private void UpdateAmmoHUD()

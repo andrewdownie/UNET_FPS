@@ -2,7 +2,6 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-//TODO: replace player reference, to indirect references through GunSlot
 public class Gun : Gun_Base
 {
     [SerializeField]
@@ -74,7 +73,6 @@ public class Gun : Gun_Base
     // Update is called once per frame
     void Update()
     {
-
         //TODO: record the time since last shot once, and compare the saved value to
         //      the current value (then this wouldn't have to eat cpu time in the update method)
         timeSinceLastShot += Time.deltaTime;
@@ -128,11 +126,9 @@ public class Gun : Gun_Base
             Destroy(GetComponent<Rigidbody>());
             enabled = true;
 
-            Collider[] colliders = GetComponents<Collider>();
-            foreach (Collider c in colliders)
-            {
-                c.enabled = false;
-            }
+            gameObject.EnableCollidersInChildren(false);
+
+
 
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -146,29 +142,14 @@ public class Gun : Gun_Base
     {
         muzzleFlash.HideFlash();
     }
-
-    public override void TurnOn()
-    {
-
+    
+    public override void SetVisible(bool visible){
         foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
         {
-            t.enabled = true;
-        }
-        muzzleFlash.HideFlash();
-
-    }
-
-    public override void TurnOff()
-    {
-
-        foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
-        {
-            t.enabled = false;
+            t.enabled = visible;
         }
         muzzleFlash.HideFlash();
     }
-
-
 
 
     public override void SetSecondaryOwner(Player_Base newOwner)
@@ -185,11 +166,7 @@ public class Gun : Gun_Base
             Destroy(GetComponent<Rigidbody>());
             enabled = true;
 
-            Collider[] colliders = GetComponents<Collider>();
-            foreach (Collider c in colliders)
-            {
-                c.enabled = false;
-            }
+            gameObject.EnableCollidersInChildren(false);
 
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -208,6 +185,7 @@ public class Gun : Gun_Base
 
     IEnumerator DropGunTimer()
     {
+        //TODO: this needs to be networked, or there is a small invalid state can happen locally
         yield return new WaitForSeconds(1.3f);
         player = null;
         gunSlot = null;
@@ -215,38 +193,14 @@ public class Gun : Gun_Base
 
     public override void Align(Transform alignObject, Vector3 additionalRotation)
     {
-
-        if (player != null)
-        {
-            Transform camera = transform.parent.parent;
-            RaycastHit hit;
-            Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
-
-            Vector3 point = hit.point;
-
-            if (point == Vector3.zero)
-            {
-                point = camera.forward * 100000;
-            }
-            alignObject.LookAt(point);
-            alignObject.Rotate(additionalRotation);
-
-        }
+        alignObject.AlignWithMainCamera(additionalRotation, alignMask);
     }
 
 
 
     public override void AlignGun()
     {
-        if (player != null)
-        {
-            Transform camera = transform.parent.parent;
-            Vector3 point = camera.position + (camera.forward * 10000);
-
-            transform.LookAt(point);
-            transform.Rotate(new Vector3(0, 90, 0));
-        }
-
+        transform.AlignWithMainCamera(new Vector3(0, 90, 0));
     }
 
     public override void Shoot(bool firstDown)

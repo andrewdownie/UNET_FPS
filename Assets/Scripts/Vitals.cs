@@ -58,14 +58,14 @@ public class Vitals : Vitals_Base {
 		if(dead){
 			if(!previouslyDead){
 				transform.Rotate(0, 0, 90);
-				player.GunSlot.EquippedGun.TurnOff();
+				player.GunSlot.EquippedGun.SetVisible(false);
 				healthBarBG.enabled = false;
 			}
 		}
 		else{
 			if(previouslyDead){
 				transform.Rotate(0, 0, -90);
-				player.GunSlot.EquippedGun.TurnOn();
+				player.GunSlot.EquippedGun.SetVisible(true);
 				healthBarBG.enabled = true;
 			}
 		}

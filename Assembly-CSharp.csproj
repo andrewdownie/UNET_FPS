@@ -71,8 +71,9 @@
      <Compile Include="Assets\Scripts\Baseless\PlayerControl.cs" />
      <Compile Include="Assets\Scripts\Baseless\RandomColor.cs" />
      <Compile Include="Assets\Scripts\Baseless\StartGame.cs" />
-     <Compile Include="Assets\Scripts\Baseless\StaticUtility.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Extensions\GameObject_Extension.cs" />
+     <Compile Include="Assets\Scripts\Extensions\Transform_Extension.cs" />
      <Compile Include="Assets\Scripts\Gun.cs" />
      <Compile Include="Assets\Scripts\GunSlot.cs" />
      <Compile Include="Assets\Scripts\HUD.cs" />

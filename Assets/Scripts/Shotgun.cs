@@ -119,9 +119,9 @@ public class Shotgun : Gun_Base
 
             Player_Base _player = coll.GetComponent<Player_Base>();
             SetOwningPlayer(_player);
-
         }
     }
+
 
     public override void SetOwningPlayer(Player_Base newOwner)
     {
@@ -138,11 +138,7 @@ public class Shotgun : Gun_Base
                 Destroy(GetComponent<Rigidbody>());
                 enabled = true;
 
-                Collider[] colliders = GetComponents<Collider>();
-                foreach (Collider c in colliders)
-                {
-                    c.enabled = false;
-                }
+                gameObject.EnableCollidersInChildren(false);
 
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -156,25 +152,11 @@ public class Shotgun : Gun_Base
         Debug.LogError("Not implemented: setsecondaryowner");
     }
 
-    public override void TurnOn()
-    {
-        foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
-        {
-            t.enabled = true;
-        }
+    public override void SetVisible(bool visible){
+        modelParent.gameObject.EnableRenderersInChildren(visible);
         muzzleFlash.HideFlash();
-
     }
 
-    public override void TurnOff()
-    {
-        foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
-        {
-            t.enabled = false;
-        }
-        muzzleFlash.HideFlash();
-
-    }
 
 
     IEnumerator DropGunTimer()
