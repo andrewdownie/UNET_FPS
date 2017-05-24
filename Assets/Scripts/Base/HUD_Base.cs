@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 
 public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
@@ -22,10 +21,12 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
         
     }
 
-
-    /////
-    ///// Unity Events
-    /////
+    /// 
+    ///
+    ///                                     Unity Methods 
+    ///
+    /// 
+    /// </summary>
     void Awake()
     {
         
@@ -51,10 +52,12 @@ public abstract class HUD_Base<T> : MonoBehaviour where T : HUD_Base<T>  {
     }
 
 
-
-    /////
-    ///// Helper Functions
-    /////
+    ///
+    ///
+    ///                                     Helper Functions
+    /// 
+    /// 
+    
     void CheckIfCanvasShouldBeDisabled()
     {
         CanvasEnabled(true);

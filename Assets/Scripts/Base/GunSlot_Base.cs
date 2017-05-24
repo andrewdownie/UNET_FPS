@@ -1,10 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public abstract class GunSlot_Base : MonoBehaviour {
+ 	/// 
+    /// 
+    ///										Getters 
+    /// 
+    /// 
+	public abstract int BulletsInClip{get;}
+	public abstract int ClipSize{get;}
+	public abstract Gun_Base EquippedGun{get;}
+	public abstract Player_Base Player{get;}
+
+	public abstract Gun_Base PrimaryGun{get;}
+	public abstract Gun_Base SecondaryGun{get;}
+
+
+
+
+
+ 	/// 
+    /// 
+    ///										Methods - TODO: not 100% what all of this does anymore, it needs cleaning first and then commenting
+    /// 
+    /// 
 
 	/// <summary>
 	/// TryPickup: the weapon slot will try to take ownership of the gun passed in.
@@ -42,18 +61,9 @@ public abstract class GunSlot_Base : MonoBehaviour {
 	/// <param name="firstDown">If this is the first frame that the shoot button is down.</param>
 	public abstract void Shoot(bool firstDown);
 
-
-	public abstract int BulletsInClip{get;}
-
-	public abstract int ClipSize{get;}
-
-
 	public abstract void SetCB_AmmoChanged(Action action);
 
 
-	public abstract Gun_Base EquippedGun{get;}
-
-	public abstract Player Player{get;}
 
 
 	public abstract void SetSecondary(Gun_Base gun);
@@ -61,8 +71,6 @@ public abstract class GunSlot_Base : MonoBehaviour {
 
 	public abstract void SetSecondaryActive(bool active);
 	public abstract void SetPrimaryActive(bool active);
-	public abstract Gun_Base PrimaryGun{get;}
-	public abstract Gun_Base SecondaryGun{get;}
 
 	public abstract void EquipPrimary();
 	public abstract void EquipSecondary();

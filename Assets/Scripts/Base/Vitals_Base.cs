@@ -1,31 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Networking;
+﻿using UnityEngine.Networking;
 
 public abstract class Vitals_Base : NetworkBehaviour {
-	public abstract void ChangeHealth(float amount);
-	public abstract void ChangeStamina(float amount);
-	public abstract void ChangeMana(float amount);
-		
+
+
+    /// 
+    /// 
+    ///                                     Getters 
+    /// 
+	/// 
+
 	/// <summary>
-	/// Adds a health pack to the vitals.
+	/// Returns true if the player is alive.
+	/// </summary>
+	public abstract bool alive{get;}
+
+	/// <summary>
+	/// Returns true if the player is dead.
+	/// </summary>
+	public abstract bool dead{get;}
+
+
+
+
+
+    /// 
+    /// 
+    ///                                     Getters 
+    /// 
+	/// 
+
+	/// <summary>
+	/// Changes (adds/subtracts) the amount of stamina the vitals have.
+	/// </summary>
+	/// <param name="amount">The amount of stamina to add/subtract.</param>
+	public abstract void ChangeStamina(float amount);
+
+	/// <summary>
+	/// Changes (adds/subtracts) the amount of mana the vitals have.
+	/// </summary>
+	/// <param name="amount"></param>
+	public abstract void ChangeMana(float amount);
+
+	/// <summary>
+	/// Changes (adds/subtracts) the amount of health the vitals have.
+	/// </summary>
+	/// <param name="amount"></param>
+	public abstract void ChangeHealth(float amount);
+
+	/// <summary>
+	/// Adds a healthpack to the vitals.
 	/// </summary>
 	public abstract void AddHealthpack();
 
-	
 	/// <summary>
-	/// Uses a healthpack. Does nothing if there are no health packs to use.
+	/// Uses a healthpack from the vitals.
 	/// </summary>
 	public abstract void UseHealthpack();
 
-	//: Less than capacity
+	/// <summary>
+	/// Returns true if there is room to add another health pack to the vitals.
+	/// </summary>
 	public abstract bool CanAddHealthpack();
-	//: At least one 
+
+	/// <summary>
+	/// Returns true if the vitals have atleast one health pack.
+	/// </summary>
 	public abstract bool HasHealthpack();
 
-	public abstract bool alive{get;}
-	public abstract bool dead{get;}
-
+	/// <summary>
+	/// Bring the player out from being dead, and give them a little health.
+	/// </summary>
 	public abstract void Revive();
 }
