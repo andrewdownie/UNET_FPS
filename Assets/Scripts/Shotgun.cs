@@ -124,14 +124,16 @@ public class Shotgun : Gun_Base
 
 
     void OnTriggerEnter(Collider coll)
-    {
-        if (coll.tag == "Player" && player == null)
-        {
-            Debug.Log("Collided with: " + coll.name);
+    {   
+        if(player == null){
+            this.EOnTriggerEnter(coll);
+        }
 
+        /*if (coll.tag == "Player" && player == null)
+        {
             Player_Base _player = coll.GetComponent<Player_Base>();
             SetOwningPlayer(_player);
-        }
+        }*/
     }
 
     IEnumerator DropGunTimer()
@@ -154,49 +156,44 @@ public class Shotgun : Gun_Base
     {
         this.EDrop();
         StartCoroutine(DropGunTimer());
-    }
-
-
-
-    public override void SetOwningPlayer(Player_Base newOwner)
+    }  public override void SetOwningPlayer(Player_Base newOwner)
     {
+
         if (newOwner != null)
         {
+
             GunSlot_Base _gunSlot = newOwner.GunSlot;
 
-            if (_gunSlot != null && _gunSlot.TryPickup(this))
-            {
-                player = newOwner;
-                gunSlot = _gunSlot;
-                gameObject.transform.parent = _gunSlot.transform;
+            player = newOwner;
+            gunSlot = _gunSlot;
+            gameObject.transform.parent = _gunSlot.transform;
 
-                Destroy(GetComponent<Rigidbody>());
-                enabled = true;
+            Destroy(GetComponent<Rigidbody>());
+            enabled = true;
 
-                gameObject.EEnableCollidersInChildren(false);
+            gameObject.EEnableCollidersInChildren(false);
 
-                transform.localPosition = Vector3.zero;
-                transform.localRotation = Quaternion.Euler(0, 180, 0);
-                AlignGun();
-            }
+
+
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.Euler(0, 180, 0);
+            AlignGun();
+
+
         }
     }
+
+
 
     public override void SetVisible(bool visible){
         modelParent.gameObject.EEnableRenderersInChildren(visible);
         muzzleFlash.HideFlash();
     }
 
-
-
-
-
-
     public override void AlignGun()
     {
         transform.EAlignWithCamera(transform.parent.parent, new Vector3(0, 90, 0));
     }
-
 
     public override void Shoot(bool firstDown)
     {

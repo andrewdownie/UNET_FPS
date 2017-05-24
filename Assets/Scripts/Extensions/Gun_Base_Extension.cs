@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using UnityEngine.Networking;
+using UnityEngine;
 
 /// <summary>
 /// A bag of extension methods for the class: Gun_Base
-/// Used to implement common methods for a virtual interface / Base class
+/// Used to implement common methods for this virtual interface / Base class
 /// </summary>
 public static class Gun_Base_Extension{
 	/// <summary>
@@ -15,6 +16,29 @@ public static class Gun_Base_Extension{
         Rigidbody rb = gun.gameObject.AddComponent<Rigidbody>();
         rb.useGravity = true;
         gun.gameObject.EEnableCollidersInChildren(true);
+    }
+
+
+    /// <summary>
+    /// The server will set the gun to be owned by the player that walked over (collided with) the gun.
+    /// </summary>
+    /// <param name="gun">The gun that will be picked up by the player.</param>
+    /// <param name="coll">The collider that caused the OnTriggerEnter event to fire.</param>
+    public static void EOnTriggerEnter(this Gun_Base gun, Collider coll){
+        if (gun.isServer && coll.tag == "Player")
+        {
+            Player_Base _player = coll.GetComponent<Player_Base>();
+            GunSlot_Base _gunSlot = _player.GunSlot;
+
+
+            if (_gunSlot != null && _gunSlot.TryPickup(gun))
+            {
+                NetworkIdentity newOwnerID = _player.GetComponent<NetworkIdentity>();
+                NetworkIdentity gunID = gun.GetComponent<NetworkIdentity>();
+
+                Net_Manager.instance.SetPrimary(newOwnerID, gunID);
+            }
+        }
     }
 
 }

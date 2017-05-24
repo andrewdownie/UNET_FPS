@@ -92,45 +92,12 @@ public class Gun : Gun_Base
     /// 
     ///
 
-    // Update is called once per frame
     void Update()
     {
         //TODO: record the time since last shot once, and compare the saved value to
         //      the current value (then this wouldn't have to eat cpu time in the update method)
         timeSinceLastShot += Time.deltaTime;
     }
-
-
-
-
-    void OnTriggerEnter(Collider coll)
-    {
-        if (coll.tag == "Player" && player == null)
-        {
-            Player_Base _player = coll.GetComponent<Player_Base>();
-            GunSlot_Base _gunSlot = _player.GunSlot;
-
-
-            if (_gunSlot != null && _gunSlot.TryPickup(this))
-            {
-                if (isServer)
-                {
-                    NetworkIdentity newOwnerID = _player.GetComponent<NetworkIdentity>();
-                    NetworkIdentity gunID = GetComponent<NetworkIdentity>();
-
-                    Net_Manager.instance.SetPrimary(newOwnerID, gunID);
-                }
-                SetOwningPlayer(_player);
-            }
-        }
-    }
-
-
-    void OnDisable()
-    {
-        muzzleFlash.HideFlash();
-    }
-
     IEnumerator DropGunTimer()
     {
         //TODO: this needs to be networked, or there is a small chance an invalid state can happen locally
@@ -138,6 +105,14 @@ public class Gun : Gun_Base
         player = null;
         gunSlot = null;
     }
+
+    void OnTriggerEnter(Collider coll)
+    {
+        if(player == null){
+            this.EOnTriggerEnter(coll);
+        }
+    }
+
 
 
 
@@ -148,18 +123,9 @@ public class Gun : Gun_Base
     ///                                     Public Methods
     /// 
     ///
-    public override void SetVisible(bool visible)
-    {
-        modelParent.gameObject.EEnableRenderersInChildren(visible);
-        muzzleFlash.HideFlash();
-    }
-
-
-    //TODO: figure out how to set the owning player over the network...
     public override void SetOwningPlayer(Player_Base newOwner)
     {
 
-        // A lot of this stuff should probably happen in the rpc? 
         if (newOwner != null)
         {
 
@@ -184,16 +150,17 @@ public class Gun : Gun_Base
         }
     }
 
+    public override void SetVisible(bool visible)
+    {
+        modelParent.gameObject.EEnableRenderersInChildren(visible);
+        muzzleFlash.HideFlash();
+    }
 
     public override void Drop()
     {
         this.EDrop();
         StartCoroutine(DropGunTimer());
     }
-
-
-
-
 
     public override void AlignGun()
     {

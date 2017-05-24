@@ -2,7 +2,7 @@
 
 /// <summary>
 /// A bag of extension methods for the Unity class: Transform
-/// Used to extend class I don't have direct access to.
+/// Used to extend a class I don't have direct access to.
 /// </summary>
 public static class ExtensionMethods
 {

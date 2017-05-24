@@ -488,8 +488,8 @@ public class Player : Player_Base
             Gun_Base primary = primaryWeapon.gameObject.GetComponent<Gun_Base>();
             if (primary != null)
             {
-                gunSlot.SetPrimary(primary);
                 primary.SetOwningPlayer(this);
+                gunSlot.SetPrimary(primary);
                 GunChanged(primaryEquipped);
             }
             else
