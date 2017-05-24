@@ -109,7 +109,7 @@ public class Gun : Gun_Base
     void OnTriggerEnter(Collider coll)
     {
         if(player == null){
-            this.EOnTriggerEnter(coll);
+            this.ETriggerEnterPickup(coll);
         }
     }
 

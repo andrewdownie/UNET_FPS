@@ -126,14 +126,8 @@ public class Shotgun : Gun_Base
     void OnTriggerEnter(Collider coll)
     {   
         if(player == null){
-            this.EOnTriggerEnter(coll);
+            this.ETriggerEnterPickup(coll);
         }
-
-        /*if (coll.tag == "Player" && player == null)
-        {
-            Player_Base _player = coll.GetComponent<Player_Base>();
-            SetOwningPlayer(_player);
-        }*/
     }
 
     IEnumerator DropGunTimer()
@@ -156,7 +150,9 @@ public class Shotgun : Gun_Base
     {
         this.EDrop();
         StartCoroutine(DropGunTimer());
-    }  public override void SetOwningPlayer(Player_Base newOwner)
+    }  
+    
+    public override void SetOwningPlayer(Player_Base newOwner)
     {
 
         if (newOwner != null)
@@ -264,7 +260,11 @@ public class Shotgun : Gun_Base
                     bulletsInClip += bulletsFromInventory;
                     timeSinceLastReload = 0;
                     canReload = false;
-                    //HUD.SetClipAmmo(bulletsInClip, clipSize);///////
+
+                    if(hasAuthority){
+                        HUD.SetClipAmmo(bulletsInClip, clipSize);
+                    }
+
                 }
                 else
                 {

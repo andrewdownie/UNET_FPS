@@ -24,7 +24,7 @@ public static class Gun_Base_Extension{
     /// </summary>
     /// <param name="gun">The gun that will be picked up by the player.</param>
     /// <param name="coll">The collider that caused the OnTriggerEnter event to fire.</param>
-    public static void EOnTriggerEnter(this Gun_Base gun, Collider coll){
+    public static void ETriggerEnterPickup(this Gun_Base gun, Collider coll){
         if (gun.isServer && coll.tag == "Player")
         {
             Player_Base _player = coll.GetComponent<Player_Base>();
@@ -39,6 +39,11 @@ public static class Gun_Base_Extension{
                 Net_Manager.instance.SetPrimary(newOwnerID, gunID);
             }
         }
+    }
+
+
+    public static void ESetOwningPlayer(this Gun_Base gun){
+
     }
 
 }

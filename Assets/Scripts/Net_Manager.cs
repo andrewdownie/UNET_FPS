@@ -101,6 +101,7 @@ public class Net_Manager : NetworkManager{
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
 				np.PrimaryWeapon = gunID;
+				gunID.AssignClientAuthority(np.Conn);
 				//np.Player.RpcConnectPrimary(np.PrimaryWeapon);
 				//Debug.LogError("Foudn the new owner id");
 				break;
@@ -112,7 +113,9 @@ public class Net_Manager : NetworkManager{
 
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
+				np.PrimaryWeapon.RemoveClientAuthority(np.Conn);
 				np.PrimaryWeapon = null;
+
 				break;
 			}	
 		}	
