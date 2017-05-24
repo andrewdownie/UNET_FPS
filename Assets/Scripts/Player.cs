@@ -461,8 +461,8 @@ public class Player : Player_Base
             Gun_Base secondary = secondaryWeapon.gameObject.GetComponent<Gun_Base>();
             if (secondary != null)
             {
+                secondary.SetOwningPlayer(this);
                 gunSlot.SetSecondary(secondary);
-                secondary.SetSecondaryOwner(this);
 
                 GunChanged(primaryEquipped);
             }

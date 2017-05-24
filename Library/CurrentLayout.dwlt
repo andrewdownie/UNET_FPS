@@ -97,7 +97,7 @@ MonoBehaviour:
   m_MinSize: {x: 758, y: 221}
   m_MaxSize: {x: 12008, y: 4021}
   vertical: 0
-  controlID: 34
+  controlID: 61
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_MinSize: {x: 758, y: 713}
   m_MaxSize: {x: 12008, y: 18063}
   vertical: 1
-  controlID: 9
+  controlID: 36
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -515,7 +515,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: e4fbffff00000000
+    m_ExpandedIDs: 7a0ffeff2210feffe421feffea21feffb85dffff3a5efffffc6fffff0270ffff9690ffff1891ffffdaa2ffffe0a2ffffe4fbffff00000000ee5100008e520000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -601,18 +601,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Scripts/Extensions
+    - Assets
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts/Extensions
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\andre\OneDrive\Development\Unity Projects\UNET_FPS
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 95}
-    m_SelectedIDs: 06270000
-    m_LastClickedID: 9990
+    m_SelectedIDs: 7a250000
+    m_LastClickedID: 9594
     m_ExpandedIDs: 000000007a2500000a2600001026000096270000742900007e2900008c2900009c29000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: fc2800008e260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

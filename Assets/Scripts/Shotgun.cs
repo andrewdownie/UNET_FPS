@@ -1,10 +1,13 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: replace player reference, to indirect references through GunSlot
 public class Shotgun : Gun_Base
 {
+    ///
+    /// 
+    ///                                     Instance Variables
+    /// 
+    /// 
     [SerializeField]
     Transform modelParent;
 
@@ -68,17 +71,34 @@ public class Shotgun : Gun_Base
 
 
 
+
+    ///
+    ///
+    ///                                     Getters
+    /// 
+    /// 
     public override int BulletsInClip
     {
         get { return bulletsInClip; }
     }
-
     public override int ClipSize
     {
         get { return clipSize; }
     }
+    public override GunType GunType
+    {
+        get { return gunType; }
+    }
 
-    // Update is called once per frame
+
+
+
+
+    ///
+    ///
+    ///                                     Unity Methods
+    /// 
+    /// 
     void Update()
     {
         //TODO: record the time since last shot once, and compare the saved value to
@@ -103,14 +123,6 @@ public class Shotgun : Gun_Base
     }
 
 
-
-    //TODO: instead of adding a rigid body, have a rigid body on by default, and toggle 'isKinematic' (don't actually know if this will do what I want, but it would be much better than what I have if it does)
-    public override void Drop()
-    {
-        _Drop(this);
-        StartCoroutine(DropGunTimer());
-    }
-
     void OnTriggerEnter(Collider coll)
     {
         if (coll.tag == "Player" && player == null)
@@ -121,6 +133,29 @@ public class Shotgun : Gun_Base
             SetOwningPlayer(_player);
         }
     }
+
+    IEnumerator DropGunTimer()
+    {
+        yield return new WaitForSeconds(1.3f);
+        player = null;
+        gunSlot = null;
+    }
+
+
+
+
+
+    ///
+    ///     
+    ///                                     Public Methods
+    /// 
+    ///
+    public override void Drop()
+    {
+        this.EDrop();
+        StartCoroutine(DropGunTimer());
+    }
+
 
 
     public override void SetOwningPlayer(Player_Base newOwner)
@@ -138,7 +173,7 @@ public class Shotgun : Gun_Base
                 Destroy(GetComponent<Rigidbody>());
                 enabled = true;
 
-                gameObject.EnableCollidersInChildren(false);
+                gameObject.EEnableCollidersInChildren(false);
 
                 transform.localPosition = Vector3.zero;
                 transform.localRotation = Quaternion.Euler(0, 180, 0);
@@ -147,30 +182,19 @@ public class Shotgun : Gun_Base
         }
     }
 
-    public override void SetSecondaryOwner(Player_Base newOwner)
-    {
-        Debug.LogError("Not implemented: setsecondaryowner");
-    }
-
     public override void SetVisible(bool visible){
-        modelParent.gameObject.EnableRenderersInChildren(visible);
+        modelParent.gameObject.EEnableRenderersInChildren(visible);
         muzzleFlash.HideFlash();
     }
 
 
 
-    IEnumerator DropGunTimer()
-    {
-        yield return new WaitForSeconds(1.3f);
-        player = null;
-        gunSlot = null;
-    }
 
 
 
     public override void AlignGun()
     {
-        transform.AlignWithMainCamera(new Vector3(0, 90, 0));
+        transform.EAlignWithCamera(transform.parent.parent, new Vector3(0, 90, 0));
     }
 
 
@@ -259,10 +283,6 @@ public class Shotgun : Gun_Base
         }
     }
 
-    public override GunType GunType
-    {
-        get { return gunType; }
-    }
 
 
 }

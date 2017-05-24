@@ -22,24 +22,17 @@ public abstract class Gun_Base : NetworkBehaviour
 
 
     public abstract void SetOwningPlayer(Player_Base newOwner);
-    public abstract void SetSecondaryOwner(Player_Base newOwner);
 
     public abstract void SetVisible(bool visible);
 
+}
 
 
-
-
-    ///x///
-    ///x/// Protected Static Methods
-    ///x///
-
-    protected static void _Drop(Gun_Base gun)
-    {
-        gun.enabled = false;
-        Rigidbody rb = gun.gameObject.AddComponent<Rigidbody>();
-        rb.useGravity = true;
-        gun.gameObject.EnableCollidersInChildren(true);
-    }
-
+public enum GunType
+{
+    sniper,
+    shotgun,
+    pistol,
+    smg,
+    assaultRifle
 }

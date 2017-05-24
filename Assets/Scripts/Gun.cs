@@ -4,6 +4,11 @@ using UnityEngine.Networking;
 
 public class Gun : Gun_Base
 {
+    ///
+    /// 
+    ///                                     Instance Variables
+    /// 
+    ///
     [SerializeField]
     Transform modelParent;
     [SerializeField]
@@ -58,17 +63,34 @@ public class Gun : Gun_Base
 
 
 
+
+    ///
+    ///
+    ///                                     Getters
+    /// 
+    ///
     public override int BulletsInClip
     {
         get { return bulletsInClip; }
     }
-
     public override int ClipSize
     {
         get { return clipSize; }
     }
+    public override GunType GunType
+    {
+        get { return gunType; }
+    }
 
 
+
+
+
+    ///
+    /// 
+    ///                                     Unity Methods
+    /// 
+    ///
 
     // Update is called once per frame
     void Update()
@@ -79,12 +101,6 @@ public class Gun : Gun_Base
     }
 
 
-    public override void Drop()
-    {
-        _Drop(this);
-
-        StartCoroutine(DropGunTimer());
-    }
 
 
     void OnTriggerEnter(Collider coll)
@@ -114,9 +130,27 @@ public class Gun : Gun_Base
     {
         muzzleFlash.HideFlash();
     }
-    
-    public override void SetVisible(bool visible){
-        modelParent.gameObject.EnableRenderersInChildren(visible);
+
+    IEnumerator DropGunTimer()
+    {
+        //TODO: this needs to be networked, or there is a small chance an invalid state can happen locally
+        yield return new WaitForSeconds(1.3f);
+        player = null;
+        gunSlot = null;
+    }
+
+
+
+
+
+    ///
+    /// 
+    ///                                     Public Methods
+    /// 
+    ///
+    public override void SetVisible(bool visible)
+    {
+        modelParent.gameObject.EEnableRenderersInChildren(visible);
         muzzleFlash.HideFlash();
     }
 
@@ -138,7 +172,7 @@ public class Gun : Gun_Base
             Destroy(GetComponent<Rigidbody>());
             enabled = true;
 
-            gameObject.EnableCollidersInChildren(false);
+            gameObject.EEnableCollidersInChildren(false);
 
 
 
@@ -150,53 +184,20 @@ public class Gun : Gun_Base
         }
     }
 
-    public override void SetSecondaryOwner(Player_Base newOwner)
+
+    public override void Drop()
     {
-
-        if (newOwner != null)
-        {
-            GunSlot_Base _gunSlot = newOwner.GunSlot;
-
-            player = newOwner;
-            gunSlot = _gunSlot;
-            gameObject.transform.parent = _gunSlot.transform;
-
-            Destroy(GetComponent<Rigidbody>());
-            enabled = true;
-
-            gameObject.EnableCollidersInChildren(false);
-
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
-            AlignGun();
-
-            //TODO: Why does SetSecondaryOwner need to make this call? (guessing it has to do with the fact this gets called client side to tell the server the client is ready for linking)
-            //if I could find a way to remove this, then SetSecondaryOwner and SetOwningPlayer would be the same
-            if (isServer)
-            {
-                NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
-                NetworkIdentity gunID = GetComponent<NetworkIdentity>();
-
-                Net_Manager.instance.SetSecondary(newOwnerID, gunID);
-            }
-
-        }
+        this.EDrop();
+        StartCoroutine(DropGunTimer());
     }
 
-    IEnumerator DropGunTimer()
-    {
-        //TODO: this needs to be networked, or there is a small invalid state can happen locally
-        yield return new WaitForSeconds(1.3f);
-        player = null;
-        gunSlot = null;
-    }
 
 
 
 
     public override void AlignGun()
     {
-        transform.AlignWithMainCamera(new Vector3(0, 90, 0));
+        transform.EAlignWithCamera(transform.parent.parent, new Vector3(0, 90, 0));
     }
 
     public override void Shoot(bool firstDown)
@@ -225,7 +226,7 @@ public class Gun : Gun_Base
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);
                 bullet.InitBulletTrail(bullet.transform.position);
 
-                bullet.transform.AlignWithMainCamera();
+                bullet.transform.EAlignWithCamera(transform.parent.parent);
 
 
                 muzzleFlash.ShowFlash();
@@ -265,20 +266,7 @@ public class Gun : Gun_Base
         }
     }
 
-    public override GunType GunType
-    {
-        get { return gunType; }
-    }
 
 
 }
 
-
-public enum GunType
-{
-    sniper,
-    shotgun,
-    pistol,
-    smg,
-    assaultRifle
-}

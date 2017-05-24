@@ -2,6 +2,7 @@
 
 /// <summary>
 /// A bag of extension methods for the Unity class: Transform
+/// Used to extend class I don't have direct access to.
 /// </summary>
 public static class ExtensionMethods
 {
@@ -11,9 +12,8 @@ public static class ExtensionMethods
     /// <param name="alignObject"></param>
     /// <param name="additionalRotation"></param>
     /// <param name="alignMask">A raycast will be sent out in the direction of the main camera, if anything with this LayerMask is hit, this object will point directly at the object hit by the raycast. (Example: if the LayerMask is set to "Everything", the object will point at any object the camera looks).</param>
-    public static void AlignWithMainCamera(this Transform alignObject, Vector3 additionalRotation, LayerMask alignMask)
+    public static void EAlignWithCamera(this Transform alignObject, Transform camera, Vector3 additionalRotation, LayerMask alignMask)
     {
-        Transform camera = Camera.main.transform;
         Vector3 point = camera.position + (camera.forward * 10000);
 
 
@@ -36,18 +36,18 @@ public static class ExtensionMethods
     /// <summary>
     /// Aligns the Transform to point forward in the direction the main camera faces.  
     /// </summary>
-    public static void AlignWithMainCamera(this Transform alignObject, Vector3 additionalRotation)
+    public static void EAlignWithCamera(this Transform alignObject, Transform camera, Vector3 additionalRotation)
     {
-        AlignWithMainCamera(alignObject, additionalRotation, LayerMask.GetMask("Nothing"));
+        EAlignWithCamera(alignObject, camera, additionalRotation, LayerMask.GetMask("Nothing"));
     }
 
     
     /// <summary>
     /// Aligns the Transform to point forward in the direction the main camera faces.  
     /// </summary>
-    public static void AlignWithMainCamera(this Transform alignObject)
+    public static void EAlignWithCamera(this Transform alignObject, Transform camera)
     {
-        AlignWithMainCamera(alignObject, Vector3.zero, LayerMask.GetMask("Nothing"));
+        EAlignWithCamera(alignObject, camera, Vector3.zero, LayerMask.GetMask("Nothing"));
     }
 
 }

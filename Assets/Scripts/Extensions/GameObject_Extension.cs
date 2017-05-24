@@ -2,14 +2,15 @@
 
 /// <summary>
 /// A bag of extension methods for the Unity class: GameObject
-/// </summary>
+/// Used to extend class I don't have direct access to.
+///  </summary>
 public static class GameObject_Extension{
  	/// <summary>
     /// Enables / disables all colliders on a GameObject and its children
     /// </summary>
     /// <param name="gameObject">The GameObject and it's children that will have colliders enabled/disabled.</param>
     /// <param name="active">Whether the colliders will be set to enabled, or set to disabled.</param>
-    public static void EnableCollidersInChildren(this GameObject gameObject, bool active)
+    public static void EEnableCollidersInChildren(this GameObject gameObject, bool active)
     {
         Collider[] colliders = gameObject.GetComponents<Collider>();
         foreach (Collider c in colliders)
@@ -23,7 +24,7 @@ public static class GameObject_Extension{
     /// </summary>
     /// <param name="gameObject">The GameObject and it's children that will have renderers enabled/disabled.</param>
     /// <param name="active">Whether the renderers will be set to enabled or set to disabled.</param>
-    public static void EnableRenderersInChildren(this GameObject gameObject, bool active)
+    public static void EEnableRenderersInChildren(this GameObject gameObject, bool active)
     {
         Renderer[] renderers = gameObject.GetComponentsInChildren<Renderer>();
         foreach (Renderer r in renderers)
