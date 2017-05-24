@@ -167,40 +167,10 @@ public class Shotgun : Gun_Base
     }
 
 
-    public override void Align(Transform alignObject, Vector3 additionalRotation)
-    {
-
-        if (player != null)
-        {
-            Transform camera = transform.parent.parent;
-            RaycastHit hit;
-            //Debug.DrawRay(camera.position, camera.forward * 1000, Color.red, 0.1f);
-            Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
-
-            Vector3 point = hit.point;
-
-            if (point == Vector3.zero)
-            {
-                point = camera.forward * 100000;
-            }
-            alignObject.LookAt(point);
-            alignObject.Rotate(additionalRotation);
-
-        }
-    }
-
 
     public override void AlignGun()
     {
-        if (player != null)
-        {
-            Transform camera = transform.parent.parent;
-            Vector3 point = camera.position + (camera.forward * 10000);
-
-            transform.LookAt(point);
-            transform.Rotate(new Vector3(0, 90, 0));
-        }
-
+        transform.AlignWithMainCamera(new Vector3(0, 90, 0));
     }
 
 
@@ -236,7 +206,6 @@ public class Shotgun : Gun_Base
                     bullet.InitBulletTrail(bullet.transform.position);
                     bullet.SetupBulletVelocity(i == 0);
 
-                    //Align(bullet.transform, bulletSpawnPoint.rotation.eulerAngles);
                 }
 
                 muzzleFlash.ShowFlash();

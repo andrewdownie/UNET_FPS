@@ -109,6 +109,18 @@ public class Gun : Gun_Base
         }
     }
 
+
+    void OnDisable()
+    {
+        muzzleFlash.HideFlash();
+    }
+    
+    public override void SetVisible(bool visible){
+        modelParent.gameObject.EnableRenderersInChildren(visible);
+        muzzleFlash.HideFlash();
+    }
+
+
     //TODO: figure out how to set the owning player over the network...
     public override void SetOwningPlayer(Player_Base newOwner)
     {
@@ -138,20 +150,6 @@ public class Gun : Gun_Base
         }
     }
 
-    void OnDisable()
-    {
-        muzzleFlash.HideFlash();
-    }
-    
-    public override void SetVisible(bool visible){
-        foreach (MeshRenderer t in modelParent.GetComponentsInChildren<MeshRenderer>())
-        {
-            t.enabled = visible;
-        }
-        muzzleFlash.HideFlash();
-    }
-
-
     public override void SetSecondaryOwner(Player_Base newOwner)
     {
 
@@ -172,6 +170,8 @@ public class Gun : Gun_Base
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             AlignGun();
 
+            //TODO: Why does SetSecondaryOwner need to make this call? (guessing it has to do with the fact this gets called client side to tell the server the client is ready for linking)
+            //if I could find a way to remove this, then SetSecondaryOwner and SetOwningPlayer would be the same
             if (isServer)
             {
                 NetworkIdentity newOwnerID = newOwner.GetComponent<NetworkIdentity>();
@@ -191,10 +191,6 @@ public class Gun : Gun_Base
         gunSlot = null;
     }
 
-    public override void Align(Transform alignObject, Vector3 additionalRotation)
-    {
-        alignObject.AlignWithMainCamera(additionalRotation, alignMask);
-    }
 
 
 
@@ -229,7 +225,7 @@ public class Gun : Gun_Base
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);
                 bullet.InitBulletTrail(bullet.transform.position);
 
-                Align(bullet.transform, new Vector3(0, 0, 0));
+                bullet.transform.AlignWithMainCamera();
 
 
                 muzzleFlash.ShowFlash();
