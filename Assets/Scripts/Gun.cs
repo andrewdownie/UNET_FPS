@@ -19,7 +19,6 @@ public class Gun : Gun_Base
 
     [SerializeField]
     private Player_Base player;
-    private GunSlot_Base gunSlot;
 
     [Header("Sound Clips")]
     [SerializeField]
@@ -109,7 +108,6 @@ public class Gun : Gun_Base
         //TODO: this needs to be networked, or there is a small chance an invalid state can happen locally
         yield return new WaitForSeconds(1.3f);
         player = null;
-        gunSlot = null;
     }
 
 
@@ -132,7 +130,7 @@ public class Gun : Gun_Base
     ///
     public override void SetOwningPlayer(Player_Base newOwner)
     {
-        player = this.ESetOwningPlayer(newOwner, out gunSlot);
+        player = this.ESetOwningPlayer(newOwner);
     }
 
 

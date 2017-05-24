@@ -18,7 +18,6 @@ public class Shotgun : Gun_Base
     private GunType gunType;
 
     private Player_Base player;
-    private GunSlot_Base gunSlot;
 
     [Header("Sound Clips")]
     [SerializeField]
@@ -138,7 +137,6 @@ public class Shotgun : Gun_Base
     {
         yield return new WaitForSeconds(1.3f);
         player = null;
-        gunSlot = null;
     }
 
 
@@ -159,7 +157,7 @@ public class Shotgun : Gun_Base
 
     public override void SetOwningPlayer(Player_Base newOwner)
     {
-        player = this.ESetOwningPlayer(newOwner, out gunSlot);
+        player = this.ESetOwningPlayer(newOwner);
     }
 
 

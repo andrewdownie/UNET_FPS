@@ -45,37 +45,29 @@ public static class Gun_Base_Extension
 
 
     /// <summary>
-    /// Sets the owner of this gun, given the sentOwner is not null. Destroys Rigidbody, enables gun script, enables colliders, aligns gun.
+    /// Sets the owner of this gun. Destroys Rigidbody, enables gun script, enables colliders, aligns gun.
     /// </summary>
     /// <param name="gun">The gun to set the owner of, and to configure to be used by a player.</param>
     /// <param name="sentOwner">The player we want to try to set as the owner of the gun.</param>
-    /// <param name="setGunSlotTo">Out: Provide the guns gunslot reference. The gunSlot of the player that will be set as the owner of the gun.</param>
-    /// <returns>Returns the sentOwner, set the guns player refernce to the return.</returns>
-    public static Player_Base ESetOwningPlayer(this Gun_Base gun, Player_Base sentOwner, out GunSlot_Base setGunSlotTo)
+    /// <returns>Returns the sentOwner, set the guns player reference to this return.</returns>
+    public static Player_Base ESetOwningPlayer(this Gun_Base gun, Player_Base sentOwner)
     {
         if (sentOwner != null)
         {
-            setGunSlotTo = sentOwner.GunSlot;
-
-            gun.transform.parent = setGunSlotTo.transform;
+            gun.transform.parent = sentOwner.GunSlot.transform;
 
             GameObject.Destroy(gun.GetComponent<Rigidbody>());
             gun.enabled = true;
 
             gun.gameObject.EEnableCollidersInChildren(false);
 
-
-
             gun.transform.localPosition = Vector3.zero;
             gun.transform.localRotation = Quaternion.Euler(0, 180, 0);
             gun.AlignGun();
 
         }
-        else{
-            setGunSlotTo = null;
-        }
 
-
+        
         return sentOwner;
     }
 
