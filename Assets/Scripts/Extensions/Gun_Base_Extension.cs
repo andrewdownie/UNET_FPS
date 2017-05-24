@@ -49,8 +49,8 @@ public static class Gun_Base_Extension
     /// </summary>
     /// <param name="gun">The gun to set the owner of, and to configure to be used by a player.</param>
     /// <param name="sentOwner">The player we want to try to set as the owner of the gun.</param>
-    /// <returns>Returns the sentOwner, set the guns player reference to this return.</returns>
-    public static Player_Base ESetOwningPlayer(this Gun_Base gun, Player_Base sentOwner)
+    /// <returns>Whether the player was set as the owner of the gun.</returns>
+    public static bool ESetOwningPlayer(this Gun_Base gun, Player_Base sentOwner)
     {
         if (sentOwner != null)
         {
@@ -66,9 +66,12 @@ public static class Gun_Base_Extension
             gun.AlignGun();
 
         }
+        else{
+            return false;
+        }
 
         
-        return sentOwner;
+        return true;
     }
 
 }

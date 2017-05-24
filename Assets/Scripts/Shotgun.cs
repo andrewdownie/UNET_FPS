@@ -127,8 +127,9 @@ public class Shotgun : Gun_Base
 
 
     void OnTriggerEnter(Collider coll)
-    {   
-        if(player == null){
+    {
+        if (player == null)
+        {
             this.ETriggerEnterPickup(coll);
         }
     }
@@ -152,16 +153,20 @@ public class Shotgun : Gun_Base
     {
         this.EDrop();
         StartCoroutine(DropGunTimer());
-    }  
-    
-
-    public override void SetOwningPlayer(Player_Base newOwner)
-    {
-        player = this.ESetOwningPlayer(newOwner);
     }
 
 
-    public override void SetVisible(bool visible){
+    public override void SetOwningPlayer(Player_Base newOwner)
+    {
+        if (this.ESetOwningPlayer(newOwner))
+        {
+            player = newOwner;
+        }
+    }
+
+
+    public override void SetVisible(bool visible)
+    {
         modelParent.gameObject.EEnableRenderersInChildren(visible);
         muzzleFlash.HideFlash();
     }
@@ -201,8 +206,8 @@ public class Shotgun : Gun_Base
                     ShotgunPellet bullet = ((GameObject)Instantiate(shotgunPelletPrefab.gameObject)).GetComponent<ShotgunPellet>();
                     bullet.transform.position = bulletSpawnPoint.position;
                     bullet.transform.rotation = bulletSpawnPoint.rotation;
-                    bullet.SetHitMarkerCallBack(hitMarkerCallback);
                     bullet.InitBulletTrail(bullet.transform.position);
+                    bullet.SetHitMarkerCallBack(hitMarkerCallback);
                     bullet.SetupBulletVelocity(i == 0);
 
                 }
@@ -244,7 +249,8 @@ public class Shotgun : Gun_Base
                     timeSinceLastReload = 0;
                     canReload = false;
 
-                    if(hasAuthority){
+                    if (hasAuthority)
+                    {
                         HUD.SetClipAmmo(bulletsInClip, clipSize);
                     }
 

@@ -37,7 +37,7 @@ public class Gun : Gun_Base
     private bool automatic;
 
     [SerializeField]
-    float timeBetweenShoots = 0.3f;
+    float timeBetweenShots = 0.3f;
     float timeSinceLastShot = 1f;
 
 
@@ -113,7 +113,8 @@ public class Gun : Gun_Base
 
     void OnTriggerEnter(Collider coll)
     {
-        if(player == null){
+        if (player == null)
+        {
             this.ETriggerEnterPickup(coll);
         }
     }
@@ -130,7 +131,10 @@ public class Gun : Gun_Base
     ///
     public override void SetOwningPlayer(Player_Base newOwner)
     {
-        player = this.ESetOwningPlayer(newOwner);
+        if (this.ESetOwningPlayer(newOwner))
+        {
+            player = newOwner;
+        }
     }
 
 
@@ -161,29 +165,26 @@ public class Gun : Gun_Base
             return;
         }
 
-        if (timeSinceLastShot >= timeBetweenShoots)
+        if (timeSinceLastShot >= timeBetweenShots)
         {
             timeSinceLastShot = 0;
 
             if (bulletsInClip > 0)
             {
 
+                AudioSource.PlayClipAtPoint(shoot, player.transform.position);
+                muzzleFlash.ShowFlash();
+
                 ///
                 /// Create the bullet
                 ///
-                //player.AudioSource.PlayOneShot(shoot);
-                AudioSource.PlayClipAtPoint(shoot, player.transform.position);
-                bulletsInClip -= 1;
-
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
-                bullet.transform.position = bulletSpawnPoint.position;
-                bullet.SetHitMarkerCallBack(hitMarkerCallback);
-                bullet.InitBulletTrail(bullet.transform.position);
-
                 bullet.transform.EAlignWithCamera(transform.parent.parent);
+                bullet.transform.position = bulletSpawnPoint.position;
+                bullet.InitBulletTrail(bullet.transform.position);
+                bullet.SetHitMarkerCallBack(hitMarkerCallback);
 
-
-                muzzleFlash.ShowFlash();
+                bulletsInClip -= 1;
 
                 ///
                 /// Create the shell
@@ -206,15 +207,15 @@ public class Gun : Gun_Base
     {
 
 
-        if (bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShoots)
+        if (bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShots)
         {
             int bulletsFromInventory = player.Ammo.Request(gunType, clipSize - bulletsInClip);
 
             if (bulletsFromInventory > 0)
             {
+                timeSinceLastShot = -(reload.length - timeBetweenShots);
                 player.AudioSource.PlayOneShot(reload);
                 bulletsInClip += bulletsFromInventory;
-                timeSinceLastShot = -(reload.length - timeBetweenShoots);
             }
 
 

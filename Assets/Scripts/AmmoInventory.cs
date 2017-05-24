@@ -7,6 +7,7 @@ public class AmmoInventory : AmmoInventory_Base {
 
     private Action CB_AmmoChanged;
     
+    //TODO: replace dictionary with plain old ints, Unity gives out of sync errors.
     private Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
 
     [SerializeField]

@@ -13,19 +13,16 @@ public abstract class Gun_Base : NetworkBehaviour
     /// <summary>
     /// The maximum amount of bullets that can be loaded into this guns clip.
     /// </summary>
-    /// <returns></returns>
     public abstract int ClipSize { get; }
 
     /// <summary>
     /// How many bullets are currently in this guns clip.
     /// </summary>
-    /// <returns></returns>
     public abstract int BulletsInClip { get; }
 
     /// <summary>
     /// The type of gun, this gun is.
     /// </summary>
-    /// <returns></returns>
     public abstract GunType GunType { get; }
 
 
