@@ -81,10 +81,14 @@ public class Shotgun : Gun_Base
     {
         get { return bulletsInClip; }
     }
+
+
     public override int ClipSize
     {
         get { return clipSize; }
     }
+
+
     public override GunType GunType
     {
         get { return gunType; }
@@ -152,33 +156,11 @@ public class Shotgun : Gun_Base
         StartCoroutine(DropGunTimer());
     }  
     
+
     public override void SetOwningPlayer(Player_Base newOwner)
     {
-
-        if (newOwner != null)
-        {
-
-            GunSlot_Base _gunSlot = newOwner.GunSlot;
-
-            player = newOwner;
-            gunSlot = _gunSlot;
-            gameObject.transform.parent = _gunSlot.transform;
-
-            Destroy(GetComponent<Rigidbody>());
-            enabled = true;
-
-            gameObject.EEnableCollidersInChildren(false);
-
-
-
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
-            AlignGun();
-
-
-        }
+        player = this.ESetOwningPlayer(newOwner, out gunSlot);
     }
-
 
 
     public override void SetVisible(bool visible){
@@ -186,10 +168,12 @@ public class Shotgun : Gun_Base
         muzzleFlash.HideFlash();
     }
 
+
     public override void AlignGun()
     {
         transform.EAlignWithCamera(transform.parent.parent, new Vector3(0, 90, 0));
     }
+
 
     public override void Shoot(bool firstDown)
     {
@@ -242,6 +226,7 @@ public class Shotgun : Gun_Base
 
         }
     }
+
 
     public override void Reload()
     {

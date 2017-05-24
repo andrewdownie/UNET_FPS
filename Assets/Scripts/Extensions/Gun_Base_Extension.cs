@@ -5,11 +5,12 @@ using UnityEngine;
 /// A bag of extension methods for the class: Gun_Base
 /// Used to implement common methods for this virtual interface / Base class
 /// </summary>
-public static class Gun_Base_Extension{
-	/// <summary>
-	/// Disables the gun script, adds a Rigidbody, and enables colliders in children.
-	/// </summary>
-	/// <param name="gun"></param>
+public static class Gun_Base_Extension
+{
+    /// <summary>
+    /// Disables the gun script, adds a Rigidbody, and enables colliders in children.
+    /// </summary>
+    /// <param name="gun"></param>
     public static void EDrop(this Gun_Base gun)
     {
         gun.enabled = false;
@@ -24,7 +25,8 @@ public static class Gun_Base_Extension{
     /// </summary>
     /// <param name="gun">The gun that will be picked up by the player.</param>
     /// <param name="coll">The collider that caused the OnTriggerEnter event to fire.</param>
-    public static void ETriggerEnterPickup(this Gun_Base gun, Collider coll){
+    public static void ETriggerEnterPickup(this Gun_Base gun, Collider coll)
+    {
         if (gun.isServer && coll.tag == "Player")
         {
             Player_Base _player = coll.GetComponent<Player_Base>();
@@ -42,8 +44,39 @@ public static class Gun_Base_Extension{
     }
 
 
-    public static void ESetOwningPlayer(this Gun_Base gun){
+    /// <summary>
+    /// Sets the owner of this gun, given the sentOwner is not null. Destroys Rigidbody, enables gun script, enables colliders, aligns gun.
+    /// </summary>
+    /// <param name="gun">The gun to set the owner of, and to configure to be used by a player.</param>
+    /// <param name="sentOwner">The player we want to try to set as the owner of the gun.</param>
+    /// <param name="setGunSlotTo">Out: Provide the guns gunslot reference. The gunSlot of the player that will be set as the owner of the gun.</param>
+    /// <returns>Returns the sentOwner, set the guns player refernce to the return.</returns>
+    public static Player_Base ESetOwningPlayer(this Gun_Base gun, Player_Base sentOwner, out GunSlot_Base setGunSlotTo)
+    {
+        if (sentOwner != null)
+        {
+            setGunSlotTo = sentOwner.GunSlot;
 
+            gun.transform.parent = setGunSlotTo.transform;
+
+            GameObject.Destroy(gun.GetComponent<Rigidbody>());
+            gun.enabled = true;
+
+            gun.gameObject.EEnableCollidersInChildren(false);
+
+
+
+            gun.transform.localPosition = Vector3.zero;
+            gun.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            gun.AlignGun();
+
+        }
+        else{
+            setGunSlotTo = null;
+        }
+
+
+        return sentOwner;
     }
 
 }
