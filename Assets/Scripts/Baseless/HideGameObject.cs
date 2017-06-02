@@ -9,7 +9,7 @@ public class HideGameObject : MonoBehaviour {
 
 	 void Start(){
         renderersToDisable = GetComponentsInChildren<Renderer>();        
-        collidersToDisable = GetComponents<Collider>();
+        collidersToDisable = GetComponentsInChildren<Collider>();
     }
 
 

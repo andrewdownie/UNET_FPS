@@ -64,7 +64,7 @@ public class ShotgunPellet : Bullet_Base {
     void OnCollisionEnter(Collision collision)
     {
 
-        if(collision.gameObject.layer == enemyLayer)
+        if(enabled == true && collision.gameObject.layer == enemyLayer)
         {
 
             RaycastHit hit;
@@ -72,12 +72,14 @@ public class ShotgunPellet : Bullet_Base {
 
             Zombie zombie = collision.gameObject.GetComponent<Zombie>();
             if(zombie != null){
-                zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
+                zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position, collision.collider);
+                Destroy(gameObject);
             }
             else{
                 MonsterSpawner_Base msb = collision.gameObject.GetComponent<MonsterSpawner_Base>();
                 if(msb != null){
                     msb.CmdSubtractHealth(bulletDamageAmount, hit.point, transform.position);
+                    Destroy(gameObject);
                 }
             }
 
@@ -91,6 +93,8 @@ public class ShotgunPellet : Bullet_Base {
         lineRenderer.enabled = false;
     }
 
+
+    
 
 
 

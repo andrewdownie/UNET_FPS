@@ -74,7 +74,7 @@ public class Bullet : Bullet_Base {
 
             Zombie zombie = collision.gameObject.GetComponent<Zombie>();
             if(zombie != null){
-                zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position);
+                zombie.TakeDamage(bulletDamageAmount, hit.point, transform.position, collision.collider);
             }
             else{
                 MonsterSpawner_Base msb = collision.gameObject.GetComponent<MonsterSpawner_Base>();
@@ -91,6 +91,7 @@ public class Bullet : Bullet_Base {
 
         enabled = false;
         lineRenderer.enabled = false;
+        Destroy(gameObject);
         
     }
 

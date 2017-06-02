@@ -367,7 +367,7 @@ public class Player : Player_Base
         {
             if (c.GetComponent<Zombie_Base>())
             {
-                c.GetComponent<Zombie_Base>().TakeDamage(15, Vector3.zero, Vector3.zero);
+                c.GetComponent<Zombie_Base>().TakeDamage(15, Vector3.zero, Vector3.zero, c);
                 c.GetComponent<Rigidbody>().AddForce(transform.forward * 1000, ForceMode.Impulse);
             }
         }

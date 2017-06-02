@@ -27,6 +27,12 @@ public class Zombie : Zombie_Base {
     [SerializeField]
     private Image healthBar;
 
+    [SerializeField]
+    Collider headCollider;
+
+    [SerializeField]
+    Collider bodyCollider;
+
 
     [SerializeField]
     MonsterSpawner_Base spawner;
@@ -54,8 +60,13 @@ public class Zombie : Zombie_Base {
     }
 
 
-    public override void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition)
+    public override void TakeDamage(float amount, Vector3 hitLocation, Vector3 bulletPosition, Collider c)
     {
+        if(c == headCollider){
+            amount *= 1.7f;
+            Debug.LogError("Head shot!");
+        }
+
         curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);
 
         healthBar.fillAmount = curHealth / maxHealth;
@@ -66,6 +77,7 @@ public class Zombie : Zombie_Base {
         ParticleSystem ps = (ParticleSystem)Instantiate(bloodSplatter, hitLocation, Quaternion.identity);
 
         ps.transform.LookAt(bulletPosition);
+
 
 
 
