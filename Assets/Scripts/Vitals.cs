@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
@@ -39,14 +37,15 @@ public class Vitals : Vitals_Base {
 	//TODO: even if this works 100% correctly, it's not setup as cleanly as it could be
 	//      	-> ChangeHealth will be called by all clients, but not do anything because of the syncvar (I think...)
 	//          -> Actually this might be the normal way to use syncvar's, while the clients will have unused work to do, its work they would have to do in single player anyway, and it saves the server a little work
-	void UpdateHealthGUI(float curHealth){
-		healthBar.fillAmount = curHealth / maxHealth;
+	void UpdateHealthGUI(float newCurHealth){
+		healthBar.fillAmount = newCurHealth / maxHealth;
 
 
-		bool dead = (curHealth == 0);
+		bool dead = (newCurHealth == 0);
 		bool previouslyDead = (this.curHealth == 0);
 		if(hasAuthority){
-			HUD.SetHealth(curHealth, maxHealth);
+			HUD.SetHealth(newCurHealth, maxHealth);
+			HUD.SetDeathMessageVisible(dead);
 			playerControllerScript.enabled = !dead;
 			player.enabled = !dead;
 
@@ -71,7 +70,7 @@ public class Vitals : Vitals_Base {
 		}
 
 
-		this.curHealth = curHealth;
+		this.curHealth = newCurHealth;
 	}
 
 	public override void OnStartAuthority(){

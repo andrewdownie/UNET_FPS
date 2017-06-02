@@ -7,8 +7,6 @@ public abstract class GunSlot_Base : MonoBehaviour {
     ///										Getters 
     /// 
     /// 
-	public abstract int BulletsInClip{get;}
-	public abstract int ClipSize{get;}
 	public abstract Gun_Base EquippedGun{get;}
 	public abstract Player_Base Player{get;}
 

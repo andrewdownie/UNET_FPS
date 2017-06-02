@@ -92,7 +92,7 @@ public class Zombie : Zombie_Base {
 
     IEnumerator DestroyDelay(float delay){
         if(isServer){
-            spawner.RemoveSpawnee();
+            spawner.RemoveSpawnee((Zombie_Base)this);
             yield return new WaitForSeconds(delay);
             NetworkServer.Destroy(gameObject);
         }

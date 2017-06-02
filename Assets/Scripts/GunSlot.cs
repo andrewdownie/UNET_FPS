@@ -1,13 +1,14 @@
-﻿using UnityEngine.Networking;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using System;
 
 public class GunSlot : GunSlot_Base {
-
+    /// 
+    ///
+    ///                                     Instance Variables
+    /// 
+    ///
     [SerializeField]
     Player player;
-
     private Action CB_AmmoChanged;
 
     [SerializeField]
@@ -15,18 +16,57 @@ public class GunSlot : GunSlot_Base {
     
     [SerializeField]
     private Gun_Base secondaryGun;
-
-
-
     private Gun_Base equippedGun;
 
 
+
+
+    /// 
+    ///
+    ///                                     Getters 
+    /// 
+    ///
+
+    public override Gun_Base EquippedGun{
+        get{
+            return equippedGun;
+        }
+    }
+
+    public override Player_Base Player{
+        get{return player;}
+    }
+
+    public override Gun_Base PrimaryGun{
+        get{return primaryGun;}
+    }
+    public override Gun_Base SecondaryGun{
+        get{return secondaryGun;}
+    }
+
+
+
+
+
+    /// 
+    ///
+    ///                                     Unity Methods
+    /// 
+    ///
 	void Awake () {
         primaryGun = null;
         secondaryGun = null;
     }
 
 	
+
+
+
+    /// 
+    ///
+    ///                                     Public Methods
+    /// 
+    ///
     public override void Drop(){
 
         if(primaryGun != null && equippedGun != secondaryGun)
@@ -53,12 +93,6 @@ public class GunSlot : GunSlot_Base {
         primaryGun.gameObject.SetActive(true);
     }
 
-    public override Gun_Base PrimaryGun{
-        get{return primaryGun;}
-    }
-    public override Gun_Base SecondaryGun{
-        get{return secondaryGun;}
-    }
 
     public override void SetSecondary(Gun_Base _gun){
         
@@ -82,6 +116,7 @@ public class GunSlot : GunSlot_Base {
 
 //        CB_AmmoChanged();//////////////////////////////////////
     }
+
     public override void MeleeAnimation(float percent)
     {
         Vector3 startPos = new Vector3(-0.098f, -0.17f, 1.144f);
@@ -127,28 +162,6 @@ public class GunSlot : GunSlot_Base {
         return ToggleEquip();
     }
 
-    private bool ToggleEquip(){
-        if(primaryGun == null){
-            return false;
-        }
-
-        if(equippedGun == primaryGun){
-            equippedGun = secondaryGun;
-        }
-        else{
-            equippedGun = primaryGun;
-        }
-        equippedGun.gameObject.SetActive(true);
-        if(player.isLocalPlayer){
-           // ////////////////////////////////// CB_AmmoChanged();
-        }
-        equippedGun.AlignGun();
-
-        if(equippedGun == primaryGun){
-            return true;
-        }
-        return false;
-    }
 
     public override void EquipPrimary(){
         if(primaryGun != null){
@@ -191,13 +204,6 @@ public class GunSlot : GunSlot_Base {
         }
     }
 
-    public override int BulletsInClip{
-        get{ return equippedGun.BulletsInClip;}
-    }
-
-    public override int ClipSize{
-        get{return equippedGun.ClipSize;}
-    }
 
 
     public override void SetCB_AmmoChanged(Action action){
@@ -205,16 +211,36 @@ public class GunSlot : GunSlot_Base {
     }
 
 
-    public override Gun_Base EquippedGun{
-        get{
-            return equippedGun;
+
+
+
+    ///
+    ///
+    ///                                     Private Methods
+    ///
+    ///
+    private bool ToggleEquip(){
+        if(primaryGun == null){
+            return false;
         }
+
+        if(equippedGun == primaryGun){
+            equippedGun = secondaryGun;
+        }
+        else{
+            equippedGun = primaryGun;
+        }
+        equippedGun.gameObject.SetActive(true);
+        if(player.isLocalPlayer){
+           // ////////////////////////////////// CB_AmmoChanged();
+        }
+        equippedGun.AlignGun();
+
+        if(equippedGun == primaryGun){
+            return true;
+        }
+        return false;
     }
-
-    public override Player_Base Player{
-        get{return player;}
-    }
-
-
+    
 
 }

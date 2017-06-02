@@ -77,5 +77,6 @@ public enum GunType
     shotgun,
     pistol,
     smg,
-    assaultRifle
+    assaultRifle,
+    none
 }

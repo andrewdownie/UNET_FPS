@@ -31,7 +31,7 @@ public class AmmoInventory : AmmoInventory_Base {
     }
 
     public override int Count(GunType gunType){
-        if(gunType == null){
+        if(gunType == GunType.none){
             return 0;
         }
         return bullets[gunType];

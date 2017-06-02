@@ -39,6 +39,10 @@ public class Gun : Gun_Base
     [SerializeField]
     float timeBetweenShots = 0.3f;
     float timeSinceLastShot = 1f;
+    [SerializeField]
+    float timeBetweenReloads = 0.5f;
+    float timeSinceLastReload = 1f;
+    bool canShoot, canReload;
 
 
     [Header("Other Setup")]
@@ -97,9 +101,17 @@ public class Gun : Gun_Base
 
     void Update()
     {
-        //TODO: record the time since last shot once, and compare the saved value to
-        //      the current value (then this wouldn't have to eat cpu time in the update method)
         timeSinceLastShot += Time.deltaTime;
+        timeSinceLastReload += Time.deltaTime;
+
+
+        if(timeSinceLastReload > timeBetweenReloads){
+            canReload = true;
+        }
+
+        if(timeSinceLastShot > timeBetweenShots){
+            canShoot = true;
+        }
     }
 
 
@@ -165,9 +177,10 @@ public class Gun : Gun_Base
             return;
         }
 
-        if (timeSinceLastShot >= timeBetweenShots)
+        if (canShoot && canReload)
         {
             timeSinceLastShot = 0;
+            canShoot = false;
 
             if (bulletsInClip > 0)
             {
@@ -205,21 +218,20 @@ public class Gun : Gun_Base
 
     public override void Reload()
     {
-
-
-        if (bulletsInClip < clipSize && timeSinceLastShot >= timeBetweenShots)
+        if (bulletsInClip < clipSize && canShoot && canReload)
         {
             int bulletsFromInventory = player.Ammo.Request(gunType, clipSize - bulletsInClip);
 
             if (bulletsFromInventory > 0)
             {
-                timeSinceLastShot = -(reload.length - timeBetweenShots);
+                timeSinceLastReload = 0;
+                canReload = false;
                 player.AudioSource.PlayOneShot(reload);
                 bulletsInClip += bulletsFromInventory;
             }
 
-
         }
+
     }
 
 

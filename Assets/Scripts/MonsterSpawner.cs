@@ -29,7 +29,7 @@ public class MonsterSpawner : MonsterSpawner_Base {
 	[SerializeField]
 	int MAX_SPAWNED = 1;
 	[SerializeField]
-	int currentlySpawned;
+	List<Zombie_Base> currentlySpawned;
 
 	[SerializeField]
 	Image healthBar;
@@ -51,12 +51,11 @@ public class MonsterSpawner : MonsterSpawner_Base {
 			enabled = false;
 		}
 
-		currentlySpawned = 0;
 		currentHealth = maxHealth;
 	}
 
-	public override void RemoveSpawnee(){
-		currentlySpawned--;
+	public override void RemoveSpawnee(Zombie_Base spawnee){
+		currentlySpawned.Remove(spawnee);
 	}
 
 
@@ -133,21 +132,21 @@ public class MonsterSpawner : MonsterSpawner_Base {
 
 
 		if(timeSinceLastSpawn >= SPAWN_DELAY && currentHealth > 0){
-			currentlySpawned++;
 			timeSinceLastSpawn = 0;
 
 			GameObject newZombie = Instantiate(zombiePrefabToSpawn, transform.position + new Vector3(0, 3, 0), Quaternion.identity);
-			if(!newZombie.GetComponent<Zombie_Base>()){
-				Debug.Log("Found zombie base");
+			Zombie_Base zomb = newZombie.GetComponent<Zombie_Base>();
+
+			if(!zomb){
+				Debug.Log("Didn't find zombie base");
 			}
+
+			currentlySpawned.Add(zomb);
 
 			newZombie.GetComponent<Zombie_Base>().SetSpawner((MonsterSpawner_Base)this);
 			NetworkServer.Spawn(newZombie);
 		}
-		else if(currentlySpawned < MAX_SPAWNED){
-			if(currentlySpawned < 0){
-				currentlySpawned = 1;
-			}
+		else if(currentlySpawned.Count < MAX_SPAWNED){
 			timeSinceLastSpawn += Time.deltaTime;
 		}
 

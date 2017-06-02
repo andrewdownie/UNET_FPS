@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections.Generic;
 
 
 /// <summary>
@@ -72,7 +71,7 @@ public class Player : Player_Base
 
             if (reviveTime > 0)
             {
-                HUD.SetReviveText("Hold 'x' to revive " + targetRevive.name);
+                HUD.SetReviveText("Hold 'j' to revive " + targetRevive.name);
             }
             else
             {
@@ -229,7 +228,7 @@ public class Player : Player_Base
         ///
         /// Start - Revive Ally
         ///
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.J))
         {
             if (targetRevive != null)
             {
@@ -241,7 +240,7 @@ public class Player : Player_Base
         ///
         /// Stop - Revive Ally
         ///
-        if (Input.GetKeyUp(KeyCode.H))
+        if (Input.GetKeyUp(KeyCode.J))
         {
             reviving = false;
             reviveTime = 0;
@@ -299,7 +298,9 @@ public class Player : Player_Base
             }
             else if (reviveTime >= REVIVE_TIME)
             {
-                targetRevive.Vitals.Revive();
+                NetworkIdentity targetNetID = targetRevive.GetComponent<NetworkIdentity>();
+                CmdRevive(targetNetID);
+                //targetRevive.Vitals.Revive();
                 targetRevive = null;
                 reviving = false;
             }
@@ -329,7 +330,7 @@ public class Player : Player_Base
                 if (targetRevive.Vitals.dead)
                 {
                     this.targetRevive = targetRevive;
-                    HUD.SetReviveText("Hold 'h' to revive " + c.name);
+                    HUD.SetReviveText("Hold 'j' to revive " + c.name);
 
                     float revivePercent = reviveTime / REVIVE_TIME;
                     if (revivePercent == 0)
@@ -345,11 +346,22 @@ public class Player : Player_Base
     }
 
     [Command]
+    void CmdRevive(NetworkIdentity reviveTarget){
+        Player_Base player = reviveTarget.GetComponent<Player_Base>();
+        player.Vitals.Revive();
+    }
+
+    [ClientRpc]
+    void RpcRevive(NetworkIdentity reviveTarget){
+        //This might not be needed, since player being alive is based on their health and health and managed by a syncvar
+    }
+
+    [Command]
     void CmdMelee()
     {
         RpcMelee();
 
-        Collider[] enemies = Physics.OverlapSphere(transform.position, 2f, enemyMask);
+        Collider[] enemies = Physics.OverlapSphere(transform.position + transform.forward, 2f, enemyMask);
 
         foreach (Collider c in enemies)
         {

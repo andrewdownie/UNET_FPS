@@ -27,7 +27,8 @@ public abstract class MonsterSpawner_Base : NetworkBehaviour {
 
 	/// <summary>
 	/// Removes a monster that was spawned from this spawner. Allows another monster to be spawned from this spawner.
-	/// </summary>
-	public abstract void RemoveSpawnee();
+	/// <param name="spawnee">The monster that should be removed from the spawners current list of spawnees.</param>
+	/// /// </summary>
+	public abstract void RemoveSpawnee(Zombie_Base spawnee);
 
 }

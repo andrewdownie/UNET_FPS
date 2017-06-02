@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
+
 public abstract class AmmoInventory_Base : MonoBehaviour {
     /// 
     /// 
