@@ -102,12 +102,13 @@ public class Net_Manager : NetworkManager{
 			if(np.PlayerID == playerID){
 				np.PrimaryWeapon = gunID;
 				gunID.AssignClientAuthority(np.Conn);
+				np.Player.RpcConnectPrimary(np.PrimaryWeapon);
 				//np.Player.RpcConnectPrimary(np.PrimaryWeapon);
 				//Debug.LogError("Foudn the new owner id");
 				break;
 			}	
 		}	
-		ConnectPrimarys();
+		//ConnectPrimarys();
 	}
 	public void DropPrimary(NetworkIdentity playerID){
 		
@@ -120,6 +121,7 @@ public class Net_Manager : NetworkManager{
 
 				np.PrimaryWeapon.RemoveClientAuthority(np.Conn);
 				np.PrimaryWeapon = null;
+				np.Player.RpcConnectPrimary(np.PrimaryWeapon);
 
 				break;
 			}	
@@ -128,7 +130,7 @@ public class Net_Manager : NetworkManager{
 		//Player_Base player = playerID.GetComponent<Player_Base>();
 		//player.RpcDrop();
 
-		ConnectPrimarys();
+		//ConnectPrimarys();
 	}
 
 	public void SetSecondary(NetworkIdentity playerID, NetworkIdentity gunID){

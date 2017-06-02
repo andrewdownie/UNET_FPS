@@ -14,9 +14,11 @@ public static class Gun_Base_Extension
     public static void EDrop(this Gun_Base gun)
     {
         gun.enabled = false;
-        Rigidbody rb = gun.gameObject.AddComponent<Rigidbody>();
-        rb.useGravity = true;
+        gun.GetComponent<Rigidbody>().isKinematic = false;
         gun.gameObject.EEnableCollidersInChildren(true);
+
+        NetworkTransform nt = gun.GetComponent<NetworkTransform>();
+        nt.enabled = true;
     }
 
 
@@ -56,7 +58,12 @@ public static class Gun_Base_Extension
         {
             gun.transform.parent = sentOwner.GunSlot.transform;
 
-            GameObject.Destroy(gun.GetComponent<Rigidbody>());
+            NetworkTransform nt = gun.GetComponent<NetworkTransform>();
+            if(nt){
+                nt.enabled = false;
+            } 
+
+            gun.GetComponent<Rigidbody>().isKinematic = true;
             gun.enabled = true;
 
             gun.gameObject.EEnableCollidersInChildren(false);
