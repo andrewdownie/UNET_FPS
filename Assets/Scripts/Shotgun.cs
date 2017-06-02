@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using UnityEngine.Networking;
 using UnityEngine;
 
 public class Shotgun : Gun_Base
@@ -137,6 +138,7 @@ public class Shotgun : Gun_Base
     IEnumerator DropGunTimer()
     {
         yield return new WaitForSeconds(1.3f);
+
         player = null;
     }
 

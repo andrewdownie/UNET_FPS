@@ -117,7 +117,6 @@ public class Gun : Gun_Base
 
     IEnumerator DropGunTimer()
     {
-        //TODO: this needs to be networked, or there is a small chance an invalid state can happen locally
         yield return new WaitForSeconds(1.3f);
         player = null;
     }
@@ -185,15 +184,15 @@ public class Gun : Gun_Base
             if (bulletsInClip > 0)
             {
 
-                AudioSource.PlayClipAtPoint(shoot, player.transform.position);
+                AudioSource.PlayClipAtPoint(shoot, player.transform.position, 0.5f);
                 muzzleFlash.ShowFlash();
 
                 ///
                 /// Create the bullet
                 ///
                 Bullet bullet = ((GameObject)Instantiate(bulletPrefab)).GetComponent<Bullet>();
-                bullet.transform.EAlignWithCamera(transform.parent.parent);
                 bullet.transform.position = bulletSpawnPoint.position;
+                bullet.transform.EAlignWithCamera(transform.parent.parent, Vector3.zero, alignMask);
                 bullet.InitBulletTrail(bullet.transform.position);
                 bullet.SetHitMarkerCallBack(hitMarkerCallback);
 

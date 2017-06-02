@@ -37,7 +37,7 @@ public class HUD : HUD_Base<HUD> {
 
     [Header("Dying and respawning")]
     [SerializeField]
-    Text deathMessage;
+    GameObject deathMessage;
     [SerializeField]
     Image reviveImg;
     [SerializeField]
@@ -92,7 +92,7 @@ public class HUD : HUD_Base<HUD> {
     }
 
     public static void SetDeathMessageVisible(bool visible){
-        singleton.deathMessage.enabled = visible;
+        singleton.deathMessage.SetActive(visible);
     }
 
 

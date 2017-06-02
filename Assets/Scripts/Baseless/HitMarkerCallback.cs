@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 
 public class HitMarkerCallback : MonoBehaviour {
-
+    [SerializeField]
     private AudioSource audioSource;
 
     [SerializeField]
@@ -14,7 +14,6 @@ public class HitMarkerCallback : MonoBehaviour {
 
 
 	void Start () {
-        audioSource = GetComponent<AudioSource>();
         HUD.SetHitMarkerVisible(false);
 	}
 	
@@ -24,7 +23,9 @@ public class HitMarkerCallback : MonoBehaviour {
             return;
         }
 
-        audioSource.PlayOneShot(hitMarkerSound);
+        //audioSource.clip = hitMarkerSound;
+        //audioSource.Play();
+        AudioSource.PlayClipAtPoint(hitMarkerSound, transform.position, 1f);
         StartCoroutine(ShowHideHitMarker());
     }
 

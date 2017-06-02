@@ -16,13 +16,12 @@ public static class ExtensionMethods
     {
         Vector3 point = camera.position + (camera.forward * 10000);
 
+        if(alignMask != LayerMask.GetMask("Nothing")){
 
-        if (alignMask == LayerMask.GetMask("Nothing"))
-        {
             RaycastHit hit;
-            Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
+            bool hitSomething = Physics.Raycast(camera.position, camera.forward * 1000, out hit, 1000f, alignMask);
 
-            if (hit.point != Vector3.zero)
+            if (hitSomething)
             {
                 point = hit.point;
             }
@@ -32,6 +31,7 @@ public static class ExtensionMethods
         alignObject.LookAt(point);
         alignObject.Rotate(additionalRotation);
     }
+
 
     /// <summary>
     /// Aligns the Transform to point forward in the direction the main camera faces.  

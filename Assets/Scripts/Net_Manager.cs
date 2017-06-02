@@ -110,9 +110,14 @@ public class Net_Manager : NetworkManager{
 		ConnectPrimarys();
 	}
 	public void DropPrimary(NetworkIdentity playerID){
+		
 
 		foreach(NetPlayer np in netPlayerList){
 			if(np.PlayerID == playerID){
+				if(np.PrimaryWeapon == null){
+					return;
+				}
+
 				np.PrimaryWeapon.RemoveClientAuthority(np.Conn);
 				np.PrimaryWeapon = null;
 
