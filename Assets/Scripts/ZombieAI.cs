@@ -27,7 +27,7 @@ public class ZombieAI : ZombieAI_Base {
     [SerializeField]
     private float attackSpeed = 1;
     [SerializeField]
-    private float attackDamage = -10;
+    private float attackDamage = 15;
 
 
     [SerializeField]
@@ -47,6 +47,14 @@ public class ZombieAI : ZombieAI_Base {
     private AudioSource audioSource;
 
     private MonsterSpawner_Base parentSpawner;
+
+
+    float timeSinceLastStep;
+    float timeUntilNextStep = 0.5f;
+    [SerializeField]
+    float STEP_TIME = 1;
+    [SerializeField]
+    AudioClip[] stepSounds;
 
 	// Use this for initialization
 	void Start () {
@@ -99,6 +107,14 @@ public class ZombieAI : ZombieAI_Base {
 
         if(aiState == ZombieAIState.chasing)
         {
+            timeSinceLastStep += Time.deltaTime;
+
+            if(timeSinceLastStep >= timeUntilNextStep){
+                timeSinceLastStep = 0;
+                PlayStepSound();
+                timeUntilNextStep = Random.Range(STEP_TIME - STEP_TIME * 0.1f, STEP_TIME + STEP_TIME * 0.1f);
+            }
+
             if(target == null){
                 aiState = ZombieAIState.idle;
                 return; 
@@ -142,9 +158,14 @@ public class ZombieAI : ZombieAI_Base {
         audioSource.PlayOneShot(zombieAttackSounds[rnd]);
     }
 
+    void PlayStepSound(){
+        int rnd = Random.Range(0, stepSounds.Length);
+        AudioSource.PlayClipAtPoint(stepSounds[rnd], transform.position);
+    }
+
     IEnumerator Attack()
     {
-        target.Vitals.ChangeHealth(attackDamage);
+        target.Vitals.DamageHealth(attackDamage, transform);
         PlayAttackSound();
         readyToAttack = false;
         yield return new WaitForSeconds(attackSpeed);

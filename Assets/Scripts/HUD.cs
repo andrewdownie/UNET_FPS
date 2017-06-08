@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 
 public class HUD : HUD_Base<HUD> {
@@ -47,6 +46,12 @@ public class HUD : HUD_Base<HUD> {
     [Header("Aimer")]
     Image aimer;
 
+
+    [Header("Damage Direction Indicator")]
+    [SerializeField]
+    Image damageDirectionIndicator;
+    [SerializeField]
+    float damageDirectionIndicatorHighestAlpha = 0.5f;
 
     
 
@@ -107,5 +112,29 @@ public class HUD : HUD_Base<HUD> {
 
     public static void SetReviveImageFill(float percentage01){
         singleton.reviveImg.fillAmount = percentage01;
+    }
+
+    public static void SetDamageDirectionIndicatorVisible(bool visible){
+        singleton.damageDirectionIndicator.enabled = visible;
+    }
+
+    public static void SetDamageDirectionIndicatorAlpha(float alpha01){
+        Color c = singleton.damageDirectionIndicator.color;
+
+        if(alpha01 > singleton.damageDirectionIndicatorHighestAlpha){
+            alpha01 = singleton.damageDirectionIndicatorHighestAlpha;
+        }
+
+        c.a = alpha01;
+
+        singleton.damageDirectionIndicator. color = c;
+    }
+
+    public static void SetDamageDirectionIndicatorRotation(float rotation){
+        SetDamageDirectionIndicatorVisible(true);
+
+        Vector3 oldRot = singleton.damageDirectionIndicator.transform.rotation.eulerAngles; 
+
+        singleton.damageDirectionIndicator.transform.rotation = Quaternion.Euler(oldRot.x, oldRot.y, rotation);
     }
 }

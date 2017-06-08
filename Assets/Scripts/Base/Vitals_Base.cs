@@ -1,4 +1,5 @@
 ﻿using UnityEngine.Networking;
+using UnityEngine;
 
 public abstract class Vitals_Base : NetworkBehaviour {
 
@@ -45,7 +46,9 @@ public abstract class Vitals_Base : NetworkBehaviour {
 	/// Changes (adds/subtracts) the amount of health the vitals have.
 	/// </summary>
 	/// <param name="amount"></param>
-	public abstract void ChangeHealth(float amount);
+	/// <param name="attacker"></param>
+	public abstract void DamageHealth(float amount, Transform attacker);
+	public abstract void HealHealth(float amount);
 
 	/// <summary>
 	/// Adds a healthpack to the vitals.

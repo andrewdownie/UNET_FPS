@@ -24,6 +24,7 @@ public class Vitals : Vitals_Base {
 	[SerializeField][SyncVar]
 	bool hasHealthpack;
 
+	[SerializeField]
 	private AudioSource audioSource;
 
 	[SerializeField]
@@ -33,6 +34,40 @@ public class Vitals : Vitals_Base {
 	private Image healthBar, healthBarBG;
 
 	private Player_Base player;
+
+
+	[SerializeField]
+	AudioClip[] painSounds;
+
+	float timeSinceLastAttack;
+	[SerializeField]
+	float damageIndicatorTime = 0.6f;
+
+
+	void Update(){
+
+
+		if(timeSinceLastAttack >= damageIndicatorTime){
+			HUD.SetDamageDirectionIndicatorVisible(false);
+		}
+		else{
+			HUD.SetDamageDirectionIndicatorAlpha((damageIndicatorTime - timeSinceLastAttack)/damageIndicatorTime);
+			timeSinceLastAttack += Time.deltaTime;
+		}
+	}
+
+	float RelativeAngleOfAttack(Transform attacker){
+
+		float indicatorRot = Vector3.Angle(transform.forward, attacker.position);	
+
+		Vector3 dir = attacker.position - transform.position;
+		dir = attacker.InverseTransformDirection(dir);
+		float angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg;
+
+
+		float yRot = transform.localEulerAngles.y;
+		return yRot + angle + 90;
+	}
 
 	//TODO: even if this works 100% correctly, it's not setup as cleanly as it could be
 	//      	-> ChangeHealth will be called by all clients, but not do anything because of the syncvar (I think...)
@@ -86,9 +121,10 @@ public class Vitals : Vitals_Base {
 	}
 
 	void Start(){
+		timeSinceLastAttack = 0;
+
 		healthBar.fillAmount = curHealth / maxHealth;
 
-		audioSource = GetComponent<AudioSource>();
 		if(audioSource == null){
 			Debug.LogWarning("Vitals: audio source not found.");
 		}
@@ -96,13 +132,35 @@ public class Vitals : Vitals_Base {
 		player = GetComponent<Player_Base>();
 	}
 
-	public override void ChangeHealth(float amount){
+	public override void DamageHealth(float amount, Transform attacker){
+		curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);
+
+		if(amount > 0){
+			PlayPainSound();
+
+			timeSinceLastAttack = 0;
+
+			if(attacker != null){
+				HUD.SetDamageDirectionIndicatorRotation(RelativeAngleOfAttack(attacker));
+			}
+
+		}
+
+	}
+
+	public override void HealHealth(float amount){
 		curHealth = Mathf.Clamp(curHealth + amount, 0, maxHealth);
 
 	}
 
+	void PlayPainSound(){
+		int rnd = Random.Range(0, painSounds.Length);
+		audioSource.clip = painSounds[rnd];
+		audioSource.Play();
+	}
+
 	public override void Revive(){
-		ChangeHealth(70);
+		HealHealth(70);
 	}
 
 	
@@ -129,7 +187,7 @@ public class Vitals : Vitals_Base {
 		}
 
 		hasHealthpack = false;
-		ChangeHealth(120);
+		HealHealth(120);
 		audioSource.PlayOneShot(healSound);
 
 		if(hasAuthority){
