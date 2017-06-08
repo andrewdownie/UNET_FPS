@@ -16,10 +16,10 @@ public class Vitals : Vitals_Base {
 	float maxHealth = 200;
 
 	[SerializeField][SyncVar]
-	float curStamina, maxStamina;
+	float curStamina = 100, maxStamina = 100;
 
 	[SerializeField][SyncVar]
-	float curMana, maxMana;
+	float curMana = 100, maxMana = 100;
 
 	[SerializeField][SyncVar]
 	bool hasHealthpack;
@@ -57,16 +57,10 @@ public class Vitals : Vitals_Base {
 	}
 
 	float RelativeAngleOfAttack(Transform attacker){
-
-		float indicatorRot = Vector3.Angle(transform.forward, attacker.position);	
-
 		Vector3 dir = attacker.position - transform.position;
-		dir = attacker.InverseTransformDirection(dir);
+		dir = transform.InverseTransformDirection(dir);
 		float angle = Mathf.Atan2(dir.z, dir.x) * Mathf.Rad2Deg;
-
-
-		float yRot = transform.localEulerAngles.y;
-		return yRot + angle + 90;
+		return angle - 90;
 	}
 
 	//TODO: even if this works 100% correctly, it's not setup as cleanly as it could be
@@ -116,7 +110,6 @@ public class Vitals : Vitals_Base {
 
 			HUD.SetDeathMessageVisible(curHealth == 0);
 
-
 		}
 	}
 
@@ -156,6 +149,7 @@ public class Vitals : Vitals_Base {
 	void PlayPainSound(){
 		int rnd = Random.Range(0, painSounds.Length);
 		audioSource.clip = painSounds[rnd];
+		audioSource.pitch = Random.Range(0.9f, 1.1f);
 		audioSource.Play();
 	}
 

@@ -11,7 +11,7 @@ public class AmmoInventory : AmmoInventory_Base {
     private Dictionary<GunType, int> bullets = new Dictionary<GunType, int>();
 
     [SerializeField]
-    int sniper, pistol, shotgun, assualtRifle, smg;
+    int sniper = 10, pistol = 100, shotgun = 10, assualtRifle = 25, smg = 35;
 
 
 

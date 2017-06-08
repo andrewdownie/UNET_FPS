@@ -64,7 +64,6 @@ public class Zombie : Zombie_Base {
     {
         if(c == headCollider){
             amount *= 1.7f;
-            Debug.LogError("Head shot!");
         }
 
         curHealth = Mathf.Clamp(curHealth - amount, 0, maxHealth);

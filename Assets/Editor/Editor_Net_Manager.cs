@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System;
 
 using UnityEngine.Networking;
-using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(Net_Manager))]
@@ -24,9 +22,9 @@ public class Editor_Net_Manager : Editor {
 			EditorGUILayout.Separator();
 
 			EditorGUILayout.LabelField("Player Name", np.PlayerName, EditorStyles.boldLabel);
-			EditorGUILayout.ObjectField("Player", np.PlayerID, typeof(NetworkIdentity));
-			EditorGUILayout.ObjectField("Primary Gun", np.PrimaryWeapon, typeof(NetworkIdentity));
-			EditorGUILayout.ObjectField("Secondary Gun", np.SecondaryWeapon, typeof(NetworkIdentity));
+			EditorGUILayout.ObjectField("Player", np.PlayerID, typeof(NetworkIdentity), true);
+			EditorGUILayout.ObjectField("Primary Gun", np.PrimaryWeapon, typeof(NetworkIdentity), true);
+			EditorGUILayout.ObjectField("Secondary Gun", np.SecondaryWeapon, typeof(NetworkIdentity), true);
 
 		}
 

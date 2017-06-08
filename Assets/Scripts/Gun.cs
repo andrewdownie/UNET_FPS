@@ -22,7 +22,7 @@ public class Gun : Gun_Base
 
     [Header("Sound Clips")]
     [SerializeField]
-    private AudioClip shoot, reload, outOfAmmo;
+    private AudioClip shoot = null, reload = null, outOfAmmo = null;
 
 
     [Header("Weapon Firing")]

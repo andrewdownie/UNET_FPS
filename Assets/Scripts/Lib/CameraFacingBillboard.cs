@@ -17,11 +17,10 @@ public class CameraFacingBillboard : MonoBehaviour
         }
 
 
-        float x, y, z;
+        float x, y;
         Camera c = Camera.main;
         x = c.transform.rotation.x;
         y = c.transform.rotation.y;
-        z = c.transform.rotation.z;
 
         Quaternion camRot = Quaternion.Euler(x, y, 0);
 
