@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 
@@ -19,6 +17,8 @@ public class NetPlayer : NetworkBehaviour{
 
 	[SerializeField]
 	string playerName;
+	[SerializeField]
+	PlayerCombatClass playerCombatClass;
 
 	public void Constructor(NetworkConnection playerConn, Player_Base player, string playerName, Gun_Base primaryWeapon, Gun_Base secondaryWeapon){
 		
@@ -74,4 +74,11 @@ public class NetPlayer : NetworkBehaviour{
 
 		return gunIdentity;
 	}
+}
+
+public enum PlayerCombatClass{
+	Breecher,
+	Scout,
+	Survivalist,
+	Rifleman,
 }
