@@ -30,6 +30,7 @@ public class AmmoPickup : NetworkBehaviour {
 
     }
 
+
     [Command]
     void CmdPickupAmmo(NetworkIdentity netID){
         RpcPickupAmmo(netID);
