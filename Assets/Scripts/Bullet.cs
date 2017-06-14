@@ -18,8 +18,6 @@ public class Bullet : Bullet_Base {
 
     Vector3 spawnPoint;
 
-   // [SerializeField]
-    //private LayerMask layerMask;
 
     [SerializeField]
     private float bulletDamageAmount = 36;

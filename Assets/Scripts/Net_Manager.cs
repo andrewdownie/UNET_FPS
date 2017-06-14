@@ -73,6 +73,9 @@ public class Net_Manager : NetworkManager{
 
 	public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
 	{
+		//
+		// Add Class Selector object to the game
+		//
 		Debug.Log("Adding player to game...");
 		GameObject newPlayer = Instantiate(playerPrefab, SpawnPoint(), Quaternion.identity);
 
@@ -80,6 +83,14 @@ public class Net_Manager : NetworkManager{
 		NetworkIdentity newIdentity = newPlayer.GetComponent<NetworkIdentity>();
 		newIdentity.AssignClientAuthority(conn);
 
+
+		
+		/*Debug.Log("Adding player to game...");
+		GameObject newPlayer = Instantiate(playerPrefab, SpawnPoint(), Quaternion.identity);
+
+		NetworkServer.Spawn(newPlayer);
+		NetworkIdentity newIdentity = newPlayer.GetComponent<NetworkIdentity>();
+		newIdentity.AssignClientAuthority(conn);
 
 		NetPlayer np = gameObject.AddComponent<NetPlayer>();
 		string playerName = "Player" + netPlayerList.Count;
@@ -92,7 +103,7 @@ public class Net_Manager : NetworkManager{
 
 
 		ConnectPrimarys();
-		ConnectSecondarys();
+		ConnectSecondarys();*/
 	}
 
 	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){
