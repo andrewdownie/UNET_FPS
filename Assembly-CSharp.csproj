@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\PlayerCombatClassSelect.cs" />
      <Compile Include="Assets\Scripts\AmmoInventory.cs" />
      <Compile Include="Assets\Scripts\Base\AmmoInventory_Base.cs" />
      <Compile Include="Assets\Scripts\Base\Bullet_Base.cs" />
