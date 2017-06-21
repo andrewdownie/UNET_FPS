@@ -16,7 +16,8 @@ public class Net_Manager : NetworkManager{
 
 	public static Net_Manager instance;
 
-
+	[SerializeField]//Spawnable Classes
+	GameObject breecher, scout, survivalist, rifleman;
 
 	void Start(){
 
@@ -85,8 +86,37 @@ public class Net_Manager : NetworkManager{
 
 
 		
-		/*Debug.Log("Adding player to game...");
-		GameObject newPlayer = Instantiate(playerPrefab, SpawnPoint(), Quaternion.identity);
+	}
+
+	public void SpawnPlayerAsClass(string className, NetworkIdentity netID){
+		NetworkConnection conn = netID.clientAuthorityOwner;
+		GameObject classToSpawn = null;
+
+		if(className == "Breecher"){
+			classToSpawn = breecher;
+		}
+		else if(className == "Scout"){
+			classToSpawn = scout;
+		}else if(className == "Survivalist"){
+			classToSpawn = survivalist;
+		}else if(className == "Rifleman"){
+			classToSpawn = rifleman;
+		}
+		else{
+			//TODO: this is for testing	
+			classToSpawn = breecher;
+		}
+
+		GameObject selectClassObject = netID.gameObject;
+		if(selectClassObject == null){
+			Debug.LogError("SCO is null");
+		}
+		NetworkServer.Destroy(selectClassObject);
+		//NetworkServer.DestroyPlayersForConnection(conn);
+
+
+		Debug.Log("Adding player to game...");
+		GameObject newPlayer = Instantiate(classToSpawn, SpawnPoint(), Quaternion.identity);
 
 		NetworkServer.Spawn(newPlayer);
 		NetworkIdentity newIdentity = newPlayer.GetComponent<NetworkIdentity>();
@@ -103,7 +133,9 @@ public class Net_Manager : NetworkManager{
 
 
 		ConnectPrimarys();
-		ConnectSecondarys();*/
+		ConnectSecondarys();
+		
+
 	}
 
 	public void SetPrimary(NetworkIdentity playerID, NetworkIdentity gunID){

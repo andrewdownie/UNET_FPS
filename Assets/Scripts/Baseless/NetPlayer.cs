@@ -25,8 +25,10 @@ public class NetPlayer : NetworkBehaviour{
 		conn = playerConn;
 		this.player = player;
 		this.playerName = playerName;
-		playerID = player.GetComponent<NetworkIdentity>();
-
+		Debug.Log(player);
+		GameObject playerGameObject = player.gameObject;
+		NetworkIdentity netID = playerGameObject.GetComponent<NetworkIdentity>();
+		playerID = netID;
 
 		this.primaryWeapon = null;
 		this.secondaryWeapon = null;
